@@ -1,7 +1,18 @@
-import { Globe, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { Globe, Map, Sparkles } from "lucide-react";
 import EuropTab from "./components/EuropTab";
+import MapQuizTab from "./components/MapQuizTab";
+
+type Tab = "checklist" | "map-quiz";
+
+const TABS: { value: Tab; label: string; icon: React.ReactNode }[] = [
+  { value: "checklist", label: "Union Européenne", icon: <Globe size={14} /> },
+  { value: "map-quiz", label: "Carte Quiz", icon: <Map size={14} /> },
+];
 
 const App = () => {
+  const [activeTab, setActiveTab] = useState<Tab>("checklist");
+
   return (
     <div
       className="min-h-dvh"
@@ -59,24 +70,43 @@ const App = () => {
         </div>
       </header>
 
-      <nav className="max-w-2xl mx-auto flex px-4 pt-4 gap-2 overflow-x-auto pb-1">
-        <button
-          type="button"
-          className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap border-2 active:scale-95 transition-transform"
-          style={{
-            background: "linear-gradient(135deg, #ede7f6, #e3f2fd)",
-            borderColor: "#9575cd",
-            color: "#6a1b9a",
-            boxShadow: "0 2px 8px #9575cd30",
-          }}
-        >
-          <Globe size={14} />
-          <span>Union Européenne</span>
-        </button>
+      <nav
+        className="max-w-2xl mx-auto flex px-4 pt-4 gap-2 overflow-x-auto pb-1"
+        aria-label="Navigation principale"
+      >
+        {TABS.map(({ value, label, icon }) => {
+          const isActive = activeTab === value;
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setActiveTab(value)}
+              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap border-2 active:scale-95 transition-transform"
+              style={
+                isActive
+                  ? {
+                      background: "linear-gradient(135deg, #ede7f6, #e3f2fd)",
+                      borderColor: "#9575cd",
+                      color: "#6a1b9a",
+                      boxShadow: "0 2px 8px #9575cd30",
+                    }
+                  : {
+                      background: "transparent",
+                      borderColor: "#e0d4f5",
+                      color: "#9575cd",
+                    }
+              }
+              aria-pressed={isActive}
+            >
+              {icon}
+              <span>{label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       <main className="max-w-2xl mx-auto pb-20">
-        <EuropTab />
+        {activeTab === "checklist" ? <EuropTab /> : <MapQuizTab />}
       </main>
     </div>
   );

@@ -37,6 +37,16 @@
   --color-candy-lemon-text: #f57f17;
 }
 
+@keyframes map-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
