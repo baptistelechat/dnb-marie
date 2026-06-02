@@ -8,7 +8,7 @@ Application web interactive pour aider Marie à réviser le DNB (brevet des coll
 - **Framework** : React 19 + Vite 8
 - **Runtime / Package manager** : Node.js + pnpm
 - **Styling** : Tailwind CSS 4 (plugin @tailwindcss/vite, sans config JS)
-- **Déploiement** : local / réseau LAN (usage mobile principal)
+- **Déploiement** : Vercel (production) — dev server avec `--host` + `vite-plugin-qrcode` pour accès mobile LAN en développement
 
 ### Architecture
 

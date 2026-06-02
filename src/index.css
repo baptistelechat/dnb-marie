@@ -1,13 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-pastel-purple: #e9d5ff;
-  --color-pastel-pink: #fce7f3;
-  --color-pastel-blue: #dbeafe;
-  --color-pastel-mint: #d1fae5;
-  --color-pastel-yellow: #fef3c7;
-  --color-pastel-peach: #fed7aa;
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Fredoka", system-ui, sans-serif;
+  --font-sans: "Nunito", system-ui, sans-serif;
+
+  /* Candy pastel palette */
+  --color-candy-rose: #fce4ec;
+  --color-candy-rose-deep: #f48fb1;
+  --color-candy-rose-vivid: #e91e63;
+  --color-candy-rose-text: #880e4f;
+
+  --color-candy-purple: #ede7f6;
+  --color-candy-purple-deep: #b39ddb;
+  --color-candy-purple-vivid: #7e57c2;
+  --color-candy-purple-text: #4a148c;
+
+  --color-candy-blue: #e3f2fd;
+  --color-candy-blue-deep: #90caf9;
+  --color-candy-blue-vivid: #42a5f5;
+  --color-candy-blue-text: #0d47a1;
+
+  --color-candy-mint: #e8f5e9;
+  --color-candy-mint-deep: #a5d6a7;
+  --color-candy-mint-vivid: #43a047;
+  --color-candy-mint-text: #1b5e20;
+
+  --color-candy-peach: #fff3e0;
+  --color-candy-peach-deep: #ffcc80;
+  --color-candy-peach-vivid: #ff9800;
+  --color-candy-peach-text: #e65100;
+
+  --color-candy-lemon: #fffde7;
+  --color-candy-lemon-deep: #fff176;
+  --color-candy-lemon-vivid: #f9a825;
+  --color-candy-lemon-text: #f57f17;
 }
 
 * {

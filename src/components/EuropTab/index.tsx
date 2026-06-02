@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { useWebHaptics } from "web-haptics/react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, Globe, Trophy } from "lucide-react";
 import { EU_COUNTRIES } from "../../data/euCountries";
 import CountryCard from "./components/CountryCard";
 import ProgressBar from "./components/ProgressBar";
@@ -46,12 +46,12 @@ const EuropTab = () => {
           spread: 80,
           origin: { y: 0.55 },
           colors: [
-            "#e9d5ff",
-            "#fce7f3",
-            "#dbeafe",
-            "#d1fae5",
-            "#fef3c7",
-            "#fed7aa",
+            "#f9a8d4",
+            "#c084fc",
+            "#818cf8",
+            "#67e8f9",
+            "#86efac",
+            "#fde68a",
           ],
         });
       launch();
@@ -63,53 +63,97 @@ const EuropTab = () => {
   }, [count, trigger]);
 
   return (
-    <div className="flex flex-col gap-5 p-4">
-      <div className="text-center pt-2">
-        <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-fuchsia-500">
-          🌍 Pays de l&apos;UE
-        </h2>
-        <p className="text-slate-400 text-sm mt-1">
-          Coche les pays au fur et à mesure !
+    <div className="flex flex-col gap-4 p-4">
+      {/* Section header */}
+      <div className="text-center pt-3 pb-1">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <Globe size={18} style={{ color: "#9575cd" }} />
+          <h2
+            className="text-2xl text-slate-800"
+            style={{
+              fontFamily: "'Fredoka', system-ui, sans-serif",
+              fontWeight: 600,
+            }}
+          >
+            Pays de l&apos;Union Européenne
+          </h2>
+          <Globe size={18} style={{ color: "#9575cd" }} />
+        </div>
+        <p className="text-slate-400 text-sm font-semibold">
+          Coche tous les pays au fur et à mesure 🗺️
         </p>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 shadow-sm border border-violet-100">
-        <div className="flex justify-between items-baseline mb-3">
-          <span className="text-sm font-semibold text-slate-600">
-            {count} / {TOTAL} pays
-          </span>
-          <span className="text-sm font-bold text-violet-600">
-            {Math.round((count / TOTAL) * 100)}%
-          </span>
+      {/* Progress card */}
+      <div
+        className="rounded-3xl p-4 border-2"
+        style={{
+          background: "white",
+          borderColor: "#e9d5ff",
+          boxShadow: "0 4px 20px #c084fc15",
+        }}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Trophy size={16} style={{ color: "#fbbf24" }} />
+            <span className="text-sm font-bold text-slate-600">
+              Progression
+            </span>
+          </div>
+          <div className="flex items-baseline gap-1">
+            <span
+              className="text-2xl font-bold"
+              style={{
+                fontFamily: "'Fredoka', system-ui, sans-serif",
+                color: "#9575cd",
+              }}
+            >
+              {count}
+            </span>
+            <span className="text-sm font-semibold text-slate-400">
+              / {TOTAL}
+            </span>
+          </div>
         </div>
+
         <ProgressBar current={count} total={TOTAL} />
+
         {count === TOTAL && (
-          <div className="mt-3 py-2 px-3 bg-emerald-50 rounded-2xl border border-emerald-200 text-center">
-            <p className="text-emerald-700 font-bold text-sm">
-              🎉 Bravo ! Tu les as tous trouvés !
+          <div
+            className="mt-3 py-2.5 px-4 rounded-2xl text-center border-2"
+            style={{ background: "#f0fdf4", borderColor: "#86efac" }}
+          >
+            <p
+              className="text-green-700 font-bold text-sm"
+              style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}
+            >
+              🏆 Bravo ! Tu les as tous trouvés !
             </p>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {EU_COUNTRIES.map((country) => (
+      {/* Country grid */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+        {EU_COUNTRIES.map((country, index) => (
           <CountryCard
             key={country.code}
             code={country.code}
             name={country.name}
             checked={checked.has(country.code)}
+            colorIndex={index % 6}
             onToggle={() => handleToggle(country.code)}
           />
         ))}
       </div>
 
+      {/* Reset */}
       {count > 0 && (
-        <div className="flex justify-center">
+        <div className="flex justify-center pt-2">
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
             aria-label="Recommencer depuis le début"
           >
             <RotateCcw size={14} />
