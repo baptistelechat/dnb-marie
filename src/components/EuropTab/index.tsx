@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
-import { useWebHaptics } from "web-haptics/react";
+import { useHaptics } from "../../utils/hapticPatterns";
 import { RotateCcw, Globe, Trophy } from "lucide-react";
 import { EU_COUNTRIES } from "../../data/euCountries";
 import CountryCard from "./components/CountryCard";
@@ -10,14 +10,14 @@ const TOTAL = EU_COUNTRIES.length;
 
 const EuropTab = () => {
   const [checked, setChecked] = useState<Set<string>>(new Set());
-  const { trigger } = useWebHaptics();
+  const { tick, success } = useHaptics();
   const completedRef = useRef(false);
 
   const count = checked.size;
 
   const handleToggle = useCallback(
     (code: string) => {
-      trigger(40);
+      tick();
       setChecked((prev) => {
         const next = new Set(prev);
         if (next.has(code)) {
@@ -28,7 +28,7 @@ const EuropTab = () => {
         return next;
       });
     },
-    [trigger],
+    [tick],
   );
 
   const handleReset = useCallback(() => {
@@ -39,7 +39,7 @@ const EuropTab = () => {
   useEffect(() => {
     if (count === TOTAL && !completedRef.current) {
       completedRef.current = true;
-      trigger("success");
+      success();
       const launch = () =>
         confetti({
           particleCount: 120,
@@ -60,7 +60,7 @@ const EuropTab = () => {
     if (count < TOTAL) {
       completedRef.current = false;
     }
-  }, [count, trigger]);
+  }, [count, success]);
 
   return (
     <div className="flex flex-col gap-4 p-4">

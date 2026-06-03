@@ -1,4 +1,4 @@
-import ProgressBar from "../../EuropTab/components/ProgressBar";
+import ProgressBar from "../../shared/ProgressBar";
 
 interface QuizProgressProps {
   answered: number;

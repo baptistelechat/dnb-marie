@@ -105,7 +105,11 @@ const App = () => {
         })}
       </nav>
 
-      <main className="max-w-2xl mx-auto pb-20">
+      <main
+        className={
+          activeTab === "map-quiz" ? "pb-20" : "max-w-2xl mx-auto pb-20"
+        }
+      >
         {activeTab === "checklist" ? <EuropTab /> : <MapQuizTab />}
       </main>
     </div>

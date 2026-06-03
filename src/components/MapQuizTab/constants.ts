@@ -1,6 +1,6 @@
 export const NUMERIC_TO_ALPHA2: Readonly<Record<string, string>> = {
-  "40": "AT",
-  "56": "BE",
+  "040": "AT",
+  "056": "BE",
   "100": "BG",
   "196": "CY",
   "191": "HR",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Country } from "../../../data/euCountries";
 import type { LastResult, QuizMode } from "../types";
 import { answersMatch } from "../../../utils/normalizeAnswer";
@@ -13,6 +13,7 @@ interface QuizPanelProps {
   onToggleFlag: () => void;
   onSubmit: (name: string, capital: string) => void;
   onNext: () => void;
+  onSkip?: () => void;
 }
 
 const QuizPanel = ({
@@ -23,9 +24,25 @@ const QuizPanel = ({
   onToggleFlag,
   onSubmit,
   onNext,
+  onSkip,
 }: QuizPanelProps) => {
   const [nameInput, setNameInput] = useState("");
   const [capitalInput, setCapitalInput] = useState("");
+
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (country && lastResult === null) {
+      nameInputRef.current?.focus();
+    }
+  }, [country, lastResult]);
+
+  useEffect(() => {
+    if (lastResult !== null) {
+      nextButtonRef.current?.focus();
+    }
+  }, [lastResult]);
 
   if (!country) {
     return (
@@ -97,6 +114,7 @@ const QuizPanel = ({
               Nom du pays
             </label>
             <input
+              ref={nameInputRef}
               id="country-name-input"
               type="text"
               value={nameInput}
@@ -156,6 +174,19 @@ const QuizPanel = ({
           >
             Vérifier ✔
           </button>
+          {onSkip && (
+            <button
+              type="button"
+              onClick={onSkip}
+              className="w-full py-1.5 text-xs font-semibold transition-colors rounded-xl hover:text-slate-500"
+              style={{
+                color: "#b0bec5",
+                fontFamily: "'Nunito', system-ui, sans-serif",
+              }}
+            >
+              Passer →
+            </button>
+          )}
         </form>
       ) : (
         <div className="flex flex-col gap-3">
@@ -165,6 +196,7 @@ const QuizPanel = ({
             correctCapital={country.capital}
           />
           <button
+            ref={nextButtonRef}
             type="button"
             onClick={onNext}
             className="w-full py-2.5 rounded-xl font-bold text-sm transition-all duration-200 active:scale-95"

@@ -17,6 +17,7 @@ declare module "react-simple-maps" {
     outline?: string;
     cursor?: string;
     animation?: string;
+    pointerEvents?: string;
   }
 
   interface ComposableMapProps {
@@ -42,11 +43,19 @@ declare module "react-simple-maps" {
       pressed?: GeoStyle;
     };
     "aria-label"?: string;
+    "aria-hidden"?: boolean | "true" | "false";
     role?: string;
     tabIndex?: number;
+  }
+
+  interface MarkerProps {
+    coordinates: [number, number]; // [longitude, latitude]
+    onClick?: () => void;
+    children?: ReactNode;
   }
 
   export const ComposableMap: (props: ComposableMapProps) => ReactNode;
   export const Geographies: (props: GeographiesProps) => ReactNode;
   export const Geography: (props: GeographyProps) => ReactNode;
+  export const Marker: (props: MarkerProps) => ReactNode;
 }
