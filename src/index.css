@@ -61,3 +61,10 @@ body {
 #root {
   min-height: 100dvh;
 }
+
+/* Carte Quiz — SVG fills container height on desktop */
+@media (min-width: 1024px) {
+  .map-viewport svg {
+    height: 100% !important;
+  }
+}

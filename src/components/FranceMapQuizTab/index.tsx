@@ -2,21 +2,26 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { useHaptics } from "../../utils/hapticPatterns";
 import { Map as MapIcon, RotateCcw } from "lucide-react";
-import { EU_COUNTRIES, type Country } from "../../data/euCountries";
+import {
+  FRENCH_REGIONS,
+  DOM_REGIONS,
+  type Region,
+} from "../../data/frenchRegions";
 import { answersMatch } from "../../utils/normalizeAnswer";
-import type { QuizMode, LastResult, LeaderboardEntry } from "./types";
+import type { QuizMode, LastResult, FranceLeaderboardEntry } from "./types";
 import { useLeaderboard } from "./hooks/useLeaderboard";
-import ModeToggle from "./components/ModeToggle";
-import EuropeMap from "./components/EuropeMap";
-import QuizPanel from "./components/QuizPanel";
-import QuizProgress from "./components/QuizProgress";
-import Timer from "./components/Timer";
+import ModeToggle from "../MapQuizTab/components/ModeToggle";
+import Timer from "../MapQuizTab/components/Timer";
+import QuizProgress from "../MapQuizTab/components/QuizProgress";
+import LeaderboardPanel from "../MapQuizTab/components/LeaderboardPanel";
+import FranceMap from "./components/FranceMap";
+import FranceQuizPanel from "./components/FranceQuizPanel";
+import DomButtons from "./components/DomButtons";
 import GameOverModal from "./components/GameOverModal";
-import LeaderboardPanel from "./components/LeaderboardPanel";
 
-const TOTAL = EU_COUNTRIES.length;
-const COUNTRY_MAP = new Map<string, Country>(
-  EU_COUNTRIES.map((c) => [c.code, c]),
+const TOTAL = FRENCH_REGIONS.length;
+const REGION_MAP = new Map<string, Region>(
+  FRENCH_REGIONS.map((r) => [r.code, r]),
 );
 
 const shuffle = (codes: string[]): string[] => {
@@ -30,7 +35,7 @@ const shuffle = (codes: string[]): string[] => {
   return arr;
 };
 
-const MapQuizTab = () => {
+const FranceMapQuizTab = () => {
   const { tick, success } = useHaptics();
   const completedRef = useRef(false);
   const { getEntries, addEntry } = useLeaderboard();
@@ -43,24 +48,31 @@ const MapQuizTab = () => {
   );
   const [failedCodes, setFailedCodes] = useState<Set<string>>(new Set());
   const [lastResult, setLastResult] = useState<LastResult>(null);
-  const [showFlag, setShowFlag] = useState(false);
   const [queue, setQueue] = useState<string[]>([]);
   const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null);
   const [timerStoppedAt, setTimerStoppedAt] = useState<number | null>(null);
   const [showGameOver, setShowGameOver] = useState(false);
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>(() =>
+  const [leaderboard, setLeaderboard] = useState<FranceLeaderboardEntry[]>(() =>
     getEntries(),
   );
 
   const activeCode = mode === "directed" ? (queue[0] ?? null) : freeActiveCode;
-  const activeCountry = activeCode
-    ? (COUNTRY_MAP.get(activeCode) ?? null)
-    : null;
+  const activeRegion = activeCode ? (REGION_MAP.get(activeCode) ?? null) : null;
   const pulsingCode = mode === "directed" ? (queue[0] ?? null) : null;
   const totalTimeSeconds =
     timerStartedAt !== null && timerStoppedAt !== null
       ? Math.floor((timerStoppedAt - timerStartedAt) / 1000)
       : 0;
+
+  const leaderboardForPanel = leaderboard.map(
+    ({ name, firstTryScore, totalRegions, totalTimeSeconds: t, date }) => ({
+      name,
+      firstTryScore,
+      totalCountries: totalRegions,
+      totalTimeSeconds: t,
+      date,
+    }),
+  );
 
   const launchConfetti = useCallback(() => {
     const launch = () =>
@@ -85,15 +97,12 @@ const MapQuizTab = () => {
     const directedDone =
       mode === "directed" && queue.length === 0 && answeredCodes.size === TOTAL;
     const freeDone = mode === "free" && answeredCodes.size === TOTAL;
-
     if ((directedDone || freeDone) && !completedRef.current) {
       completedRef.current = true;
       success();
       launchConfetti();
     }
-    if (answeredCodes.size < TOTAL) {
-      completedRef.current = false;
-    }
+    if (answeredCodes.size < TOTAL) completedRef.current = false;
   }, [answeredCodes.size, queue.length, mode, success, launchConfetti]);
 
   const resetState = useCallback(() => {
@@ -102,7 +111,6 @@ const MapQuizTab = () => {
     setFirstAttemptCodes(new Set());
     setFailedCodes(new Set());
     setLastResult(null);
-    setShowFlag(false);
     setTimerStartedAt(null);
     setTimerStoppedAt(null);
     setShowGameOver(false);
@@ -114,7 +122,7 @@ const MapQuizTab = () => {
       setMode(newMode);
       resetState();
       if (newMode === "directed") {
-        setQueue(shuffle(EU_COUNTRIES.map((c) => c.code)));
+        setQueue(shuffle(FRENCH_REGIONS.map((r) => r.code)));
       } else {
         setQueue([]);
       }
@@ -123,11 +131,10 @@ const MapQuizTab = () => {
   );
 
   const handleSelect = useCallback(
-    (alpha2: string) => {
+    (code: string) => {
       if (mode === "free") {
-        setFreeActiveCode(alpha2);
+        setFreeActiveCode(code);
         setLastResult(null);
-        setShowFlag(false);
       }
     },
     [mode],
@@ -135,42 +142,40 @@ const MapQuizTab = () => {
 
   const handleSubmit = useCallback(
     (nameInput: string, capitalInput: string) => {
-      if (!activeCountry) return;
-
+      if (!activeRegion) return;
       if (mode === "directed" && timerStartedAt === null) {
         setTimerStartedAt(Date.now());
       }
-
       const correct =
-        answersMatch(nameInput, activeCountry.name) &&
-        answersMatch(capitalInput, activeCountry.capital);
+        answersMatch(nameInput, activeRegion.name) &&
+        answersMatch(capitalInput, activeRegion.capital);
       tick();
       if (correct) {
         if (
-          !failedCodes.has(activeCountry.code) &&
-          !answeredCodes.has(activeCountry.code)
+          !failedCodes.has(activeRegion.code) &&
+          !answeredCodes.has(activeRegion.code)
         ) {
           setFirstAttemptCodes((prev) => {
             const n = new Set(prev);
-            n.add(activeCountry.code);
+            n.add(activeRegion.code);
             return n;
           });
         }
         setAnsweredCodes((prev) => {
-          const next = new Set(prev);
-          next.add(activeCountry.code);
-          return next;
+          const n = new Set(prev);
+          n.add(activeRegion.code);
+          return n;
         });
       } else {
         setFailedCodes((prev) => {
           const n = new Set(prev);
-          n.add(activeCountry.code);
+          n.add(activeRegion.code);
           return n;
         });
       }
       setLastResult(correct ? "correct" : "wrong");
     },
-    [activeCountry, tick, answeredCodes, failedCodes, mode, timerStartedAt],
+    [activeRegion, tick, answeredCodes, failedCodes, mode, timerStartedAt],
   );
 
   const handleNext = useCallback(() => {
@@ -192,22 +197,33 @@ const MapQuizTab = () => {
         });
       }
       setLastResult(null);
-      setShowFlag(false);
     } else {
       setFreeActiveCode(null);
       setLastResult(null);
-      setShowFlag(false);
     }
   }, [mode, lastResult, queue.length]);
+
+  const handleSkip = useCallback(() => {
+    if (!activeRegion) return;
+    if (mode === "directed" && timerStartedAt === null) {
+      setTimerStartedAt(Date.now());
+    }
+    setFailedCodes((prev) => {
+      const n = new Set(prev);
+      n.add(activeRegion.code);
+      return n;
+    });
+    setLastResult("skipped");
+  }, [activeRegion, mode, timerStartedAt]);
 
   const handleSave = useCallback(
     (playerName: string, date: string) => {
       const start = timerStartedAt ?? 0;
       const stop = timerStoppedAt ?? Date.now();
-      const entry: LeaderboardEntry = {
+      const entry: FranceLeaderboardEntry = {
         name: playerName,
         firstTryScore: firstAttemptCodes.size,
-        totalCountries: TOTAL,
+        totalRegions: TOTAL,
         totalTimeSeconds: Math.floor((stop - start) / 1000),
         date,
       };
@@ -217,22 +233,9 @@ const MapQuizTab = () => {
     [timerStartedAt, timerStoppedAt, firstAttemptCodes.size, addEntry],
   );
 
-  const handleSkip = useCallback(() => {
-    if (!activeCountry) return;
-    if (mode === "directed" && timerStartedAt === null) {
-      setTimerStartedAt(Date.now());
-    }
-    setFailedCodes((prev) => {
-      const n = new Set(prev);
-      n.add(activeCountry.code);
-      return n;
-    });
-    setLastResult("skipped");
-  }, [activeCountry, mode, timerStartedAt]);
-
   const handleReplay = useCallback(() => {
     resetState();
-    setQueue(shuffle(EU_COUNTRIES.map((c) => c.code)));
+    setQueue(shuffle(FRENCH_REGIONS.map((r) => r.code)));
     setMode("directed");
   }, [resetState]);
 
@@ -248,12 +251,12 @@ const MapQuizTab = () => {
               fontWeight: 600,
             }}
           >
-            Carte de l&apos;Europe
+            Carte de France
           </h2>
           <MapIcon size={18} style={{ color: "#9575cd" }} />
         </div>
         <p className="text-slate-400 text-sm font-semibold">
-          Identifie les pays et leurs capitales 🏛️
+          Identifie les régions et leurs chefs-lieux 🏛️
         </p>
       </div>
 
@@ -268,13 +271,13 @@ const MapQuizTab = () => {
                 className="text-green-700 font-bold"
                 style={{ fontFamily: "'Fredoka', system-ui, sans-serif" }}
               >
-                🏆 Bravo ! Tu as identifié les 27 pays !
+                🏆 Bravo ! Tu as identifié les {TOTAL} régions !
               </p>
             </div>
           )}
 
           <div className="lg:flex-1 lg:min-h-0">
-            <EuropeMap
+            <FranceMap
               activeCode={activeCode}
               answeredCodes={answeredCodes}
               pulsingCode={pulsingCode}
@@ -282,6 +285,15 @@ const MapQuizTab = () => {
               isInteractive={mode === "free"}
             />
           </div>
+
+          <DomButtons
+            regions={DOM_REGIONS}
+            activeCode={activeCode}
+            answeredCodes={answeredCodes}
+            pulsingCode={pulsingCode}
+            isInteractive={mode === "free"}
+            onSelect={handleSelect}
+          />
         </div>
 
         <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3 lg:overflow-y-auto">
@@ -295,19 +307,19 @@ const MapQuizTab = () => {
 
           <QuizProgress answered={answeredCodes.size} total={TOTAL} />
 
-          <QuizPanel
+          <FranceQuizPanel
             key={activeCode ?? "empty"}
-            country={activeCountry}
+            region={activeRegion}
             mode={mode}
             lastResult={lastResult}
-            showFlag={showFlag}
-            onToggleFlag={() => setShowFlag((v) => !v)}
             onSubmit={handleSubmit}
             onNext={handleNext}
             onSkip={mode === "directed" ? handleSkip : undefined}
           />
 
-          {mode === "directed" && <LeaderboardPanel entries={leaderboard} />}
+          {mode === "directed" && (
+            <LeaderboardPanel entries={leaderboardForPanel} />
+          )}
 
           {answeredCodes.size > 0 && (
             <div className="flex justify-center">
@@ -328,6 +340,7 @@ const MapQuizTab = () => {
       {showGameOver && (
         <GameOverModal
           firstTryScore={firstAttemptCodes.size}
+          total={TOTAL}
           totalTimeSeconds={totalTimeSeconds}
           leaderboard={leaderboard}
           onSave={handleSave}
@@ -338,4 +351,4 @@ const MapQuizTab = () => {
   );
 };
 
-export default MapQuizTab;
+export default FranceMapQuizTab;
