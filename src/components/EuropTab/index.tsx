@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { useHaptics } from "../../utils/hapticPatterns";
-import { RotateCcw, Globe, Trophy } from "lucide-react";
+import { RotateCcw, Globe, Landmark, Trophy } from "lucide-react";
 import { EU_COUNTRIES } from "../../data/euCountries";
 import CountryCard from "./components/CountryCard";
 import ProgressBar from "./components/ProgressBar";
@@ -86,45 +86,64 @@ const EuropTab = () => {
       </div>
 
       {/* Mode toggle */}
-      <div className="flex items-center justify-center gap-3">
-        <span
-          className="text-sm font-bold"
-          style={{
-            fontFamily: "'Nunito', system-ui, sans-serif",
-            color: !showCapitalFirst ? "#9575cd" : "#94a3b8",
-          }}
+      <div className="flex justify-center">
+        <div
+          className="flex rounded-full p-1 gap-1"
+          style={{ background: "#f0e6ff" }}
+          role="group"
+          aria-label="Mode d'affichage"
         >
-          Pays
-        </span>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={showCapitalFirst}
-          aria-label="Afficher les capitales en premier"
-          onClick={() => setShowCapitalFirst((v) => !v)}
-          className="relative w-12 h-6 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
-          style={{
-            background: showCapitalFirst ? "#7e57c2" : "#e2e8f0",
-          }}
-        >
-          <span
-            className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300"
-            style={{
-              transform: showCapitalFirst
-                ? "translateX(24px)"
-                : "translateX(0)",
-            }}
-          />
-        </button>
-        <span
-          className="text-sm font-bold"
-          style={{
-            fontFamily: "'Nunito', system-ui, sans-serif",
-            color: showCapitalFirst ? "#9575cd" : "#94a3b8",
-          }}
-        >
-          Capitales
-        </span>
+          <button
+            type="button"
+            onClick={() => setShowCapitalFirst(false)}
+            className="flex items-center gap-1.5 text-sm font-bold rounded-full px-4 py-2 border-2 transition-all duration-200 active:scale-95"
+            style={
+              !showCapitalFirst
+                ? {
+                    background: "linear-gradient(135deg, #ede7f6, #e3f2fd)",
+                    borderColor: "#9575cd",
+                    color: "#6a1b9a",
+                    boxShadow: "0 2px 8px #9575cd30",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+                : {
+                    background: "transparent",
+                    borderColor: "#e0d4f5",
+                    color: "#9575cd",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+            }
+            aria-pressed={!showCapitalFirst}
+          >
+            <Globe size={14} />
+            Pays
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowCapitalFirst(true)}
+            className="flex items-center gap-1.5 text-sm font-bold rounded-full px-4 py-2 border-2 transition-all duration-200 active:scale-95"
+            style={
+              showCapitalFirst
+                ? {
+                    background: "linear-gradient(135deg, #ede7f6, #e3f2fd)",
+                    borderColor: "#9575cd",
+                    color: "#6a1b9a",
+                    boxShadow: "0 2px 8px #9575cd30",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+                : {
+                    background: "transparent",
+                    borderColor: "#e0d4f5",
+                    color: "#9575cd",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+            }
+            aria-pressed={showCapitalFirst}
+          >
+            <Landmark size={14} />
+            Capitales
+          </button>
+        </div>
       </div>
 
       {/* Progress card */}

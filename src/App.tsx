@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { Globe, Map, Sparkles } from "lucide-react";
+import { Globe, Landmark, Map, Sparkles } from "lucide-react";
 import EuropTab from "./components/EuropTab";
 import MapQuizTab from "./components/MapQuizTab";
+import CapitalsQuizTab from "./components/CapitalsQuizTab";
 
-type Tab = "checklist" | "map-quiz";
+type Tab = "checklist" | "map-quiz" | "capitals-quiz";
 
 const TABS: { value: Tab; label: string; icon: React.ReactNode }[] = [
-  { value: "checklist", label: "Union Européenne", icon: <Globe size={14} /> },
+  { value: "checklist", label: "Liste", icon: <Globe size={14} /> },
   { value: "map-quiz", label: "Carte Quiz", icon: <Map size={14} /> },
+  { value: "capitals-quiz", label: "Flashcards", icon: <Landmark size={14} /> },
 ];
 
 const App = () => {
@@ -110,7 +112,9 @@ const App = () => {
           activeTab === "map-quiz" ? "pb-20" : "max-w-2xl mx-auto pb-20"
         }
       >
-        {activeTab === "checklist" ? <EuropTab /> : <MapQuizTab />}
+        {activeTab === "checklist" && <EuropTab />}
+        {activeTab === "map-quiz" && <MapQuizTab />}
+        {activeTab === "capitals-quiz" && <CapitalsQuizTab />}
       </main>
     </div>
   );
