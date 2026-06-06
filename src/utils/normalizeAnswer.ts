@@ -7,7 +7,7 @@ export const normalizeAnswer = (raw: string): string => {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
-    .replace(/[''`-]/g, " ")
+    .replace(/['‘’–—`-]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
   return expandAbbreviations(base);

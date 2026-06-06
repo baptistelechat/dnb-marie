@@ -55,4 +55,9 @@ export const REGION_LOGOS: Partial<Record<string, string>> = {
   "76": "https://upload.wikimedia.org/wikipedia/fr/thumb/8/89/Logo_Occitanie_2017.svg/langfr-330px-Logo_Occitanie_2017.svg.png",
   "52": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/LOGO_R0V15B160.svg/langfr-330px-LOGO_R0V15B160.svg.png",
   "93": "https://upload.wikimedia.org/wikipedia/fr/thumb/3/34/Logo_marque_R%C3%A9gion_Sud.svg/langfr-330px-Logo_marque_R%C3%A9gion_Sud.svg.png",
+  "01": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Unofficial_flag_of_Guadeloupe_%28local%29.svg/330px-Unofficial_flag_of_Guadeloupe_%28local%29.svg.png",
+  "02": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Flag_of_the_Territorial_Collectivity_of_Martinique.svg/330px-Flag_of_the_Territorial_Collectivity_of_Martinique.svg.png",
+  "03": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Flag_of_French_Guyana_%28Regional%29.svg/330px-Flag_of_French_Guyana_%28Regional%29.svg.png",
+  "04": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Armoiries_R%C3%A9union.svg/langfr-330px-Armoiries_R%C3%A9union.svg.png",
+  "06": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Flag_of_Mayotte_%28Local%29.svg/330px-Flag_of_Mayotte_%28Local%29.svg.png",
 };
