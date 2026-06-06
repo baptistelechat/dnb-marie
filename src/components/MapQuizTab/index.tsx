@@ -12,6 +12,7 @@ import QuizPanel from "./components/QuizPanel";
 import QuizProgress from "./components/QuizProgress";
 import Timer from "./components/Timer";
 import GameOverModal from "./components/GameOverModal";
+import LeaderboardPanel from "./components/LeaderboardPanel";
 
 const TOTAL = EU_COUNTRIES.length;
 const COUNTRY_MAP = new Map<string, Country>(
@@ -40,6 +41,7 @@ const MapQuizTab = () => {
   const [firstAttemptCodes, setFirstAttemptCodes] = useState<Set<string>>(
     new Set(),
   );
+  const [failedCodes, setFailedCodes] = useState<Set<string>>(new Set());
   const [lastResult, setLastResult] = useState<LastResult>(null);
   const [showFlag, setShowFlag] = useState(false);
   const [queue, setQueue] = useState<string[]>([]);
@@ -98,6 +100,7 @@ const MapQuizTab = () => {
     setFreeActiveCode(null);
     setAnsweredCodes(new Set());
     setFirstAttemptCodes(new Set());
+    setFailedCodes(new Set());
     setLastResult(null);
     setShowFlag(false);
     setTimerStartedAt(null);
@@ -143,7 +146,7 @@ const MapQuizTab = () => {
         answersMatch(capitalInput, activeCountry.capital);
       tick();
       if (correct) {
-        if (!answeredCodes.has(activeCountry.code)) {
+        if (!failedCodes.has(activeCountry.code) && !answeredCodes.has(activeCountry.code)) {
           setFirstAttemptCodes((prev) => {
             const n = new Set(prev);
             n.add(activeCountry.code);
@@ -155,10 +158,16 @@ const MapQuizTab = () => {
           next.add(activeCountry.code);
           return next;
         });
+      } else {
+        setFailedCodes((prev) => {
+          const n = new Set(prev);
+          n.add(activeCountry.code);
+          return n;
+        });
       }
       setLastResult(correct ? "correct" : "wrong");
     },
-    [activeCountry, tick, answeredCodes, mode, timerStartedAt],
+    [activeCountry, tick, answeredCodes, failedCodes, mode, timerStartedAt],
   );
 
   const handleNext = useCallback(() => {
@@ -210,6 +219,11 @@ const MapQuizTab = () => {
     if (mode === "directed" && timerStartedAt === null) {
       setTimerStartedAt(Date.now());
     }
+    setFailedCodes((prev) => {
+      const n = new Set(prev);
+      n.add(activeCountry.code);
+      return n;
+    });
     setLastResult("skipped");
   }, [activeCountry, mode, timerStartedAt]);
 
@@ -287,6 +301,10 @@ const MapQuizTab = () => {
             onNext={handleNext}
             onSkip={mode === "directed" ? handleSkip : undefined}
           />
+
+          {mode === "directed" && (
+            <LeaderboardPanel entries={leaderboard} />
+          )}
 
           {answeredCodes.size > 0 && (
             <div className="flex justify-center">
