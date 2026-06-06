@@ -10,6 +10,7 @@ const TOTAL = EU_COUNTRIES.length;
 
 const EuropTab = () => {
   const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [showCapitalFirst, setShowCapitalFirst] = useState(false);
   const { tick, success } = useHaptics();
   const completedRef = useRef(false);
 
@@ -84,6 +85,48 @@ const EuropTab = () => {
         </p>
       </div>
 
+      {/* Mode toggle */}
+      <div className="flex items-center justify-center gap-3">
+        <span
+          className="text-sm font-bold"
+          style={{
+            fontFamily: "'Nunito', system-ui, sans-serif",
+            color: !showCapitalFirst ? "#9575cd" : "#94a3b8",
+          }}
+        >
+          Pays
+        </span>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={showCapitalFirst}
+          aria-label="Afficher les capitales en premier"
+          onClick={() => setShowCapitalFirst((v) => !v)}
+          className="relative w-12 h-6 rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+          style={{
+            background: showCapitalFirst ? "#7e57c2" : "#e2e8f0",
+          }}
+        >
+          <span
+            className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300"
+            style={{
+              transform: showCapitalFirst
+                ? "translateX(24px)"
+                : "translateX(0)",
+            }}
+          />
+        </button>
+        <span
+          className="text-sm font-bold"
+          style={{
+            fontFamily: "'Nunito', system-ui, sans-serif",
+            color: showCapitalFirst ? "#9575cd" : "#94a3b8",
+          }}
+        >
+          Capitales
+        </span>
+      </div>
+
       {/* Progress card */}
       <div
         className="rounded-3xl p-4 border-2"
@@ -140,6 +183,8 @@ const EuropTab = () => {
             key={country.code}
             code={country.code}
             name={country.name}
+            capital={country.capital}
+            showCapitalFirst={showCapitalFirst}
             checked={checked.has(country.code)}
             colorIndex={index % 6}
             onToggle={() => handleToggle(country.code)}
