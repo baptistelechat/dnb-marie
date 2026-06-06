@@ -16,7 +16,7 @@ import QuizProgress from "../MapQuizTab/components/QuizProgress";
 import LeaderboardPanel from "../MapQuizTab/components/LeaderboardPanel";
 import FranceMap from "./components/FranceMap";
 import FranceQuizPanel from "./components/FranceQuizPanel";
-import DomButtons from "./components/DomButtons";
+import DomMiniMap from "./components/DomMiniMap";
 import GameOverModal from "./components/GameOverModal";
 
 const TOTAL = FRENCH_REGIONS.length;
@@ -276,7 +276,7 @@ const FranceMapQuizTab = () => {
             </div>
           )}
 
-          <div className="lg:flex-1 lg:min-h-0">
+          <div className="lg:flex-1 lg:min-h-0 relative">
             <FranceMap
               activeCode={activeCode}
               answeredCodes={answeredCodes}
@@ -284,16 +284,25 @@ const FranceMapQuizTab = () => {
               onSelect={handleSelect}
               isInteractive={mode === "free"}
             />
+            {/* DOM incrustés dans la zone océan à gauche de la métropole */}
+            <div
+              className="absolute inset-y-0 left-0 flex flex-col justify-center items-end gap-1"
+              style={{ width: "27%", paddingRight: 6 }}
+            >
+              {DOM_REGIONS.map((region) => (
+                <DomMiniMap
+                  key={region.code}
+                  code={region.code}
+                  name={region.name}
+                  isActive={region.code === activeCode}
+                  isAnswered={answeredCodes.has(region.code)}
+                  isPulsing={region.code === pulsingCode}
+                  isInteractive={mode === "free"}
+                  onSelect={() => handleSelect(region.code)}
+                />
+              ))}
+            </div>
           </div>
-
-          <DomButtons
-            regions={DOM_REGIONS}
-            activeCode={activeCode}
-            answeredCodes={answeredCodes}
-            pulsingCode={pulsingCode}
-            isInteractive={mode === "free"}
-            onSelect={handleSelect}
-          />
         </div>
 
         <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3 lg:overflow-y-auto">

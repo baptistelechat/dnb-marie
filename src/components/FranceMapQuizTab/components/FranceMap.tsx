@@ -23,9 +23,9 @@ const FranceMap = ({
     >
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ center: [2.5, 46.6], scale: 2700 }}
-        width={800}
-        height={560}
+        projectionConfig={{ center: [0.44, 46.5], scale: 2400 }}
+        width={1000}
+        height={700}
         style={{ width: "100%", height: "auto" }}
       >
         <Geographies geography={FRANCE_REGIONS_URL}>
