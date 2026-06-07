@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { useHaptics } from "../../utils/hapticPatterns";
-import { RotateCcw, MapPin, Landmark, Trophy } from "lucide-react";
+import { RotateCcw, MapPin, Landmark, Trophy, Globe } from "lucide-react";
 import { FRENCH_REGIONS } from "../../data/frenchRegions";
 import RegionCard from "./components/RegionCard";
 import ProgressBar from "../shared/ProgressBar";
@@ -68,7 +68,7 @@ const FranceTab = () => {
       {/* Section header */}
       <div className="text-center pt-3 pb-1">
         <div className="flex items-center justify-center gap-2 mb-1">
-          <MapPin size={18} style={{ color: "#9575cd" }} />
+          <Globe size={18} style={{ color: "#9575cd" }} />
           <h2
             className="text-2xl text-slate-800"
             style={{
@@ -78,7 +78,7 @@ const FranceTab = () => {
           >
             Régions de France
           </h2>
-          <MapPin size={18} style={{ color: "#9575cd" }} />
+          <Globe size={18} style={{ color: "#9575cd" }} />
         </div>
         <p className="text-slate-400 text-sm font-semibold">
           Coche toutes les régions au fur et à mesure 🗺️
