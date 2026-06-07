@@ -31,7 +31,7 @@ const EuropeMap = ({
 }: EuropeMapProps) => {
   return (
     <div
-      className="w-full rounded-2xl overflow-hidden"
+      className="map-viewport w-full lg:h-full rounded-2xl overflow-hidden"
       style={{ background: "#f0f0f0" }}
     >
       <ComposableMap

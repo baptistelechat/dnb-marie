@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import confetti from "canvas-confetti";
 import { useHaptics } from "../../utils/hapticPatterns";
-import { RotateCcw, Globe, Trophy } from "lucide-react";
+import { RotateCcw, Globe, Landmark, Trophy } from "lucide-react";
 import { EU_COUNTRIES } from "../../data/euCountries";
 import CountryCard from "./components/CountryCard";
 import ProgressBar from "./components/ProgressBar";
@@ -10,6 +10,7 @@ const TOTAL = EU_COUNTRIES.length;
 
 const EuropTab = () => {
   const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [showCapitalFirst, setShowCapitalFirst] = useState(false);
   const { tick, success } = useHaptics();
   const completedRef = useRef(false);
 
@@ -84,6 +85,67 @@ const EuropTab = () => {
         </p>
       </div>
 
+      {/* Mode toggle */}
+      <div className="flex justify-center">
+        <div
+          className="flex rounded-full p-1 gap-1"
+          style={{ background: "#f0e6ff" }}
+          role="group"
+          aria-label="Mode d'affichage"
+        >
+          <button
+            type="button"
+            onClick={() => setShowCapitalFirst(false)}
+            className="flex items-center gap-1.5 text-sm font-bold rounded-full px-4 py-2 border-2 transition-all duration-200 active:scale-95"
+            style={
+              !showCapitalFirst
+                ? {
+                    background: "linear-gradient(135deg, #ede7f6, #e3f2fd)",
+                    borderColor: "#9575cd",
+                    color: "#6a1b9a",
+                    boxShadow: "0 2px 8px #9575cd30",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+                : {
+                    background: "transparent",
+                    borderColor: "#e0d4f5",
+                    color: "#9575cd",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+            }
+            aria-pressed={!showCapitalFirst}
+          >
+            <Globe size={14} />
+            Pays
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowCapitalFirst(true)}
+            className="flex items-center gap-1.5 text-sm font-bold rounded-full px-4 py-2 border-2 transition-all duration-200 active:scale-95"
+            style={
+              showCapitalFirst
+                ? {
+                    background: "linear-gradient(135deg, #ede7f6, #e3f2fd)",
+                    borderColor: "#9575cd",
+                    color: "#6a1b9a",
+                    boxShadow: "0 2px 8px #9575cd30",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+                : {
+                    background: "transparent",
+                    borderColor: "#e0d4f5",
+                    color: "#9575cd",
+                    fontFamily: "'Fredoka', system-ui, sans-serif",
+                  }
+            }
+            aria-pressed={showCapitalFirst}
+          >
+            <Landmark size={14} />
+            Capitales
+          </button>
+        </div>
+      </div>
+
       {/* Progress card */}
       <div
         className="rounded-3xl p-4 border-2"
@@ -140,6 +202,8 @@ const EuropTab = () => {
             key={country.code}
             code={country.code}
             name={country.name}
+            capital={country.capital}
+            showCapitalFirst={showCapitalFirst}
             checked={checked.has(country.code)}
             colorIndex={index % 6}
             onToggle={() => handleToggle(country.code)}

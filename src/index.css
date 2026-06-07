@@ -47,6 +47,25 @@
   }
 }
 
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }
@@ -60,4 +79,11 @@ body {
 
 #root {
   min-height: 100dvh;
+}
+
+/* Carte Quiz — SVG fills container height on desktop */
+@media (min-width: 1024px) {
+  .map-viewport svg {
+    height: 100% !important;
+  }
 }

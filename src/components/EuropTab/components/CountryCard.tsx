@@ -4,6 +4,8 @@ import { Check } from "lucide-react";
 interface CountryCardProps {
   code: string;
   name: string;
+  capital: string;
+  showCapitalFirst: boolean;
   checked: boolean;
   colorIndex: number;
   onToggle: () => void;
@@ -63,18 +65,22 @@ const CANDY_COLORS = [
 const CountryCard = ({
   code,
   name,
+  capital,
+  showCapitalFirst,
   checked,
   colorIndex,
   onToggle,
 }: CountryCardProps) => {
   const colors = CANDY_COLORS[colorIndex];
+  const primary = showCapitalFirst ? capital : name;
+  const secondary = showCapitalFirst ? name : capital;
 
   return (
     <button
       type="button"
       onClick={onToggle}
       aria-pressed={checked}
-      aria-label={`${name} — ${checked ? "coché" : "non coché"}`}
+      aria-label={`${name}, capitale ${capital} — ${checked ? "coché" : "non coché"}`}
       className="flex flex-col items-center gap-2.5 w-full px-3 py-4 rounded-3xl border-2 transition-all duration-200 cursor-pointer active:scale-95 text-center relative"
       style={{
         background: checked ? colors.checkedBg : colors.bg,
@@ -116,17 +122,28 @@ const CountryCard = ({
         )}
       </div>
 
-      <span
-        className="text-xs font-bold leading-tight"
-        style={{
-          color: colors.text,
-          textDecoration: checked ? "line-through" : "none",
-          opacity: checked ? 0.55 : 1,
-          fontFamily: "'Nunito', system-ui, sans-serif",
-        }}
-      >
-        {name}
-      </span>
+      <div className="flex flex-col items-center gap-0.5">
+        <span
+          className="text-xs font-bold leading-tight"
+          style={{
+            color: colors.text,
+            opacity: checked ? 0.55 : 1,
+            fontFamily: "'Nunito', system-ui, sans-serif",
+          }}
+        >
+          {primary}
+        </span>
+        <span
+          className="text-[10px] font-semibold leading-tight"
+          style={{
+            color: colors.text,
+            opacity: checked ? 0.4 : 0.6,
+            fontFamily: "'Nunito', system-ui, sans-serif",
+          }}
+        >
+          {secondary}
+        </span>
+      </div>
     </button>
   );
 };

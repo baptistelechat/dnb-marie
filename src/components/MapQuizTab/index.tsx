@@ -12,6 +12,7 @@ import QuizPanel from "./components/QuizPanel";
 import QuizProgress from "./components/QuizProgress";
 import Timer from "./components/Timer";
 import GameOverModal from "./components/GameOverModal";
+import LeaderboardPanel from "./components/LeaderboardPanel";
 
 const TOTAL = EU_COUNTRIES.length;
 const COUNTRY_MAP = new Map<string, Country>(
@@ -40,6 +41,7 @@ const MapQuizTab = () => {
   const [firstAttemptCodes, setFirstAttemptCodes] = useState<Set<string>>(
     new Set(),
   );
+  const [failedCodes, setFailedCodes] = useState<Set<string>>(new Set());
   const [lastResult, setLastResult] = useState<LastResult>(null);
   const [showFlag, setShowFlag] = useState(false);
   const [queue, setQueue] = useState<string[]>([]);
@@ -98,6 +100,7 @@ const MapQuizTab = () => {
     setFreeActiveCode(null);
     setAnsweredCodes(new Set());
     setFirstAttemptCodes(new Set());
+    setFailedCodes(new Set());
     setLastResult(null);
     setShowFlag(false);
     setTimerStartedAt(null);
@@ -130,20 +133,23 @@ const MapQuizTab = () => {
     [mode],
   );
 
+  const handleGo = useCallback(() => {
+    setTimerStartedAt(Date.now());
+  }, []);
+
   const handleSubmit = useCallback(
     (nameInput: string, capitalInput: string) => {
       if (!activeCountry) return;
-
-      if (mode === "directed" && timerStartedAt === null) {
-        setTimerStartedAt(Date.now());
-      }
 
       const correct =
         answersMatch(nameInput, activeCountry.name) &&
         answersMatch(capitalInput, activeCountry.capital);
       tick();
       if (correct) {
-        if (!answeredCodes.has(activeCountry.code)) {
+        if (
+          !failedCodes.has(activeCountry.code) &&
+          !answeredCodes.has(activeCountry.code)
+        ) {
           setFirstAttemptCodes((prev) => {
             const n = new Set(prev);
             n.add(activeCountry.code);
@@ -155,10 +161,16 @@ const MapQuizTab = () => {
           next.add(activeCountry.code);
           return next;
         });
+      } else {
+        setFailedCodes((prev) => {
+          const n = new Set(prev);
+          n.add(activeCountry.code);
+          return n;
+        });
       }
       setLastResult(correct ? "correct" : "wrong");
     },
-    [activeCountry, tick, answeredCodes, mode, timerStartedAt],
+    [activeCountry, tick, answeredCodes, failedCodes],
   );
 
   const handleNext = useCallback(() => {
@@ -207,11 +219,13 @@ const MapQuizTab = () => {
 
   const handleSkip = useCallback(() => {
     if (!activeCountry) return;
-    if (mode === "directed" && timerStartedAt === null) {
-      setTimerStartedAt(Date.now());
-    }
+    setFailedCodes((prev) => {
+      const n = new Set(prev);
+      n.add(activeCountry.code);
+      return n;
+    });
     setLastResult("skipped");
-  }, [activeCountry, mode, timerStartedAt]);
+  }, [activeCountry]);
 
   const handleReplay = useCallback(() => {
     resetState();
@@ -220,8 +234,8 @@ const MapQuizTab = () => {
   }, [resetState]);
 
   return (
-    <div className="flex flex-col gap-4 py-4 px-4">
-      <div className="text-center pt-3 pb-1">
+    <div className="h-full flex flex-col gap-3 px-4 pt-4 pb-2 overflow-hidden">
+      <div className="shrink-0 text-center pb-1">
         <div className="flex items-center justify-center gap-2 mb-1">
           <MapIcon size={18} style={{ color: "#9575cd" }} />
           <h2
@@ -240,11 +254,11 @@ const MapQuizTab = () => {
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 items-start">
-        <div className="flex-1 min-w-0 flex flex-col gap-3">
+      <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-auto lg:overflow-hidden">
+        <div className="lg:flex-1 min-w-0 lg:min-h-0 flex flex-col gap-3">
           {mode === "free" && answeredCodes.size === TOTAL && (
             <div
-              className="rounded-3xl py-3 px-4 text-center border-2"
+              className="shrink-0 rounded-3xl py-3 px-4 text-center border-2"
               style={{ background: "#f0fdf4", borderColor: "#86efac" }}
             >
               <p
@@ -256,16 +270,18 @@ const MapQuizTab = () => {
             </div>
           )}
 
-          <EuropeMap
-            activeCode={activeCode}
-            answeredCodes={answeredCodes}
-            pulsingCode={pulsingCode}
-            onSelect={handleSelect}
-            isInteractive={mode === "free"}
-          />
+          <div className="lg:flex-1 lg:min-h-0">
+            <EuropeMap
+              activeCode={activeCode}
+              answeredCodes={answeredCodes}
+              pulsingCode={pulsingCode}
+              onSelect={handleSelect}
+              isInteractive={mode === "free"}
+            />
+          </div>
         </div>
 
-        <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3">
+        <div className="w-full lg:w-80 shrink-0 flex flex-col gap-3 lg:overflow-y-auto">
           <div className="flex justify-center">
             <ModeToggle mode={mode} onChange={handleModeChange} />
           </div>
@@ -276,17 +292,48 @@ const MapQuizTab = () => {
 
           <QuizProgress answered={answeredCodes.size} total={TOTAL} />
 
-          <QuizPanel
-            key={activeCode ?? "empty"}
-            country={activeCountry}
-            mode={mode}
-            lastResult={lastResult}
-            showFlag={showFlag}
-            onToggleFlag={() => setShowFlag((v) => !v)}
-            onSubmit={handleSubmit}
-            onNext={handleNext}
-            onSkip={mode === "directed" ? handleSkip : undefined}
-          />
+          {mode === "directed" && timerStartedAt === null ? (
+            <div className="flex flex-col items-center justify-center gap-3 p-6 rounded-3xl border-2 border-purple-200 bg-purple-50">
+              <p
+                className="text-slate-500 text-sm font-semibold"
+                style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+              >
+                🔀 {queue.length} pays à identifier
+              </p>
+              <button
+                type="button"
+                onClick={handleGo}
+                className="px-10 py-4 rounded-2xl font-bold text-2xl text-white shadow-lg active:scale-95 transition-transform"
+                style={{
+                  background: "#7e57c2",
+                  fontFamily: "'Fredoka', system-ui, sans-serif",
+                }}
+                aria-label="Démarrer la partie"
+              >
+                GO !
+              </button>
+              <p
+                className="text-slate-400 text-xs"
+                style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+              >
+                Le chrono démarre au GO
+              </p>
+            </div>
+          ) : (
+            <QuizPanel
+              key={activeCode ?? "empty"}
+              country={activeCountry}
+              mode={mode}
+              lastResult={lastResult}
+              showFlag={showFlag}
+              onToggleFlag={() => setShowFlag((v) => !v)}
+              onSubmit={handleSubmit}
+              onNext={handleNext}
+              onSkip={mode === "directed" ? handleSkip : undefined}
+            />
+          )}
+
+          {mode === "directed" && <LeaderboardPanel entries={leaderboard} />}
 
           {answeredCodes.size > 0 && (
             <div className="flex justify-center">
