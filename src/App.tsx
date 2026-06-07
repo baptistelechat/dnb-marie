@@ -141,7 +141,7 @@ const App = () => {
       </div>
 
       <nav
-        className="max-w-2xl mx-auto flex px-4 pt-3 gap-2 overflow-x-auto pb-1 shrink-0"
+        className="max-w-2xl mx-auto flex flex-wrap justify-center px-4 pt-3 gap-2 pb-1 shrink-0"
         aria-label="Navigation principale"
       >
         {TABS.map(({ value, label, icon }) => {
