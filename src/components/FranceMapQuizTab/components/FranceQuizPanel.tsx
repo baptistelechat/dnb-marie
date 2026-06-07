@@ -110,7 +110,7 @@ const FranceQuizPanel = ({
               type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              placeholder="ex : Bretagne"
+              placeholder="ex : Pays de la Loire"
               autoComplete="off"
               className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none"
               style={{
@@ -135,7 +135,7 @@ const FranceQuizPanel = ({
               type="text"
               value={capitalInput}
               onChange={(e) => setCapitalInput(e.target.value)}
-              placeholder="ex : Rennes"
+              placeholder="ex : Nantes"
               autoComplete="off"
               className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none"
               style={{

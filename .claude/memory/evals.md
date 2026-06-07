@@ -22,3 +22,4 @@ last_updated: 2026-06-07
 | [EVAL-013](evals/EVAL-013.md) | 2026-06-07 | Bouton GO! ajouté aux 4 onglets quiz (Carte EU, Carte France, Flashcards UE, Flashcards France) — lint 0 erreur | #quiz #timer #react #ux                  | keep   |
 | [EVAL-014](evals/EVAL-014.md) | 2026-06-07 | AssociationTab — mini-jeu association pays/capitales UE complet, lint+build clean (432 kB)                      | #association #game #react #leaderboard   | keep   |
 | [EVAL-015](evals/EVAL-015.md) | 2026-06-07 | FranceAssociationTab — 18 paires région ↔ chef-lieu, leaderboard séparé, lint+build clean (437 kB)              | #association #france #react #build       | keep   |
+| [EVAL-016](evals/EVAL-016.md) | 2026-06-07 | Fix cheat association — `updateBoardAfterMatch` avec swap aléatoire `rightOrder`, lint clean                    | #association #fix #game-design           | keep   |

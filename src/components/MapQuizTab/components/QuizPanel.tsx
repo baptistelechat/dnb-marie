@@ -119,7 +119,7 @@ const QuizPanel = ({
               type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              placeholder="ex : Espagne"
+              placeholder="ex : France"
               autoComplete="off"
               className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
               style={{
@@ -144,7 +144,7 @@ const QuizPanel = ({
               type="text"
               value={capitalInput}
               onChange={(e) => setCapitalInput(e.target.value)}
-              placeholder="ex : Madrid"
+              placeholder="ex : Paris"
               autoComplete="off"
               className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
               style={{

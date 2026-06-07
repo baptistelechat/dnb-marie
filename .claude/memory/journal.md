@@ -202,3 +202,26 @@ Fix en trois temps : généralisation des sous-composants partagés (`leftLabel`
 ---
 
 Session de 2 messages. Baptiste demande de centrer les onglets de jeu (Liste, Carte Quiz, Flashcards, Association) et de les faire passer sur plusieurs lignes sur les petits écrans. Fix : `<nav>` dans `App.tsx`, remplacement de `overflow-x-auto` par `flex-wrap justify-center`. Aucun blocker, aucune décision structurante.
+
+---
+
+Session de 1 message. Baptiste signale que le sélecteur UE/France est visuellement plus petit sur l'onglet Carte Quiz que sur les 3 autres onglets. Diagnostic : en mode `h-dvh flex flex-col` (actif uniquement sur Carte Quiz via [BDR-016](decisions/BDR-016.md)), `mx-auto` horizontal sur un flex item en colonne force `align-self: center`, réduisant la largeur à la taille intrinsèque des boutons plutôt que `max-w-2xl`. Fix : `w-full` ajouté sur le `div` sélecteur (ligne 97) et la `nav` des onglets (ligne 143) dans `App.tsx`. Aucun blocker.
+
+**Entrées clés :**
+
+- [LRN-014](learnings/LRN-014.md) — `flex flex-col` + `mx-auto` → largeur intrinsèque, fix `w-full`
+
+---
+
+Session d'une seule passe, très courte. Baptiste signale que Marie a trouvé un cheat dans l'onglet Association : après chaque bonne réponse, le nouvel item remplaçait le code matché au même index dans `leftOrder` ET `rightOrder`. La nouvelle paire (pays + capitale ou région + chef-lieu) atterrissait donc toujours à la même ligne visuelle dans les deux colonnes, permettant à Marie de cliquer en boucle sur la même ligne sans jamais lire les labels.
+
+Diagnostic immédiat dans `AssociationTab/utils.ts`, fonction `updateBoardAfterMatch` : le `array.map(c => c === matched ? next : c)` était appliqué identiquement aux deux tableaux. Fix : `leftOrder` reste replace-in-place (stabilité visuelle, zéro déplacement des items voisins), mais `rightOrder` reçoit un swap aléatoire avec un index ≠ matchedIdx après le remplacement — la capitale atterrit à une ligne imprévisible. Guard `if (length > 1)` pour le dernier item. Fix dans un seul fichier, couvre les deux onglets (EU + France) car `FranceAssociationTab/utils.ts` réexporte `updateBoardAfterMatch`. Lint 0 erreur.
+
+**Entrées clés :**
+
+- [BDR-024](decisions/BDR-024.md) — swap aléatoire `rightOrder` après match
+- [LRN-015](learnings/LRN-015.md) — colonnes synchronisées replace-in-place → cheat positionnel
+
+---
+
+Session de fermeture + sécurité. Review automatique post-commit signale `allowedHosts: true` dans `vite.config.ts` comme risque DNS rebinding. Fix validé par Baptiste : remplacé par `[".loca.lt"]` pour limiter l'exposition à localtunnel uniquement. Seul GLRN-084 ajouté (les entrées Chrome auto-translate de la session précédente étaient déjà enregistrées).

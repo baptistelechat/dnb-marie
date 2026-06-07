@@ -42,19 +42,32 @@ export const updateBoardAfterMatch = (
   const newPool = [...prev.pool];
 
   if (newPool.length > 0) {
-    // Remplace en place : le nouvel item prend exactement la position de l'item retiré
     const next = newPool.pop()!;
+
+    // Left: replace in place — le nouveau pays hérite de la position de l'ancien (stabilité visuelle)
+    const newLeftOrder = prev.leftOrder.map((c) =>
+      c === matchedCode ? next.countryCode : c,
+    );
+
+    // Right: replace puis swap aléatoire pour que la capitale n'arrive jamais au même slot que le pays
+    const newRightOrder = [...prev.rightOrder];
+    const matchedIdx = newRightOrder.indexOf(matchedCode);
+    newRightOrder[matchedIdx] = next.countryCode;
+    if (newRightOrder.length > 1) {
+      let swapIdx = Math.floor(Math.random() * (newRightOrder.length - 1));
+      if (swapIdx >= matchedIdx) swapIdx++;
+      const tmp = newRightOrder[matchedIdx]!;
+      newRightOrder[matchedIdx] = newRightOrder[swapIdx]!;
+      newRightOrder[swapIdx] = tmp;
+    }
+
     return {
       pool: newPool,
       display: prev.display.map((p) =>
         p.countryCode === matchedCode ? next : p,
       ),
-      leftOrder: prev.leftOrder.map((c) =>
-        c === matchedCode ? next.countryCode : c,
-      ),
-      rightOrder: prev.rightOrder.map((c) =>
-        c === matchedCode ? next.countryCode : c,
-      ),
+      leftOrder: newLeftOrder,
+      rightOrder: newRightOrder,
     };
   }
 

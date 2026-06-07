@@ -30,3 +30,4 @@ last_updated: 2026-06-07
 | [BDR-021](decisions/BDR-021.md) | 2026-06-07 | AssociationTab — `AssociationBoardState` avec pool + display + leftOrder/rightOrder indépendants              | #association #game-design #react #state          | actif  |
 | [BDR-022](decisions/BDR-022.md) | 2026-06-07 | AssociationTab — replace-in-place `array.map` pour stabilité positionnelle lors d'un match                    | #association #state #ux #array                   | actif  |
 | [BDR-023](decisions/BDR-023.md) | 2026-06-07 | FranceAssociationTab — variante Association France avec FRENCH_REGIONS, leaderboard séparé, labels génériques | #association #france #react #game-design         | actif  |
+| [BDR-024](decisions/BDR-024.md) | 2026-06-07 | Association — swap aléatoire dans `rightOrder` après match pour bloquer le jeu positionnel                    | #association #game-design #array #ux             | actif  |
