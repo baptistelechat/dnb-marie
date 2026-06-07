@@ -94,7 +94,7 @@ const App = () => {
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-4 pt-4 shrink-0">
+      <div className="w-full max-w-2xl mx-auto px-4 pt-4 shrink-0">
         <div
           className="flex rounded-full p-1 gap-1"
           style={{ background: "#f0e6ff" }}
@@ -141,7 +141,7 @@ const App = () => {
       </div>
 
       <nav
-        className="max-w-2xl mx-auto flex flex-wrap justify-center px-4 pt-3 gap-2 pb-1 shrink-0"
+        className="w-full max-w-2xl mx-auto flex flex-wrap justify-center px-4 pt-3 gap-2 pb-1 shrink-0"
         aria-label="Navigation principale"
       >
         {TABS.map(({ value, label, icon }) => {
