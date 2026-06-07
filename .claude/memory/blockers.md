@@ -20,3 +20,4 @@ last_updated: 2026-06-07
 | [BLK-011](blockers/BLK-011.md) | 2026-06-06 | "Provence-Alpes-Côte d'Azur" refusé au quiz : apostrophe U+2019 mobile absente du regex `normalizeAnswer` | #normalizeAnswer #quiz #unicode #apostrophe   | résolu |
 | [BLK-012](blockers/BLK-012.md) | 2026-06-06 | "St Denis" rejeté : tiret iOS U+2013 non couvert + `\bst\b` sans frontière mot avant `–`                  | #normalizeAnswer #quiz #unicode #ios          | résolu |
 | [BLK-013](blockers/BLK-013.md) | 2026-06-07 | `dev-browser` absent du PATH — `command not found`, import ESM chemin absolu Windows échoue               | #dev-browser #playwright #windows #esm        | résolu |
+| [BLK-014](blockers/BLK-014.md) | 2026-06-07 | Bug "slov"/"sud" AssociationTab : 3 tentatives CSS avant de diagnostiquer Chrome auto-translate           | #chrome #translate #debug #association        | résolu |
