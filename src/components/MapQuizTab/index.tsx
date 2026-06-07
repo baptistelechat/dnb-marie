@@ -133,13 +133,13 @@ const MapQuizTab = () => {
     [mode],
   );
 
+  const handleGo = useCallback(() => {
+    setTimerStartedAt(Date.now());
+  }, []);
+
   const handleSubmit = useCallback(
     (nameInput: string, capitalInput: string) => {
       if (!activeCountry) return;
-
-      if (mode === "directed" && timerStartedAt === null) {
-        setTimerStartedAt(Date.now());
-      }
 
       const correct =
         answersMatch(nameInput, activeCountry.name) &&
@@ -170,7 +170,7 @@ const MapQuizTab = () => {
       }
       setLastResult(correct ? "correct" : "wrong");
     },
-    [activeCountry, tick, answeredCodes, failedCodes, mode, timerStartedAt],
+    [activeCountry, tick, answeredCodes, failedCodes],
   );
 
   const handleNext = useCallback(() => {
@@ -219,16 +219,13 @@ const MapQuizTab = () => {
 
   const handleSkip = useCallback(() => {
     if (!activeCountry) return;
-    if (mode === "directed" && timerStartedAt === null) {
-      setTimerStartedAt(Date.now());
-    }
     setFailedCodes((prev) => {
       const n = new Set(prev);
       n.add(activeCountry.code);
       return n;
     });
     setLastResult("skipped");
-  }, [activeCountry, mode, timerStartedAt]);
+  }, [activeCountry]);
 
   const handleReplay = useCallback(() => {
     resetState();
@@ -295,17 +292,46 @@ const MapQuizTab = () => {
 
           <QuizProgress answered={answeredCodes.size} total={TOTAL} />
 
-          <QuizPanel
-            key={activeCode ?? "empty"}
-            country={activeCountry}
-            mode={mode}
-            lastResult={lastResult}
-            showFlag={showFlag}
-            onToggleFlag={() => setShowFlag((v) => !v)}
-            onSubmit={handleSubmit}
-            onNext={handleNext}
-            onSkip={mode === "directed" ? handleSkip : undefined}
-          />
+          {mode === "directed" && timerStartedAt === null ? (
+            <div className="flex flex-col items-center justify-center gap-3 p-6 rounded-3xl border-2 border-purple-200 bg-purple-50">
+              <p
+                className="text-slate-500 text-sm font-semibold"
+                style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+              >
+                🔀 {queue.length} pays à identifier
+              </p>
+              <button
+                type="button"
+                onClick={handleGo}
+                className="px-10 py-4 rounded-2xl font-bold text-2xl text-white shadow-lg active:scale-95 transition-transform"
+                style={{
+                  background: "#7e57c2",
+                  fontFamily: "'Fredoka', system-ui, sans-serif",
+                }}
+                aria-label="Démarrer la partie"
+              >
+                GO !
+              </button>
+              <p
+                className="text-slate-400 text-xs"
+                style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+              >
+                Le chrono démarre au GO
+              </p>
+            </div>
+          ) : (
+            <QuizPanel
+              key={activeCode ?? "empty"}
+              country={activeCountry}
+              mode={mode}
+              lastResult={lastResult}
+              showFlag={showFlag}
+              onToggleFlag={() => setShowFlag((v) => !v)}
+              onSubmit={handleSubmit}
+              onNext={handleNext}
+              onSkip={mode === "directed" ? handleSkip : undefined}
+            />
+          )}
 
           {mode === "directed" && <LeaderboardPanel entries={leaderboard} />}
 

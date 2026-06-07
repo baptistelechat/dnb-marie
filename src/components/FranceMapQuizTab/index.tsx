@@ -140,12 +140,13 @@ const FranceMapQuizTab = () => {
     [mode],
   );
 
+  const handleGo = useCallback(() => {
+    setTimerStartedAt(Date.now());
+  }, []);
+
   const handleSubmit = useCallback(
     (nameInput: string, capitalInput: string) => {
       if (!activeRegion) return;
-      if (mode === "directed" && timerStartedAt === null) {
-        setTimerStartedAt(Date.now());
-      }
       const correct =
         answersMatch(nameInput, activeRegion.name) &&
         answersMatch(capitalInput, activeRegion.capital);
@@ -175,7 +176,7 @@ const FranceMapQuizTab = () => {
       }
       setLastResult(correct ? "correct" : "wrong");
     },
-    [activeRegion, tick, answeredCodes, failedCodes, mode, timerStartedAt],
+    [activeRegion, tick, answeredCodes, failedCodes],
   );
 
   const handleNext = useCallback(() => {
@@ -205,16 +206,13 @@ const FranceMapQuizTab = () => {
 
   const handleSkip = useCallback(() => {
     if (!activeRegion) return;
-    if (mode === "directed" && timerStartedAt === null) {
-      setTimerStartedAt(Date.now());
-    }
     setFailedCodes((prev) => {
       const n = new Set(prev);
       n.add(activeRegion.code);
       return n;
     });
     setLastResult("skipped");
-  }, [activeRegion, mode, timerStartedAt]);
+  }, [activeRegion]);
 
   const handleSave = useCallback(
     (playerName: string, date: string) => {
@@ -316,15 +314,44 @@ const FranceMapQuizTab = () => {
 
           <QuizProgress answered={answeredCodes.size} total={TOTAL} />
 
-          <FranceQuizPanel
-            key={activeCode ?? "empty"}
-            region={activeRegion}
-            mode={mode}
-            lastResult={lastResult}
-            onSubmit={handleSubmit}
-            onNext={handleNext}
-            onSkip={mode === "directed" ? handleSkip : undefined}
-          />
+          {mode === "directed" && timerStartedAt === null ? (
+            <div className="flex flex-col items-center justify-center gap-3 p-6 rounded-3xl border-2 border-purple-200 bg-purple-50">
+              <p
+                className="text-slate-500 text-sm font-semibold"
+                style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+              >
+                🔀 {queue.length} régions à identifier
+              </p>
+              <button
+                type="button"
+                onClick={handleGo}
+                className="px-10 py-4 rounded-2xl font-bold text-2xl text-white shadow-lg active:scale-95 transition-transform"
+                style={{
+                  background: "#7e57c2",
+                  fontFamily: "'Fredoka', system-ui, sans-serif",
+                }}
+                aria-label="Démarrer la partie"
+              >
+                GO !
+              </button>
+              <p
+                className="text-slate-400 text-xs"
+                style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+              >
+                Le chrono démarre au GO
+              </p>
+            </div>
+          ) : (
+            <FranceQuizPanel
+              key={activeCode ?? "empty"}
+              region={activeRegion}
+              mode={mode}
+              lastResult={lastResult}
+              onSubmit={handleSubmit}
+              onNext={handleNext}
+              onSkip={mode === "directed" ? handleSkip : undefined}
+            />
+          )}
 
           {mode === "directed" && (
             <LeaderboardPanel entries={leaderboardForPanel} />

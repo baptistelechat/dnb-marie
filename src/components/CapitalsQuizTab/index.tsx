@@ -90,12 +90,13 @@ const CapitalsQuizTab = () => {
     [resetState, getEntries],
   );
 
+  const handleGo = useCallback(() => {
+    setTimerStartedAt(Date.now());
+  }, []);
+
   const handleSubmit = useCallback(
     (answer: string) => {
       if (!activeCountry) return;
-      if (timerStartedAt === null) {
-        setTimerStartedAt(Date.now());
-      }
       const correct =
         direction === "country-to-capital"
           ? answersMatch(answer, activeCountry.capital)
@@ -126,14 +127,7 @@ const CapitalsQuizTab = () => {
       }
       setLastResult(correct ? "correct" : "wrong");
     },
-    [
-      activeCountry,
-      direction,
-      tick,
-      answeredCodes,
-      failedCodes,
-      timerStartedAt,
-    ],
+    [activeCountry, direction, tick, answeredCodes, failedCodes],
   );
 
   const handleNext = useCallback(() => {
@@ -159,16 +153,13 @@ const CapitalsQuizTab = () => {
 
   const handleSkip = useCallback(() => {
     if (!activeCountry) return;
-    if (timerStartedAt === null) {
-      setTimerStartedAt(Date.now());
-    }
     setFailedCodes((prev) => {
       const n = new Set(prev);
       n.add(activeCountry.code);
       return n;
     });
     setLastResult("skipped");
-  }, [activeCountry, timerStartedAt]);
+  }, [activeCountry]);
 
   const handleSave = useCallback(
     (playerName: string, date: string) => {
@@ -238,21 +229,51 @@ const CapitalsQuizTab = () => {
 
       <CapitalsProgress answered={answeredCodes.size} total={TOTAL} />
 
-      <QuizCard
-        key={activeCode ?? "empty"}
-        country={activeCountry}
-        direction={direction}
-      />
-
-      <AnswerInput
-        key={`${activeCode ?? "empty"}-${lastResult ?? "null"}`}
-        direction={direction}
-        lastResult={lastResult}
-        country={activeCountry}
-        onSubmit={handleSubmit}
-        onNext={handleNext}
-        onSkip={handleSkip}
-      />
+      {timerStartedAt === null ? (
+        <div className="flex flex-col items-center justify-center gap-3 p-6 rounded-3xl border-2 border-purple-200 bg-purple-50">
+          <p
+            className="text-slate-500 text-sm font-semibold"
+            style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+          >
+            🃏 {queue.length} pays à identifier
+          </p>
+          <button
+            type="button"
+            onClick={handleGo}
+            className="px-10 py-4 rounded-2xl font-bold text-2xl text-white shadow-lg active:scale-95 transition-transform"
+            style={{
+              background: "#7e57c2",
+              fontFamily: "'Fredoka', system-ui, sans-serif",
+            }}
+            aria-label="Démarrer la partie"
+          >
+            GO !
+          </button>
+          <p
+            className="text-slate-400 text-xs"
+            style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
+          >
+            Le chrono démarre au GO
+          </p>
+        </div>
+      ) : (
+        <>
+          <QuizCard
+            key={activeCode ?? "empty"}
+            country={activeCountry}
+            direction={direction}
+          />
+          <AnswerInput
+            key={`${activeCode ?? "empty"}-${lastResult ?? "null"}`}
+            direction={direction}
+            lastResult={lastResult}
+            country={activeCountry}
+            onSubmit={handleSubmit}
+            onNext={handleNext}
+            onSkip={handleSkip}
+          />
+        </>
+      )}
 
       <LeaderboardPanel entries={leaderboardForPanel} />
 
