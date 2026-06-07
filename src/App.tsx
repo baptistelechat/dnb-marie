@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Globe, Landmark, Map, Sparkles } from "lucide-react";
+import { Globe, Landmark, Link2, Map, Sparkles } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
 import EuropTab from "./components/EuropTab";
 import MapQuizTab from "./components/MapQuizTab";
@@ -7,8 +7,9 @@ import CapitalsQuizTab from "./components/CapitalsQuizTab";
 import FranceTab from "./components/FranceTab";
 import FranceMapQuizTab from "./components/FranceMapQuizTab";
 import FranceCapitalsQuizTab from "./components/FranceCapitalsQuizTab";
+import AssociationTab from "./components/AssociationTab";
 
-type Tab = "checklist" | "map-quiz" | "capitals-quiz";
+type Tab = "checklist" | "map-quiz" | "capitals-quiz" | "association";
 type Subject = "eu" | "france";
 
 const TABS: { value: Tab; label: string; icon: React.ReactNode }[] = [
@@ -18,6 +19,11 @@ const TABS: { value: Tab; label: string; icon: React.ReactNode }[] = [
     value: "capitals-quiz",
     label: "Flashcards",
     icon: <Landmark size={14} />,
+  },
+  {
+    value: "association",
+    label: "Association",
+    icon: <Link2 size={14} />,
   },
 ];
 
@@ -180,6 +186,7 @@ const App = () => {
         {subject === "eu" && activeTab === "capitals-quiz" && (
           <CapitalsQuizTab />
         )}
+        {activeTab === "association" && <AssociationTab />}
         {subject === "france" && activeTab === "checklist" && <FranceTab />}
         {subject === "france" && activeTab === "map-quiz" && (
           <FranceMapQuizTab />
