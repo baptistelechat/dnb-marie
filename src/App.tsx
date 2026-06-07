@@ -8,6 +8,7 @@ import FranceTab from "./components/FranceTab";
 import FranceMapQuizTab from "./components/FranceMapQuizTab";
 import FranceCapitalsQuizTab from "./components/FranceCapitalsQuizTab";
 import AssociationTab from "./components/AssociationTab";
+import FranceAssociationTab from "./components/FranceAssociationTab";
 
 type Tab = "checklist" | "map-quiz" | "capitals-quiz" | "association";
 type Subject = "eu" | "france";
@@ -186,7 +187,10 @@ const App = () => {
         {subject === "eu" && activeTab === "capitals-quiz" && (
           <CapitalsQuizTab />
         )}
-        {activeTab === "association" && <AssociationTab />}
+        {subject === "eu" && activeTab === "association" && <AssociationTab />}
+        {subject === "france" && activeTab === "association" && (
+          <FranceAssociationTab />
+        )}
         {subject === "france" && activeTab === "checklist" && <FranceTab />}
         {subject === "france" && activeTab === "map-quiz" && (
           <FranceMapQuizTab />

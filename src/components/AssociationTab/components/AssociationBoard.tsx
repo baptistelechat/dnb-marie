@@ -12,6 +12,8 @@ interface AssociationBoardProps {
   shakingPair: { left: string; right: string } | null;
   onSelectLeft: (code: string) => void;
   onSelectRight: (code: string) => void;
+  leftLabel?: string;
+  rightLabel?: string;
 }
 
 const AssociationBoard = ({
@@ -24,6 +26,8 @@ const AssociationBoard = ({
   shakingPair,
   onSelectLeft,
   onSelectRight,
+  leftLabel = "Pays",
+  rightLabel = "Capitales",
 }: AssociationBoardProps) => {
   const pairMap = new Map(display.map((p) => [p.countryCode, p]));
 
@@ -51,7 +55,7 @@ const AssociationBoard = ({
             fontFamily: "'Fredoka', system-ui, sans-serif",
           }}
         >
-          Pays
+          {leftLabel}
         </p>
         {leftOrder.map((code) => {
           const pair = pairMap.get(code);
@@ -75,7 +79,7 @@ const AssociationBoard = ({
             fontFamily: "'Fredoka', system-ui, sans-serif",
           }}
         >
-          Capitales
+          {rightLabel}
         </p>
         {rightOrder.map((code) => {
           const pair = pairMap.get(code);

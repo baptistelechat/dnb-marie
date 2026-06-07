@@ -4,6 +4,7 @@ import type { AssociationLeaderboardEntry } from "../types";
 
 interface AssociationGameOverModalProps {
   firstTryScore: number;
+  totalCountries: number;
   totalTimeSeconds: number;
   leaderboard: AssociationLeaderboardEntry[];
   onSave: (playerName: string, date: string) => void;
@@ -32,6 +33,7 @@ const formatTime = (seconds: number): string => {
 
 const AssociationGameOverModal = ({
   firstTryScore,
+  totalCountries,
   totalTimeSeconds,
   leaderboard,
   onSave,
@@ -83,7 +85,7 @@ const AssociationGameOverModal = ({
               color: "#4a148c",
             }}
           >
-            {firstTryScore} / 27
+            {firstTryScore} / {totalCountries}
           </p>
           <p
             className="text-sm font-semibold"
@@ -204,7 +206,7 @@ const AssociationGameOverModal = ({
                       className="font-bold shrink-0"
                       style={{ color: "#7e57c2" }}
                     >
-                      {entry.firstTryScore}/27
+                      {entry.firstTryScore}/{entry.totalCountries}
                     </span>
                     <span
                       className="text-xs shrink-0"

@@ -1,23 +1,23 @@
 import { useState, useCallback } from "react";
 import { Link2, RotateCcw } from "lucide-react";
-import { EU_COUNTRIES } from "../../data/euCountries";
+import { FRENCH_REGIONS } from "../../data/frenchRegions";
 import { useHaptics } from "../../utils/hapticPatterns";
 import type {
   AssociationBoardState,
   AssociationLeaderboardEntry,
-} from "./types";
+} from "../AssociationTab/types";
 import { initBoard, updateBoardAfterMatch } from "./utils";
-import { useAssociationLeaderboard } from "./hooks/useAssociationLeaderboard";
-import AssociationBoard from "./components/AssociationBoard";
-import AssociationGameOverModal from "./components/AssociationGameOverModal";
+import { useFranceAssociationLeaderboard } from "./hooks/useFranceAssociationLeaderboard";
+import AssociationBoard from "../AssociationTab/components/AssociationBoard";
+import AssociationGameOverModal from "../AssociationTab/components/AssociationGameOverModal";
 import Timer from "../MapQuizTab/components/Timer";
 import LeaderboardPanel from "../MapQuizTab/components/LeaderboardPanel";
 
-const TOTAL = EU_COUNTRIES.length;
+const TOTAL = FRENCH_REGIONS.length;
 
-const AssociationTab = () => {
+const FranceAssociationTab = () => {
   const { tick, success, error: hapticError } = useHaptics();
-  const { getEntries, addEntry } = useAssociationLeaderboard();
+  const { getEntries, addEntry } = useFranceAssociationLeaderboard();
 
   const [board, setBoard] = useState<AssociationBoardState>(() => initBoard());
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
@@ -173,7 +173,7 @@ const AssociationTab = () => {
           <Link2 size={18} style={{ color: "#9575cd" }} />
         </div>
         <p className="text-slate-400 text-sm font-semibold">
-          Relie chaque pays à sa capitale 🗺️
+          Relie chaque région à son chef-lieu 🗺️
         </p>
       </div>
 
@@ -200,7 +200,7 @@ const AssociationTab = () => {
             className="text-slate-500 text-sm font-semibold"
             style={{ fontFamily: "'Nunito', system-ui, sans-serif" }}
           >
-            🔗 27 paires pays ↔ capitale
+            🔗 {TOTAL} paires région ↔ chef-lieu
           </p>
           <button
             type="button"
@@ -232,6 +232,8 @@ const AssociationTab = () => {
           shakingPair={shakingPair}
           onSelectLeft={handleSelectLeft}
           onSelectRight={handleSelectRight}
+          leftLabel="Régions"
+          rightLabel="Chef-lieux"
         />
       )}
 
@@ -265,4 +267,4 @@ const AssociationTab = () => {
   );
 };
 
-export default AssociationTab;
+export default FranceAssociationTab;
