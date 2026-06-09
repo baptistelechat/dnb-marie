@@ -143,14 +143,14 @@ interface HistoricalFigure {
 
 ### Ressources photos — tâches obligatoires
 
-- [ ] Sourcer 2-3 photos libres de droits (Wikimedia Commons, licence CC) par personnage = 22 à 33 images
-- [ ] Vérifier le chargement de chaque URL (pas de 404, résolution correcte sur mobile)
-- [ ] Documenter les URLs validées directement dans `historicalFigures.ts`
+- [x] Sourcer 2-3 photos libres de droits (Wikimedia Commons, licence CC) par personnage = 22 à 33 images
+- [x] Vérifier le chargement de chaque URL (pas de 404, résolution correcte sur mobile)
+- [x] Documenter les URLs validées directement dans `historicalFigures.ts`
 
 ### Validation pédagogique — ⛔ bloquant
 
-- [ ] Faire valider les données (dates, mots-clés personnages) par Marie ou sur la base de son cours avant de coder quoi que ce soit
-- [ ] Un scan du cahier d'histoire suffit — l'app doit refléter ce que le prof attend au DNB, pas la culture générale
+- [x] Faire valider les données (dates, mots-clés personnages) par Marie ou sur la base de son cours avant de coder quoi que ce soit
+- [x] Un scan du cahier d'histoire suffit — l'app doit refléter ce que le prof attend au DNB, pas la culture générale
 
 ---
 

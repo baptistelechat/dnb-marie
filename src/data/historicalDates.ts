@@ -1,0 +1,168 @@
+export interface HistoricalDate {
+  id: string;
+  type: "point" | "range";
+  date: string;
+  sortKey: number;
+  endSortKey?: number;
+  event: string;
+  period?: string;
+}
+
+export const HISTORICAL_DATES: HistoricalDate[] = [
+  {
+    id: "wwi-debut",
+    type: "point",
+    date: "Août 1914",
+    sortKey: 1914,
+    event: "Début de la Première Guerre mondiale",
+    period: "Première Guerre mondiale",
+  },
+  {
+    id: "genocide-armenien",
+    type: "point",
+    date: "1915",
+    sortKey: 1915,
+    event: "Le génocide arménien",
+    period: "Première Guerre mondiale",
+  },
+  {
+    id: "verdun",
+    type: "point",
+    date: "1916",
+    sortKey: 1916,
+    event: "La bataille de Verdun",
+    period: "Première Guerre mondiale",
+  },
+  {
+    id: "revolution-russe",
+    type: "point",
+    date: "1917",
+    sortKey: 1917,
+    event: "La révolution russe",
+  },
+  {
+    id: "armistice-wwi",
+    type: "point",
+    date: "11 novembre 1918",
+    sortKey: 1918,
+    event: "Armistice de la Première Guerre mondiale",
+    period: "Première Guerre mondiale",
+  },
+  {
+    id: "staline-urss",
+    type: "range",
+    date: "1924–1953",
+    sortKey: 1924,
+    endSortKey: 1953,
+    event: "Staline au pouvoir en URSS",
+  },
+  {
+    id: "allemagne-hitler",
+    type: "range",
+    date: "1933–1945",
+    sortKey: 1933,
+    endSortKey: 1945,
+    event: "L'Allemagne d'Hitler",
+  },
+  {
+    id: "front-populaire",
+    type: "point",
+    date: "1936",
+    sortKey: 1936,
+    event: "Le Front populaire",
+  },
+  {
+    id: "wwii-debut",
+    type: "point",
+    date: "1 septembre 1939",
+    sortKey: 1939,
+    event: "Début de la Seconde Guerre mondiale",
+  },
+  {
+    id: "wwii",
+    type: "range",
+    date: "1939–1945",
+    sortKey: 1939,
+    endSortKey: 1945,
+    event: "La Seconde Guerre mondiale",
+  },
+  {
+    id: "appel-18-juin",
+    type: "point",
+    date: "18 juin 1940",
+    sortKey: 1940,
+    event: "Appel du général de Gaulle à la résistance sur la BBC",
+    period: "Seconde Guerre mondiale",
+  },
+  {
+    id: "montoire",
+    type: "point",
+    date: "24 octobre 1940",
+    sortKey: 1940,
+    event: "Entrevue de Montoire — début de la collaboration",
+    period: "Seconde Guerre mondiale",
+  },
+  {
+    id: "debarquement",
+    type: "point",
+    date: "6 juin 1944",
+    sortKey: 1944,
+    event: "Débarquement en Normandie",
+    period: "Seconde Guerre mondiale",
+  },
+  {
+    id: "liberation",
+    type: "range",
+    date: "1944–1945",
+    sortKey: 1944,
+    endSortKey: 1945,
+    event: "La Libération — de Gaulle à la tête du GPRF, programme du CNR",
+    period: "Seconde Guerre mondiale",
+  },
+  {
+    id: "gprf",
+    type: "range",
+    date: "1944–1946",
+    sortKey: 1944,
+    endSortKey: 1946,
+    event: "Le GPRF : gouvernement provisoire de la République française",
+  },
+  {
+    id: "liberation-camps",
+    type: "point",
+    date: "Janvier 1945",
+    sortKey: 1945,
+    event: "Libération des camps de concentration",
+    period: "Seconde Guerre mondiale",
+  },
+  {
+    id: "fin-wwii-europe",
+    type: "point",
+    date: "8 mai 1945",
+    sortKey: 1945,
+    event: "Fin de la Seconde Guerre mondiale en Europe",
+  },
+  {
+    id: "hiroshima",
+    type: "point",
+    date: "Août 1945",
+    sortKey: 1945,
+    event: "Bombes atomiques sur Hiroshima et Nagasaki",
+  },
+  {
+    id: "secu-sociale-vote-femmes",
+    type: "range",
+    date: "1945–1946",
+    sortKey: 1945,
+    endSortKey: 1946,
+    event: "Création de la Sécurité sociale et droit de vote des femmes",
+  },
+  {
+    id: "quatrieme-republique",
+    type: "range",
+    date: "1946–1958",
+    sortKey: 1946,
+    endSortKey: 1958,
+    event: "La Quatrième République",
+  },
+];

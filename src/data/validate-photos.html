@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Validation photos — DNB</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f0f4f8;
+        padding: 24px 24px 120px;
+      }
+      h1 {
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+        color: #1e293b;
+      }
+      .subtitle {
+        color: #64748b;
+        font-size: 0.875rem;
+        margin-bottom: 28px;
+      }
+      .person {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 28px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      }
+      .person-header {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 4px;
+      }
+      .person h2 {
+        font-size: 1.05rem;
+        color: #0f172a;
+      }
+      .badge {
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 99px;
+      }
+      .badge.ok {
+        background: #dcfce7;
+        color: #15803d;
+      }
+      .badge.warn {
+        background: #fef3c7;
+        color: #b45309;
+      }
+      .person .role {
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 14px;
+      }
+      .section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 14px 0 8px;
+      }
+      .photos {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .photo-item {
+        position: relative;
+        cursor: pointer;
+        border-radius: 10px;
+        border: 3px solid transparent;
+        transition:
+          border-color 0.15s,
+          transform 0.1s;
+        flex-shrink: 0;
+      }
+      .photo-item:hover {
+        transform: scale(1.03);
+      }
+      .photo-item.selected {
+        border-color: #22c55e;
+      }
+      .photo-item.selected .check {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .check {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 26px;
+        height: 26px;
+        background: #22c55e;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0.5);
+        transition:
+          opacity 0.15s,
+          transform 0.15s;
+        font-size: 14px;
+        color: white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        z-index: 2;
+      }
+      .photo-item img {
+        width: 140px;
+        height: 175px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+        background: #f8fafc;
+      }
+      .photo-item .info {
+        width: 140px;
+        padding: 5px 4px 2px;
+        font-size: 0.68rem;
+        color: #64748b;
+        text-align: center;
+        line-height: 1.3;
+      }
+      .http-status {
+        font-size: 0.65rem;
+        font-weight: 700;
+      }
+      .http-status.ok {
+        color: #16a34a;
+      }
+      .http-status.fail {
+        color: #dc2626;
+      }
+      .warning {
+        font-size: 0.8rem;
+        color: #b45309;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+      }
+      .incomplete {
+        font-size: 0.8rem;
+        color: #7c3aed;
+        background: #f5f3ff;
+        border: 1px solid #ddd6fe;
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 12px;
+      }
+
+      /* Barre flottante */
+      #sticky-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #1e293b;
+        color: white;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        z-index: 100;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+      }
+      #sticky-bar .count-badge {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #86efac;
+      }
+      #sticky-bar .export-btn {
+        margin-left: auto;
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      #sticky-bar .export-btn:hover {
+        background: #16a34a;
+      }
+
+      /* Modal export */
+      #modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 200;
+        align-items: center;
+        justify-content: center;
+      }
+      #modal-overlay.open {
+        display: flex;
+      }
+      #modal {
+        background: white;
+        border-radius: 14px;
+        padding: 24px;
+        width: min(700px, 90vw);
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      #modal h3 {
+        font-size: 1.1rem;
+        color: #0f172a;
+      }
+      #modal p {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+      #modal textarea {
+        flex: 1;
+        min-height: 300px;
+        font-family: "Courier New", monospace;
+        font-size: 0.78rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 12px;
+        resize: vertical;
+        color: #1e293b;
+      }
+      #modal .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      #modal .copy-btn {
+        background: #7c3aed;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      #modal .close-btn {
+        background: #f1f5f9;
+        color: #475569;
+        border: none;
+        border-radius: 8px;
+        padding: 9px 18px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📸 Validation photos — Personnages historiques</h1>
+    <p class="subtitle">
+      Clique sur une photo pour la sélectionner ✅ | Re-clique pour
+      désélectionner | Clique "Exporter" quand tu as terminé
+    </p>
+
+    <div id="container"></div>
+
+    <div id="sticky-bar">
+      <span>Photos sélectionnées :</span>
+      <span id="total-count" class="count-badge">0</span>
+      <button class="export-btn" onclick="openModal()">
+        📋 Exporter la sélection
+      </button>
+    </div>
+
+    <div id="modal-overlay">
+      <div id="modal">
+        <h3>📋 Sélection finale</h3>
+        <p>
+          Copie ce JSON et donne-le à Claude pour mettre à jour
+          historicalFigures.ts
+        </p>
+        <textarea id="export-output" readonly></textarea>
+        <div class="modal-actions">
+          <button class="close-btn" onclick="closeModal()">Fermer</button>
+          <button class="copy-btn" onclick="copyOutput()">📋 Copier</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const data = [
+        {
+          id: "petain",
+          name: "Pétain",
+          role: "Chef de l'État français (Vichy) — Collaboration",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/a/a9/P%C3%A9tain_-_portrait_photographique.jpg",
+              label: "Portrait photographique",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Philippe_P%C3%A9tain_-_photo_Henri_Manuel.jpg",
+              label: "Henri Manuel",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/8/81/Philippe_P%C3%A9tain_%28before_1918%29.jpg",
+              label: "Avant 1918",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/3/34/Philippe_P%C3%A9tain_%28en_civil%2C_autour_de_1930%29.jpg",
+              label: "En civil ~1930",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/e/e4/PETAIN%2C_HENRI_P._MARSHALL_LCCN2016862650.jpg",
+              label: "Library of Congress",
+            },
+            {
+              url: "https://www.cheminsdememoire.gouv.fr/sites/default/files/styles/fiche_visuel/public/2018-08/petain_1928.jpg",
+              label: "Chemins de Mémoire 1928",
+            },
+            {
+              url: "https://www.cheminsdememoire.gouv.fr/sites/default/files/2018-09/GH_marechal_Petain.jpg",
+              label: "Bâton de maréchal 1918",
+            },
+          ],
+        },
+        {
+          id: "lenine",
+          name: "Lénine",
+          role: "Fondateur de l'URSS — Révolution russe",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/c/cd/Iljitsj_Oeljanov_Lenin%2C_de_Russische_revolutionair_en_communistische_%28partij%29_leider_van_de%2C_SFA001006857.jpg",
+              label: "SFA (portrait)",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/7/76/L-Vladimir_speaking.jpg",
+              label: "Discours",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/3/30/Vladimir_Lenin_and_Lev_Kamenev.jpg",
+              label: "Avec Kamenev",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/8/83/Lenin_1920.jpg",
+              label: "1920",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/c/c6/Lenin-last-photo.jpg",
+              label: "Dernière photo 1923",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/c/c0/Lenin_in_1920_%28cropped%29.jpg",
+              label: "1920 (recadré)",
+            },
+          ],
+        },
+        {
+          id: "staline",
+          name: "Staline",
+          role: "Dirigeant de l'URSS — Totalitarisme soviétique",
+          sections: [
+            {
+              label: "Jeunesse",
+              photos: [
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Joseph_Stalin_1911_mug_shot_%28cropped%29.jpg",
+                  label: "Fiche police 1911",
+                },
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Stalin%2C_1915_%281%29.jpg",
+                  label: "1915",
+                },
+              ],
+            },
+            {
+              label: "Au pouvoir",
+              photos: [
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Stalin_in_1939.jpg",
+                  label: "1939",
+                },
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/c/ce/Stalin_and_Maria_Demchenko_1935.jpg",
+                  label: "Avec Demchenko 1935",
+                },
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/3/38/Bundesarchiv_Bild_183-H27337%2C_Moskau%2C_Stalin_und_Ribbentrop_im_Kreml.jpg",
+                  label: "Ribbentrop 1939",
+                },
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/f/f7/Joseph_Stalin_official_portrait.jpg",
+                  label: "Portrait officiel 1949",
+                },
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/d/d9/J.V._Stalin_TASS_Portrait.jpg",
+                  label: "TASS Portrait 1948",
+                },
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Stalin_in_1937.jpg",
+                  label: "1937",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "hitler",
+          name: "Hitler",
+          role: "Führer d'Allemagne — Nazisme",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/3/32/Bundesarchiv_Bild_183-S33882%2C_Adolf_Hitler.jpg",
+              label: "Bundesarchiv S33882",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Bundesarchiv_Bild_183-H1216-0500-002%2C_Adolf_Hitler.jpg",
+              label: "Bundesarchiv H1216",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/d/d0/Adolf_Hitler_1933_Portrait.jpeg",
+              label: "Portrait 1933",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/2/23/Adolf_Hitler_1938_Portrait_%283x4_cropped%29.jpg",
+              label: "Portrait 1938",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/b/b4/Bundesarchiv_Bild_183-S62600%2C_Adolf_Hitler.jpg",
+              label: "Bundesarchiv S62600",
+            },
+          ],
+        },
+        {
+          id: "blum",
+          name: "Léon Blum",
+          role: "Président du Conseil 1936 — Front populaire",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/c/c7/L%C3%A9on_Blum_directeur_du_Populaire_-_photo_Henri_Manuel.jpg",
+              label: "Directeur du Populaire",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/d/da/L%C3%A9on_Blum_Meurisse_b_1927.jpg",
+              label: "Meurisse 1927",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/f/ff/L%C3%A9on_Blum_by_Vallotton.jpg",
+              label: "⚠️ Peinture Vallotton",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/1/18/L%C3%A9on_Blum_reading.jpg",
+              label: "En train de lire",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/2/23/L%C3%A9on_Blum.jpg",
+              label: "Portrait (Wikipedia)",
+            },
+          ],
+        },
+        {
+          id: "degaulle",
+          name: "Le général de Gaulle",
+          role: "Appel du 18 juin — France libre — GPRF",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/e/ea/General_Charles_de_Gaulle_in_1945.jpg",
+              label: "1945",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/8/82/Charles_de_Gaulle_micro_BBC_Londres.jpg",
+              label: "BBC Londres",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Commander_of_Free_French_Forces_General_Charles_de_Gaulle_seated_at_his_desk_in_London_during_the_Second_World_War._D1973.jpg",
+              label: "Bureau Londres IWM",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Charles_de_Gaulle_et_son_%C3%A9pouse_%C3%A0_Londres.jpg",
+              label: "Avec son épouse",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/7/79/De_Gaulle-OWI_%283x4_cropped%29_%282%29.jpg",
+              label: "OWI crop Londres 1942",
+            },
+            {
+              url: "https://museedelaresistanceenligne.org/musee/doc/image/recto/grande/1301.jpg",
+              label: "Musée Résistance, Londres 1940",
+            },
+          ],
+        },
+        {
+          id: "moulin",
+          name: "Jean Moulin",
+          role: "CNR — Résistance — Martyr",
+          incomplete:
+            "Seulement 2 portraits largement connus. Nouvelles sources ajoutées.",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/1/15/Moulin_Harcourt_1937.jpg",
+              label: "Studio Harcourt 1937",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/en/3/33/Jean_Moulin_with_a_scarf_and_fedora_by_Marcel_Bernard.jpg",
+              label: "🎩 Chapeau (Marcel Bernard, 1940)",
+            },
+            {
+              url: "https://museedelaresistanceenligne.org/musee/doc/image/recto/grande/3328.jpg",
+              label: "Musée Résistance (chapeau)",
+            },
+            {
+              url: "https://cdn.essentiels.bnf.fr/media/images/cache/crop/rc/c4ox9tBr/uploads/media/image/20240311170358000000_085.jpg",
+              label: "BnF Essentiels",
+            },
+            {
+              url: "https://www.museeliberation-leclerc-moulin.paris.fr/sites/default/files/styles/960x540/public/2020-06/JMsquare.jpg",
+              label: "Musée Libération Paris",
+            },
+          ],
+        },
+        {
+          id: "elize",
+          name: "Raphaël Élizé",
+          role: "Premier maire noir de France — Déporté 1945",
+          photos: [
+            {
+              url: "https://outremermemory.com/wp-content/uploads/2021/02/Raphael-2.png",
+              label: "Portrait N&B — Outremer Memory",
+            },
+            {
+              url: "https://www.lalibre.be/resizer/v2/HYJCOLTZRFEE3EJ4BIMARDEI4Y.jpg?auth=901a42f82dafe2cca83a5198001fbc0894e1cd4c25e98d570be3f391df108b9f&width=1200&height=800&quality=85&focal=321%2C438",
+              label: "⚠️ Portrait — La Libre (lien avec token, peut expirer)",
+            },
+          ],
+        },
+        {
+          id: "tillion",
+          name: "Germaine Tillion",
+          role: "Résistante — Déportée Ravensbrück — Ethnologue",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/3/37/%C2%A9_assoc_GT_Photo_G_Tillion_carte_d%27%C3%A9tudiante_1934.jpg",
+              label: "Carte étudiante 1934",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/en/2/27/Germaine_Tillion.jpg",
+              label: "Portrait (Wikipedia EN)",
+            },
+            {
+              url: "https://www.cheminsdememoire.gouv.fr/sites/default/files/styles/fiche_visuel/public/2018-08/germaine_tillion_xl.jpg",
+              label: "Chemins de Mémoire — portrait",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Germaine_Tillion%2C_Genevi%C3%A8ve_de_Gaulle-Anthonioz%2C_Pierre_Brossolette_et_Jean_Zay_rentrent_au_Panth%C3%A9on_03.jpg",
+              label: "Entrée au Panthéon 2015",
+            },
+          ],
+        },
+        {
+          id: "gaulle-antonioz",
+          name: "Geneviève de Gaulle-Antonioz",
+          role: "Résistante — Déportée Ravensbrück",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/0/0e/GdGA_StreetArt.jpg",
+              label: "Street art Paris",
+            },
+            {
+              url: "https://museedelaresistanceenligne.org/musee/doc/image/recto/grande/1895.jpg",
+              label: "Musée Résistance — portrait",
+            },
+            {
+              url: "https://museedelaresistanceenligne.org/musee/doc/image/recto/grande/6311.jpg",
+              label: "Avec Viannay — Défense de la France, 1943",
+            },
+            {
+              url: "https://www.cheminsdememoire.gouv.fr/sites/default/files/2018-09/genevieve_de_gaulle_0_0.jpg",
+              label: "Chemins de Mémoire — portrait galerie",
+            },
+            {
+              url: "https://www.cheminsdememoire.gouv.fr/sites/default/files/styles/fiche_visuel_large/public/2018-09/haut_page_10.jpg",
+              label: "Chemins de Mémoire — portrait principal",
+            },
+            {
+              url: "https://www.atd-fourthworld.org/wp-content/uploads/sites/5/2015/07/arton3875.jpg",
+              label: "ATD Quart Monde — portrait",
+            },
+          ],
+        },
+        {
+          id: "baker",
+          name: "Joséphine Baker",
+          role: "Résistante — Espionne — Droits civiques",
+          photos: [
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Baker_Harcourt_1940_2.jpg",
+              label: "Harcourt 1940",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/3/36/Jos%C3%A9phine_Baker_-_photo_Henri_Manuel.jpg",
+              label: "Henri Manuel",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/4/45/Josephine_Baker.jpg",
+              label: "Portrait",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/2/2d/Manuel_-_Josephine_Baker.jpg",
+              label: "Manuel (2e)",
+            },
+            {
+              url: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Josefine_Baker.jpg",
+              label: "Josefine Baker",
+            },
+            {
+              url: "https://imagesdefense.gouv.fr/media/catalog/product/cache/15c2d697f4361d5a5843ebce5d137147/5/1/5109161_21_1.jpg",
+              label: "ImagesDéfense — FFL",
+            },
+          ],
+        },
+      ];
+
+      // ── state ──
+      const selected = {}; // { personId: Set<url> }
+      data.forEach((p) => {
+        selected[p.id] = new Set();
+      });
+
+      function getTotalSelected() {
+        return Object.values(selected).reduce((s, set) => s + set.size, 0);
+      }
+
+      function updateBadge(personId) {
+        const count = selected[personId].size;
+        const badge = document.querySelector(`[data-badge="${personId}"]`);
+        if (badge) {
+          const allPhotos = data.find((p) => p.id === personId);
+          const total = allPhotos.photos
+            ? allPhotos.photos.length
+            : (allPhotos.sections?.reduce((s, x) => s + x.photos.length, 0) ??
+              0);
+          badge.textContent = `${count} / ${total}`;
+          badge.className = `badge ${count >= 3 ? "ok" : "warn"}`;
+        }
+        document.getElementById("total-count").textContent = getTotalSelected();
+      }
+
+      function togglePhoto(personId, url, itemEl) {
+        if (selected[personId].has(url)) {
+          selected[personId].delete(url);
+          itemEl.classList.remove("selected");
+        } else {
+          selected[personId].add(url);
+          itemEl.classList.add("selected");
+        }
+        updateBadge(personId);
+      }
+
+      // ── build UI ──
+      const container = document.getElementById("container");
+
+      function makeGrid(personId, photos) {
+        const grid = document.createElement("div");
+        grid.className = "photos";
+        photos.forEach((c) => {
+          const item = document.createElement("div");
+          item.className = "photo-item";
+          item.onclick = () => togglePhoto(personId, c.url, item);
+
+          const check = document.createElement("div");
+          check.className = "check";
+          check.textContent = "✓";
+
+          const img = document.createElement("img");
+          img.loading = "lazy";
+          img.alt = "";
+          const statusEl = document.createElement("span");
+          statusEl.className = "http-status";
+          img.onload = () => {
+            statusEl.className = "http-status ok";
+            statusEl.textContent = "✅";
+          };
+          img.onerror = () => {
+            statusEl.className = "http-status fail";
+            statusEl.textContent = "❌ 404";
+            item.style.opacity = ".4";
+            item.style.pointerEvents = "none";
+          };
+          img.src = c.url;
+
+          const info = document.createElement("div");
+          info.className = "info";
+          info.appendChild(statusEl);
+          info.append(" " + c.label);
+
+          item.append(check, img, info);
+          grid.appendChild(item);
+        });
+        return grid;
+      }
+
+      data.forEach((person) => {
+        const div = document.createElement("div");
+        div.className = "person";
+
+        const allPhotos = person.photos
+          ? person.photos
+          : (person.sections?.flatMap((s) => s.photos) ?? []);
+        const total = allPhotos.length;
+
+        div.innerHTML = `
+    <div class="person-header">
+      <h2>${person.name}</h2>
+      <span class="badge warn" data-badge="${person.id}">0 / ${total}</span>
+    </div>
+    <div class="role">${person.role}</div>
+  `;
+
+        if (person.warning) {
+          const w = document.createElement("div");
+          w.className = "warning";
+          w.textContent = person.warning;
+          div.appendChild(w);
+        }
+        if (person.incomplete) {
+          const w = document.createElement("div");
+          w.className = "incomplete";
+          w.textContent = "⚠️ " + person.incomplete;
+          div.appendChild(w);
+        }
+
+        if (person.sections) {
+          person.sections.forEach((s) => {
+            const lbl = document.createElement("div");
+            lbl.className = "section-label";
+            lbl.textContent = s.label;
+            div.appendChild(lbl);
+            div.appendChild(makeGrid(person.id, s.photos));
+          });
+        } else {
+          div.appendChild(makeGrid(person.id, person.photos));
+        }
+
+        container.appendChild(div);
+      });
+
+      // ── export ──
+      function openModal() {
+        const output = {};
+        data.forEach((p) => {
+          output[p.id] = Array.from(selected[p.id]);
+        });
+        document.getElementById("export-output").value = JSON.stringify(
+          output,
+          null,
+          2,
+        );
+        document.getElementById("modal-overlay").classList.add("open");
+      }
+      function closeModal() {
+        document.getElementById("modal-overlay").classList.remove("open");
+      }
+      function copyOutput() {
+        const ta = document.getElementById("export-output");
+        ta.select();
+        document.execCommand("copy");
+        const btn = document.querySelector(".copy-btn");
+        btn.textContent = "✅ Copié !";
+        setTimeout(() => (btn.textContent = "📋 Copier"), 1500);
+      }
+    </script>
+  </body>
+</html>
