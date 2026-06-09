@@ -43,12 +43,12 @@ src/components/
 
 ### Tâches
 
-- [ ] Remplacer le badge `3ème` dans le header par deux boutons pill (`Géographie` / `Histoire`), même style visuel que le sélecteur EU/France actuel
-- [ ] Ajouter le state `domain: "geo" | "histoire"` dans `App.tsx`
-- [ ] Conditionner l'affichage du sélecteur EU/France uniquement quand `domain === "geo"` (comportement inchangé)
-- [ ] Ajouter un sélecteur `Dates` / `Personnages` affiché uniquement quand `domain === "histoire"` (même composant pill — `Calendar` pour Dates, `User` pour Personnages)
-- [ ] Créer un state `historySubject: "dates" | "personnages"` et un state `historyTab`
-- [ ] Définir `HISTORY_TABS_DATES` et `HISTORY_TABS_PERSONNAGES` séparés de `GEO_TABS` :
+- [x] Remplacer le badge `3ème` dans le header par deux boutons pill (`Géographie` / `Histoire`), même style visuel que le sélecteur EU/France actuel
+- [x] Ajouter le state `domain: "geo" | "histoire"` dans `App.tsx`
+- [x] Conditionner l'affichage du sélecteur EU/France uniquement quand `domain === "geo"` (comportement inchangé)
+- [x] Ajouter un sélecteur `Dates` / `Personnages` affiché uniquement quand `domain === "histoire"` (même composant pill — `Calendar` pour Dates, `User` pour Personnages)
+- [x] Créer un state `historySubject: "dates" | "personnages"` et un state `historyTab`
+- [x] Définir `HISTORY_TABS_DATES` et `HISTORY_TABS_PERSONNAGES` séparés de `GEO_TABS` :
 
 | Domaine                | Onglet          | Icône         | Description                          |
 | ---------------------- | --------------- | ------------- | ------------------------------------ |
@@ -60,9 +60,9 @@ src/components/
 | Histoire / Personnages | `"Association"` | `Link2`       | Jeu association personnage ↔ mot-clé |
 | Histoire / Personnages | `"Photos"`      | `Camera`      | Flashcard photo → nom                |
 
-- [ ] La navigation des onglets affiche les tabs correspondant à `domain` + `historySubject`
-- [ ] Le `<main>` dispatche sur `domain` en premier, puis sur les sub-states
-- [ ] Reset `historyTab` sur `"frise"` quand `historySubject === "dates"`, sur `"liste"` quand `"personnages"`
+- [x] La navigation des onglets affiche les tabs correspondant à `domain` + `historySubject`
+- [x] Le `<main>` dispatche sur `domain` en premier, puis sur les sub-states
+- [x] Reset `historyTab` sur `"frise"` quand `historySubject === "dates"`, sur `"liste"` quand `"personnages"`
 
 ---
 
