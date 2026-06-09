@@ -17,11 +17,12 @@ export const useLeaderboard = () => {
   const addEntry = useCallback(
     (entry: LeaderboardEntry): LeaderboardEntry[] => {
       const entries = getEntries();
+      const score = (e: LeaderboardEntry) =>
+        e.firstTryScore * 2 + (e.hintScore ?? 0);
       const updated = [...entries, entry]
         .sort(
           (a, b) =>
-            b.firstTryScore - a.firstTryScore ||
-            a.totalTimeSeconds - b.totalTimeSeconds,
+            score(b) - score(a) || a.totalTimeSeconds - b.totalTimeSeconds,
         )
         .slice(0, 10);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));

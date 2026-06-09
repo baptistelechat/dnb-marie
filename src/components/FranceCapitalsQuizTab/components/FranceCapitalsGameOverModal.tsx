@@ -7,6 +7,7 @@ import type {
 
 interface FranceCapitalsGameOverModalProps {
   firstTryScore: number;
+  hintScore?: number;
   total: number;
   totalTimeSeconds: number;
   leaderboard: FranceCapitalsLeaderboardEntry[];
@@ -43,6 +44,7 @@ const DIRECTION_LABELS: Record<FranceCapitalsDirection, string> = {
 
 const FranceCapitalsGameOverModal = ({
   firstTryScore,
+  hintScore = 0,
   total,
   totalTimeSeconds,
   leaderboard,
@@ -50,6 +52,7 @@ const FranceCapitalsGameOverModal = ({
   onSave,
   onReplay,
 }: FranceCapitalsGameOverModalProps) => {
+  const missedScore = total - firstTryScore - hintScore;
   const [name, setName] = useState("");
   const [saved, setSaved] = useState(false);
   const [savedEntryDate, setSavedEntryDate] = useState<string | null>(null);
@@ -99,22 +102,13 @@ const FranceCapitalsGameOverModal = ({
             {DIRECTION_LABELS[direction]}
           </p>
           <p
-            className="text-3xl font-bold"
+            className="text-2xl font-bold"
             style={{
               fontFamily: "'Fredoka', system-ui, sans-serif",
               color: "#4a148c",
             }}
           >
-            {firstTryScore} / {total}
-          </p>
-          <p
-            className="text-sm font-semibold"
-            style={{
-              color: "#9575cd",
-              fontFamily: "'Nunito', system-ui, sans-serif",
-            }}
-          >
-            du premier coup
+            {firstTryScore} ★ · {hintScore} 💡 · {missedScore} ❌
           </p>
           <p
             className="text-sm"
@@ -216,7 +210,20 @@ const FranceCapitalsGameOverModal = ({
                       className="font-bold shrink-0"
                       style={{ color: "#7e57c2" }}
                     >
-                      {entry.firstTryScore}/{entry.totalRegions}
+                      {entry.firstTryScore}★
+                      {(entry.hintScore ?? 0) > 0 && (
+                        <span style={{ color: "#9575cd" }}>
+                          {" "}
+                          · {entry.hintScore}💡
+                        </span>
+                      )}{" "}
+                      ·{" "}
+                      <span style={{ color: "#ef4444" }}>
+                        {entry.totalRegions -
+                          entry.firstTryScore -
+                          (entry.hintScore ?? 0)}
+                        ❌
+                      </span>
                     </span>
                     <span
                       className="text-xs shrink-0"

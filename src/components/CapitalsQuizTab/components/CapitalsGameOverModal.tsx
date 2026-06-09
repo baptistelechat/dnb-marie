@@ -4,6 +4,7 @@ import type { CapitalsLeaderboardEntry, CapitalsDirection } from "../types";
 
 interface CapitalsGameOverModalProps {
   firstTryScore: number;
+  hintScore?: number;
   totalTimeSeconds: number;
   leaderboard: CapitalsLeaderboardEntry[];
   direction: CapitalsDirection;
@@ -43,12 +44,14 @@ const formatTime = (seconds: number): string => {
 
 const CapitalsGameOverModal = ({
   firstTryScore,
+  hintScore = 0,
   totalTimeSeconds,
   leaderboard,
   direction,
   onSave,
   onReplay,
 }: CapitalsGameOverModalProps) => {
+  const missedScore = 27 - firstTryScore - hintScore;
   const [name, setName] = useState("");
   const [saved, setSaved] = useState(false);
   const [savedEntryDate, setSavedEntryDate] = useState<string | null>(null);
@@ -91,22 +94,13 @@ const CapitalsGameOverModal = ({
           </h2>
 
           <p
-            className="text-3xl font-bold"
+            className="text-2xl font-bold"
             style={{
               fontFamily: "'Fredoka', system-ui, sans-serif",
               color: "#4a148c",
             }}
           >
-            {firstTryScore} / 27
-          </p>
-          <p
-            className="text-sm font-semibold"
-            style={{
-              color: "#9575cd",
-              fontFamily: "'Nunito', system-ui, sans-serif",
-            }}
-          >
-            du premier essai
+            {firstTryScore} ★ · {hintScore} 💡 · {missedScore} ❌
           </p>
 
           <div className="flex justify-center gap-3 mt-1">
@@ -240,7 +234,20 @@ const CapitalsGameOverModal = ({
                       className="font-bold shrink-0"
                       style={{ color: "#7e57c2" }}
                     >
-                      {entry.firstTryScore}/27
+                      {entry.firstTryScore}★
+                      {(entry.hintScore ?? 0) > 0 && (
+                        <span style={{ color: "#9575cd" }}>
+                          {" "}
+                          · {entry.hintScore}💡
+                        </span>
+                      )}{" "}
+                      ·{" "}
+                      <span style={{ color: "#ef4444" }}>
+                        {entry.totalCountries -
+                          entry.firstTryScore -
+                          (entry.hintScore ?? 0)}
+                        ❌
+                      </span>
                     </span>
                     <span
                       className="text-xs shrink-0"

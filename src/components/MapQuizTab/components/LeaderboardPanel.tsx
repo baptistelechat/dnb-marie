@@ -73,7 +73,20 @@ const LeaderboardPanel = ({ entries }: LeaderboardPanelProps) => {
                 </span>
               </div>
               <span className="font-bold shrink-0" style={{ color: "#7e57c2" }}>
-                {entry.firstTryScore}/{entry.totalCountries}
+                {entry.firstTryScore}★
+                {(entry.hintScore ?? 0) > 0 && (
+                  <span style={{ color: "#9575cd" }}>
+                    {" "}
+                    · {entry.hintScore}💡
+                  </span>
+                )}{" "}
+                ·{" "}
+                <span style={{ color: "#ef4444" }}>
+                  {entry.totalCountries -
+                    entry.firstTryScore -
+                    (entry.hintScore ?? 0)}
+                  ❌
+                </span>
               </span>
               <span className="shrink-0" style={{ color: "#b0bec5" }}>
                 {formatTime(entry.totalTimeSeconds)}

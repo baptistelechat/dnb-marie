@@ -44,6 +44,7 @@ const MapQuizTab = () => {
   const [failedCodes, setFailedCodes] = useState<Set<string>>(new Set());
   const [lastResult, setLastResult] = useState<LastResult>(null);
   const [showFlag, setShowFlag] = useState(false);
+  const [flagUsedCodes, setFlagUsedCodes] = useState<Set<string>>(new Set());
   const [queue, setQueue] = useState<string[]>([]);
   const [timerStartedAt, setTimerStartedAt] = useState<number | null>(null);
   const [timerStoppedAt, setTimerStoppedAt] = useState<number | null>(null);
@@ -103,6 +104,7 @@ const MapQuizTab = () => {
     setFailedCodes(new Set());
     setLastResult(null);
     setShowFlag(false);
+    setFlagUsedCodes(new Set());
     setTimerStartedAt(null);
     setTimerStoppedAt(null);
     setShowGameOver(false);
@@ -136,6 +138,13 @@ const MapQuizTab = () => {
   const handleGo = useCallback(() => {
     setTimerStartedAt(Date.now());
   }, []);
+
+  const handleToggleFlag = useCallback(() => {
+    if (!showFlag && activeCode) {
+      setFlagUsedCodes((prev) => new Set([...prev, activeCode]));
+    }
+    setShowFlag((v) => !v);
+  }, [showFlag, activeCode]);
 
   const handleSubmit = useCallback(
     (nameInput: string, capitalInput: string) => {
@@ -207,6 +216,7 @@ const MapQuizTab = () => {
       const entry: LeaderboardEntry = {
         name: playerName,
         firstTryScore: firstAttemptCodes.size,
+        hintScore: flagUsedCodes.size,
         totalCountries: TOTAL,
         totalTimeSeconds: Math.floor((stop - start) / 1000),
         date,
@@ -214,7 +224,13 @@ const MapQuizTab = () => {
       const updated = addEntry(entry);
       setLeaderboard(updated);
     },
-    [timerStartedAt, timerStoppedAt, firstAttemptCodes.size, addEntry],
+    [
+      timerStartedAt,
+      timerStoppedAt,
+      firstAttemptCodes.size,
+      flagUsedCodes.size,
+      addEntry,
+    ],
   );
 
   const handleSkip = useCallback(() => {
@@ -326,7 +342,7 @@ const MapQuizTab = () => {
               mode={mode}
               lastResult={lastResult}
               showFlag={showFlag}
-              onToggleFlag={() => setShowFlag((v) => !v)}
+              onToggleFlag={handleToggleFlag}
               onSubmit={handleSubmit}
               onNext={handleNext}
               onSkip={mode === "directed" ? handleSkip : undefined}
@@ -354,6 +370,7 @@ const MapQuizTab = () => {
       {showGameOver && (
         <GameOverModal
           firstTryScore={firstAttemptCodes.size}
+          hintScore={flagUsedCodes.size}
           totalTimeSeconds={totalTimeSeconds}
           leaderboard={leaderboard}
           onSave={handleSave}

@@ -65,9 +65,17 @@ const FranceMapQuizTab = () => {
       : 0;
 
   const leaderboardForPanel = leaderboard.map(
-    ({ name, firstTryScore, totalRegions, totalTimeSeconds: t, date }) => ({
+    ({
       name,
       firstTryScore,
+      hintScore,
+      totalRegions,
+      totalTimeSeconds: t,
+      date,
+    }) => ({
+      name,
+      firstTryScore,
+      hintScore,
       totalCountries: totalRegions,
       totalTimeSeconds: t,
       date,

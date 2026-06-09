@@ -160,14 +160,15 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/shared/HintButton.tsx`
+- [x] Créer `src/components/shared/HintButton.tsx`
   - Props : `pool: string[]`, `answer: string`, `onHintUsed: () => void`
   - Génère 3 distracteurs aléatoires + la bonne réponse, dans un ordre shufflé
   - Réutilisé dans `CapitalsQuizTab`, `FranceCapitalsQuizTab`, `HistoryDatesFlashcardTab`, `PhotoFlashcardTab`
-- [ ] Mettre à jour le contrat `useLeaderboard` : ajouter `hintScore` dans l'entrée sauvegardée
+- [x] Mettre à jour le contrat `useLeaderboard` : ajouter `hintScore` dans l'entrée sauvegardée
   - Les anciennes entrées sans ce champ affichent `hintScore = 0` par défaut (rétrocompatibilité)
-- [ ] Mettre à jour `GameOverModal` (et variantes) pour afficher `freeScore ★ · hintScore 💡 · missedScore ❌`
-- [ ] Vérifier lint + build clean avant de passer à la Phase 2
+  - _(Extension décidée en session : "voir le drapeau" dans MapQuizTab compte aussi comme hint)_
+- [x] Mettre à jour `GameOverModal` (et variantes) pour afficher `freeScore ★ · hintScore 💡 · missedScore ❌`
+- [x] Vérifier lint + build clean avant de passer à la Phase 2
 
 ---
 

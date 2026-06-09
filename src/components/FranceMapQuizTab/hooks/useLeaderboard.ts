@@ -14,12 +14,13 @@ const load = (): FranceLeaderboardEntry[] => {
   }
 };
 
+const score = (e: FranceLeaderboardEntry) =>
+  e.firstTryScore * 2 + (e.hintScore ?? 0);
+
 const sort = (entries: FranceLeaderboardEntry[]): FranceLeaderboardEntry[] =>
-  [...entries].sort((a, b) => {
-    if (b.firstTryScore !== a.firstTryScore)
-      return b.firstTryScore - a.firstTryScore;
-    return a.totalTimeSeconds - b.totalTimeSeconds;
-  });
+  [...entries].sort(
+    (a, b) => score(b) - score(a) || a.totalTimeSeconds - b.totalTimeSeconds,
+  );
 
 export const useLeaderboard = () => {
   const getEntries = useCallback(
