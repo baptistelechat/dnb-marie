@@ -1,6 +1,6 @@
 ---
 register: decisions
-last_updated: 2026-06-07
+last_updated: 2026-06-09
 ---
 
 ## Index
@@ -32,3 +32,9 @@ last_updated: 2026-06-07
 | [BDR-023](decisions/BDR-023.md) | 2026-06-07 | FranceAssociationTab — variante Association France avec FRENCH_REGIONS, leaderboard séparé, labels génériques | #association #france #react #game-design         | actif  |
 | [BDR-024](decisions/BDR-024.md) | 2026-06-07 | Association — swap aléatoire dans `rightOrder` après match pour bloquer le jeu positionnel                    | #association #game-design #array #ux             | actif  |
 | [BDR-025](decisions/BDR-025.md) | 2026-06-07 | `lang="fr" translate="no"` + notranslate meta pour bloquer Chrome auto-translate                              | #chrome #translate #html #mobile                 | actif  |
+| [BDR-026](decisions/BDR-026.md) | 2026-06-09 | Système de score unifié ★/💡/❌ — `freeScore × 2 + hintScore`, 3 critères de départage                        | #game-design #scoring #leaderboard               | actif  |
+| [BDR-027](decisions/BDR-027.md) | 2026-06-09 | Frise lecture (Option B — lanes chronologiques, tap pour valider) remplace checklist pour les dates           | #histoire #game-design #timeline                 | actif  |
+| [BDR-028](decisions/BDR-028.md) | 2026-06-09 | Frise Ordonner — Option D (point/pilule morphologie, @dnd-kit/core, snap au début de range)                   | #histoire #dnd-kit #timeline                     | actif  |
+| [BDR-029](decisions/BDR-029.md) | 2026-06-09 | Phase 1b infrastructure partagée (HintButton, GameOverModal unifié, useLeaderboard) avant toutes phases jeu   | #architecture #refactoring #hint                 | actif  |
+| [BDR-030](decisions/BDR-030.md) | 2026-06-09 | `type: "point" \| "range"` + `endSortKey` obligatoire dans HistoricalDate pour les périodes                   | #typescript #data #histoire                      | actif  |
+| [BDR-031](decisions/BDR-031.md) | 2026-06-09 | `keywords[]` (2-4 mots-clés/personne, Phase 7 depuis cours Marie) — `primaryKeyword` provisoire               | #histoire #data #personnages                     | actif  |

@@ -1,6 +1,6 @@
 ---
 register: learnings
-last_updated: 2026-06-07
+last_updated: 2026-06-09
 ---
 
 ## Index
@@ -22,3 +22,4 @@ last_updated: 2026-06-07
 | [LRN-013](learnings/LRN-013.md) | 2026-06-07 | Variante sujet d'un composant — auditer sous-composants pour labels et valeurs hardcodés avant de dériver                                             | #react #refactoring #composants #audit              | Création FranceAssociationTab                       |
 | [LRN-014](learnings/LRN-014.md) | 2026-06-07 | `flex flex-col` + `mx-auto` horizontal → `align-self: center`, largeur intrinsèque — fix : `w-full` pour 100% du parent                               | #tailwind #flexbox #mx-auto #layout                 | Fix sélecteur UE/France Carte Quiz                  |
 | [LRN-015](learnings/LRN-015.md) | 2026-06-07 | Deux colonnes synchronisées replace-in-place → alignement visuel exploitable — randomiser au moins l'un des deux tableaux après remplacement          | #association #array #game-design #react             | Association jeu dnb-marie — cheat positionnel Marie |
+| [LRN-016](learnings/LRN-016.md) | 2026-06-09 | Session Rodin pré-dev identifie les bloquants éditoriaux et les dépendances d'infrastructure à anticiper                                              | #rodin #architecture #planning                      | Roadmap Histoire dnb-marie — challenge avant dev    |

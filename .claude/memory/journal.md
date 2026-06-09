@@ -1,6 +1,6 @@
 ---
 register: journal
-last_updated: 2026-06-07
+last_updated: 2026-06-09
 ---
 
 ## 2026-06-02
@@ -225,3 +225,24 @@ Diagnostic immédiat dans `AssociationTab/utils.ts`, fonction `updateBoardAfterM
 ---
 
 Session de fermeture + sécurité. Review automatique post-commit signale `allowedHosts: true` dans `vite.config.ts` comme risque DNS rebinding. Fix validé par Baptiste : remplacé par `[".loca.lt"]` pour limiter l'exposition à localtunnel uniquement. Seul GLRN-084 ajouté (les entrées Chrome auto-translate de la session précédente étaient déjà enregistrées).
+
+## 2026-06-09
+
+Session entièrement dédiée au planning du module Histoire. Aucun code écrit — livrable unique : `docs/roadmap-histoire.md`, roadmap complète 12 phases pour l'ajout de la partie Histoire au dnb-marie.
+
+Le module remplace le badge "3ème" par un sélecteur de domaine Géographie / Histoire. Il introduit deux sous-domaines : Dates (Frise lecture, Ordonner drag&drop, Flashcards, Association) et Personnages (Liste, Association, Photos flashcards). La session a d'abord produit une roadmap initiale, puis un challenge Rodin complet a identifié 6 problèmes structurels :
+
+1. L'infrastructure partagée (HintButton, GameOverModal, useLeaderboard) était prévue en Phase 10 — trop tard. Extraite en Phase 1b.
+2. Les photos des personnages n'étaient pas listées comme bloquant en Phase 1 — ajoutées explicitement.
+3. Les intervalles de dates (`range`) n'avaient pas de représentation visuelle distincte des points. Décision Option D (pilule morphe + snap début).
+4. La Frise était utilisée pour deux concepts (lecture + jeu). Renommage : "Frise" pour la lecture, "Ordonner" pour le jeu.
+5. Un seul mot-clé par personnage insuffisant. `keywords[]` défini avec 2-4 entrées, à remplir en Phase 7 depuis le cours de Marie.
+6. Le système de score ×0.75 générait des décimales. Remplacé par deux compteurs entiers `freeScore ★` / `hintScore 💡` avec tri pondéré (`freeScore × 2 + hintScore`).
+
+**Entrées clés :**
+
+- [BDR-026](decisions/BDR-026.md) — système de score unifié ★/💡/❌
+- [BDR-027](decisions/BDR-027.md) — Frise lecture Option B
+- [BDR-028](decisions/BDR-028.md) — Frise Ordonner Option D
+- [BDR-029](decisions/BDR-029.md) — Phase 1b infrastructure partagée
+- [EVAL-017](evals/EVAL-017.md) — roadmap-histoire.md validée

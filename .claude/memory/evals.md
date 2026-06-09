@@ -1,6 +1,6 @@
 ---
 register: evals
-last_updated: 2026-06-07
+last_updated: 2026-06-09
 ---
 
 ## Index
@@ -23,3 +23,4 @@ last_updated: 2026-06-07
 | [EVAL-014](evals/EVAL-014.md) | 2026-06-07 | AssociationTab — mini-jeu association pays/capitales UE complet, lint+build clean (432 kB)                      | #association #game #react #leaderboard   | keep   |
 | [EVAL-015](evals/EVAL-015.md) | 2026-06-07 | FranceAssociationTab — 18 paires région ↔ chef-lieu, leaderboard séparé, lint+build clean (437 kB)              | #association #france #react #build       | keep   |
 | [EVAL-016](evals/EVAL-016.md) | 2026-06-07 | Fix cheat association — `updateBoardAfterMatch` avec swap aléatoire `rightOrder`, lint clean                    | #association #fix #game-design           | keep   |
+| [EVAL-017](evals/EVAL-017.md) | 2026-06-09 | `docs/roadmap-histoire.md` — roadmap 12 phases, 9 décisions tranchées, interfaces TS définies, score intégré    | #roadmap #histoire #planning             | keep   |
