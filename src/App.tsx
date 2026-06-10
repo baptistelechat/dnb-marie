@@ -23,6 +23,7 @@ import FranceMapQuizTab from "./components/FranceMapQuizTab";
 import FranceCapitalsQuizTab from "./components/FranceCapitalsQuizTab";
 import AssociationTab from "./components/AssociationTab";
 import FranceAssociationTab from "./components/FranceAssociationTab";
+import FriseLectureTab from "./components/FriseLectureTab";
 
 type Domain = "geo" | "histoire";
 type GeoTab = "checklist" | "map-quiz" | "capitals-quiz" | "association";
@@ -317,22 +318,26 @@ const App = () => {
         {domain === "geo" &&
           geoSubject === "france" &&
           geoTab === "association" && <FranceAssociationTab />}
-        {domain === "histoire" && (
-          <div className="p-8 text-center">
-            <p
-              className="text-2xl mb-2"
-              style={{
-                fontFamily: "'Fredoka', system-ui, sans-serif",
-                color: "#9575cd",
-              }}
-            >
-              Histoire — bientôt disponible ✨
-            </p>
-            <p className="text-sm text-slate-400">
-              Module en cours de développement
-            </p>
-          </div>
-        )}
+        {domain === "histoire" &&
+          historySubject === "dates" &&
+          historyTab === "frise" && <FriseLectureTab />}
+        {domain === "histoire" &&
+          !(historySubject === "dates" && historyTab === "frise") && (
+            <div className="p-8 text-center">
+              <p
+                className="text-2xl mb-2"
+                style={{
+                  fontFamily: "'Fredoka', system-ui, sans-serif",
+                  color: "#9575cd",
+                }}
+              >
+                Bientôt disponible ✨
+              </p>
+              <p className="text-sm text-slate-400">
+                Module en cours de développement
+              </p>
+            </div>
+          )}
       </main>
     </div>
   );

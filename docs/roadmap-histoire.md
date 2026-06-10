@@ -184,19 +184,20 @@ interface HistoricalFigure {
 - Les lanes sont calculées algorithmiquement : un range occupe la lane la plus basse disponible sur son intervalle
 - Marie **tape** sur une pastille ou une pilule pour la marquer comme vue → feedback visuel (couleur validée), haptics `tick()`
 - Barre de progression `shared/ProgressBar`, confetti + `success()` à 100%
-- Responsive : frise **horizontale** desktop, **verticale** sur mobile
+- Layout : frise **verticale descendante** (axe de haut en bas), scroll vertical de la page
 
 ### Tâches
 
-- [ ] Créer `src/components/FriseLectureTab/`
+- [x] Créer `src/components/FriseLectureTab/`
   - `index.tsx` — orchestrateur, gestion de l'état "vues"
-  - `components/FriseAxis.tsx` — axe temporel avec graduation annuelle
-  - `components/PointMarker.tsx` — pastille ronde, tap pour valider
-  - `components/RangeBar.tsx` — pilule colorée sur sa lane, tap pour valider
+  - `components/TimelineCanvas.tsx` — canvas vertical (axe + barres + pastilles + labels)
   - `utils/computeLanes.ts` — algorithme de packing : assigne chaque range à la lane la plus basse disponible sur son intervalle
-- [ ] Gérer le scroll horizontal (desktop) / vertical (mobile) sur l'axe
-- [ ] Tap sur un item déjà validé → toggle (décocher possible)
-- [ ] Barre de progression, confetti, haptics (pattern identique aux checklists existantes)
+- [x] Axe vertical descendant, ticks aux années clés, labels d'années à gauche
+- [x] Barres de périodes (ranges) : colonnes verticales colorées par lane avec texte `writing-mode: vertical-rl`
+- [x] Pastilles d'événements ponctuels sur l'axe avec anti-collision (greedy push-down) pour les mêmes années
+- [x] Labels horizontaux à droite de toutes les lanes (date + nom de l'événement)
+- [x] Tap sur un item déjà validé → toggle (décocher possible)
+- [x] Barre de progression, confetti, haptics (pattern identique aux checklists existantes)
 
 ---
 
@@ -224,20 +225,21 @@ interface HistoricalFigure {
 - La frise affiche les emplacements vides avec les dates visibles
 - Marie glisse chaque carte vers le bon emplacement
 - **`type: "point"`** → drop zone = pastille cible, snap sur la date exacte
-- **`type: "range"`** → drop zone = zone étendue de la date de début à la date de fin, pilule qui s'anime pour s'étirer après placement correct (Option D)
+- **`type: "range"`** → drop zone = zone étendue de la date de début à la date de fin, pilule verticale qui s'anime pour s'étirer après placement correct (Option D)
 - Feedback : ✅ vert si correct, ❌ shake rouge + retour à la pile si incorrect
 - Score `freeScore` (pas de hint dans ce jeu), timer GO!, leaderboard localStorage
+- Layout : frise **verticale descendante** (même orientation que Phase 2), cartes draggables à droite
 
 ### Tâches
 
 - [ ] Créer `src/components/FriseOrdonnnerTab/`
   - `index.tsx`
-  - `components/GameTimeline.tsx` — frise avec drop zones positionnées
+  - `components/GameTimeline.tsx` — frise verticale avec drop zones positionnées
   - `components/DraggableEventCard.tsx` — carte draggable (événement sans la date)
-  - `components/DropZone.tsx` — cible sur la frise (pastille ou zone étendue selon `type`)
+  - `components/DropZone.tsx` — cible sur la frise (pastille ou colonne verticale selon `type`)
 - [ ] Installer et configurer `@dnd-kit/core` + `@dnd-kit/utilities`
-- [ ] Gérer le responsive : frise horizontale desktop, verticale sur mobile
-- [ ] Animation d'extension de la pilule sur placement correct d'un range
+- [ ] Réutiliser `computeLanes` pour les lanes de ranges (même algo que Phase 2)
+- [ ] Animation d'extension de la pilule verticale sur placement correct d'un range
 - [ ] Timer GO! + leaderboard localStorage
 
 ---
@@ -435,14 +437,14 @@ Les entrées leaderboard existantes (format `{ name, time, firstTryScore }`) s'a
 
 ## Points de décision ✅ Tranchés
 
-| #   | Question                     | Décision retenue                                                                                  |
-| --- | ---------------------------- | ------------------------------------------------------------------------------------------------- |
-| 1   | **Drag & drop frise**        | `@dnd-kit/core` — UX tactile mobile correcte                                                      |
-| 2   | **Tolérance réponse "date"** | Correspondance exacte sur le contenu, tolérance sur le format (`11/11/1918`, `11 nov 1918`, etc.) |
-| 3   | **Mode photos personnages**  | Saisie libre + bouton "Proposition" optionnel — correct libre → `★`, correct avec aide → `💡`     |
-| 4   | **Accepter nom partiel**     | Oui — `"De Gaulle"` valide pour `"Le général de Gaulle"`                                          |
-| 5   | **Intervalles sur la frise** | `type: "point" \| "range"` dans `HistoricalDate`, `endSortKey` obligatoire pour les ranges        |
-| 6   | **Frise lecture vs liste**   | Frise lecture (Option B lanes) remplace la checklist dates — onglet nommé `"Frise"`               |
-| 7   | **Frise jeu**                | Option D (pastille/pilule, snap début, extension animée) — onglet nommé `"Ordonner"`              |
-| 8   | **Tri leaderboard égalité**  | `score_pondéré` desc → `freeScore` desc → `temps` asc                                             |
-| 9   | **Temps par item**           | Non — temps total uniquement, comme 3ème critère de tri (pas de pénalité de vitesse par réponse)  |
+| #   | Question                     | Décision retenue                                                                                                                                                                  |
+| --- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Drag & drop frise**        | `@dnd-kit/core` — UX tactile mobile correcte                                                                                                                                      |
+| 2   | **Tolérance réponse "date"** | Correspondance exacte sur le contenu, tolérance sur le format (`11/11/1918`, `11 nov 1918`, etc.)                                                                                 |
+| 3   | **Mode photos personnages**  | Saisie libre + bouton "Proposition" optionnel — correct libre → `★`, correct avec aide → `💡`                                                                                     |
+| 4   | **Accepter nom partiel**     | Oui — `"De Gaulle"` valide pour `"Le général de Gaulle"`                                                                                                                          |
+| 5   | **Intervalles sur la frise** | `type: "point" \| "range"` dans `HistoricalDate`, `endSortKey` obligatoire pour les ranges                                                                                        |
+| 6   | **Frise lecture vs liste**   | Frise lecture (Option B lanes) remplace la checklist dates — onglet nommé `"Frise"`                                                                                               |
+| 7   | **Orientation frise**        | Verticale descendante — même layout pour Phase 2 (lecture) et Phase 4 (ordonner) ; élimine les labels rotatifs illisibles et gère les événements de même année par anti-collision |
+| 8   | **Tri leaderboard égalité**  | `score_pondéré` desc → `freeScore` desc → `temps` asc                                                                                                                             |
+| 9   | **Temps par item**           | Non — temps total uniquement, comme 3ème critère de tri (pas de pénalité de vitesse par réponse)                                                                                  |
