@@ -1,0 +1,24 @@
+---
+id: ZBLK-010
+type: blocker
+date: 2026-06-06
+tags: [react-simple-maps, projection, dom-tom, reunion]
+status: résolu
+---
+
+# ZBLK-010 — La Réunion coupée : scale surdimensionné pour le width du viewport minimap
+
+| Friction                                                                                              | Cause réelle                                                                                                                                                                                | Solution                                                                                                                                                                               | Statut |
+| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Le territoire de La Réunion apparaissait coupé sur le bord droit du minimap malgré un `center` centré | `scale=6500` avec `width=69` → viewport couvre `69 / (6500 × π/180 / cos(-21°)) = 0.608°` longitude, mais La Réunion fait 0.620° lon (bounding box `55.217→55.837`) → débordement de 0.012° | Recalcul depuis bounding box exact : `lon_span=0.620°`, `lat_span=0.520°` → `scale_lon=6 000`, `scale_lat=5 500` → min=5500 puis réduit à 6000 avec `width=78` pour avoir 20% de marge | résolu |
+
+## Détails
+
+Bounding box GeoJSON La Réunion : `[55.217, -21.391, 55.837, -20.871]`  
+Formule : `scale = width / (lon_span × π/180 / cos(lat_center))`  
+→ `scale = 78 / (0.620 × 0.01745 / cos(-21.131°)) = 5 980 ≈ 6 000`
+
+## Références
+
+- [BDR-018](../../decisions/BDR-018.md) — décision de calculer les projections individuellement
+- voir aussi GLRN-078 — formule générique de calcul projection react-simple-maps

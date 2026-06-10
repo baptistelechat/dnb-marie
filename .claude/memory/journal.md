@@ -1,6 +1,6 @@
----
+﻿---
 register: journal
-last_updated: 2026-06-09
+last_updated: 2026-06-11
 ---
 
 ## 2026-06-02
@@ -10,7 +10,7 @@ Création complète de l'app dnb-marie de zéro. Scaffolding Vite React TypeScri
 **Entrées clés :**
 
 - [BDR-001](decisions/BDR-001.md) — pnpm remplace npm (bug arborist)
-- [BLK-001](blockers/BLK-001.md) — npm 10.8.3 crash résolu
+- [ZBLK-001](archive/blockers/ZBLK-001.md) — npm 10.8.3 crash résolu
 - [LRN-001](learnings/LRN-001.md) — vite-plugin-qrcode + host:true
 - [EVAL-001](evals/EVAL-001.md) — build propre session initiale
 
@@ -24,7 +24,7 @@ Un warning CSS au premier build : `@import url()` Google Fonts placé après `@i
 
 - [BDR-002](decisions/BDR-002.md) — design direction Fredoka+Nunito, candy cyclique
 - [BDR-003](decisions/BDR-003.md) — shadcn différé
-- [BLK-002](blockers/BLK-002.md) — Playwright chemin dev-browser
+- [ZBLK-002](archive/blockers/ZBLK-002.md) — Playwright chemin dev-browser
 - [EVAL-002](evals/EVAL-002.md) — redesign UI candy pastel validé
 
 ---
@@ -38,8 +38,8 @@ Deux séries de bugs avant build clean. ESLint `react-hooks/set-state-in-effect`
 **Entrées clés :**
 
 - [BDR-004](decisions/BDR-004.md) — react-simple-maps pour la carte EU
-- [BLK-003](blockers/BLK-003.md) — ESLint set-state-in-effect
-- [BLK-004](blockers/BLK-004.md) — Build TS : types + Map shadowing
+- [ZBLK-003](archive/blockers/ZBLK-003.md) — ESLint set-state-in-effect
+- [ZBLK-004](archive/blockers/ZBLK-004.md) — Build TS : types + Map shadowing
 - [EVAL-003](evals/EVAL-003.md) — MapQuizTab complet
 
 ## 2026-06-03
@@ -67,7 +67,7 @@ Implémentation de l'Option B pour le mode dirigé : la partie continue jusqu'à
 
 **Entrées clés :**
 
-- [BLK-005](blockers/BLK-005.md) — Belgique/Autriche invisibles, root cause IDs zero-paddés world-atlas
+- [ZBLK-005](archive/blockers/ZBLK-005.md) — Belgique/Autriche invisibles, root cause IDs zero-paddés world-atlas
 - [LRN-003](learnings/LRN-003.md) — world-atlas IDs format `"040"` pas `"40"`
 - [BDR-009](decisions/BDR-009.md) — mode dirigé continue jusqu'à 100%
 - [EVAL-005](evals/EVAL-005.md) — carte N&B + markers + Option B, build clean
@@ -88,7 +88,7 @@ Ajout de l'ancienneté relative sous chaque nom du classement : `formatAge(dateI
 
 - [BDR-011](decisions/BDR-011.md) — timer démarre au premier submit
 - [BDR-012](decisions/BDR-012.md) — fin de partie dans handleNext, pas useEffect
-- [BLK-006](blockers/BLK-006.md) — ESLint set-state-in-effect, 3ème occurrence
+- [ZBLK-006](archive/blockers/ZBLK-006.md) — ESLint set-state-in-effect, 3ème occurrence
 - [EVAL-006](evals/EVAL-006.md) — chronomètre + leaderboard + passer + ancienneté
 
 ## 2026-06-06
@@ -103,8 +103,8 @@ Ajout simultané du composant `LeaderboardPanel` affiché en sidebar sous `QuizP
 
 - [BDR-013](decisions/BDR-013.md) — `failedCodes` Set pour scoring premier essai correct
 - [BDR-014](decisions/BDR-014.md) — `.claude/launch.json` avec `npx pnpm run dev`
-- [BLK-007](blockers/BLK-007.md) — pnpm absent PATH subprocess, résolution launch.json
-- [BLK-008](blockers/BLK-008.md) — firstTryScore toujours 27/27, fix failedCodes
+- [ZBLK-007](archive/blockers/ZBLK-007.md) — pnpm absent PATH subprocess, résolution launch.json
+- [ZBLK-008](archive/blockers/ZBLK-008.md) — firstTryScore toujours 27/27, fix failedCodes
 - [EVAL-007](evals/EVAL-007.md) — LeaderboardPanel + fix scoring validé
 
 ---
@@ -127,7 +127,7 @@ Validé par screenshots dev-browser sur les deux onglets Carte Quiz (EU + France
 **Entrées clés :**
 
 - [BDR-016](decisions/BDR-016.md) — `h-dvh flex-col` conditionnel par onglet
-- [BLK-009](blockers/BLK-009.md) — 3 régressions layout viewport, root cause + fix
+- [ZBLK-009](archive/blockers/ZBLK-009.md) — 3 régressions layout viewport, root cause + fix
 - [LRN-010](learnings/LRN-010.md) — pattern layout conditionnel multi-onglets
 - [LRN-011](learnings/LRN-011.md) — pattern flex-1 min-h-0 compression + overlap
 - [EVAL-009](evals/EVAL-009.md) — régressions fixées, validé screenshots
@@ -140,7 +140,7 @@ Session focalisée sur la feature `FranceMapQuizTab` — intégration complète 
 
 - [BDR-017](decisions/BDR-017.md) — DOM overlay absolu dans zone océan
 - [BDR-018](decisions/BDR-018.md) — projections individuelles depuis bounding box
-- [BLK-010](blockers/BLK-010.md) — La Réunion coupée, fix projection
+- [ZBLK-010](archive/blockers/ZBLK-010.md) — La Réunion coupée, fix projection
 - [EVAL-010](evals/EVAL-010.md) — FranceMapQuizTab complet validé
 
 ---
@@ -156,8 +156,8 @@ Entre les deux, intégration des logos DOM-TOM dans `REGION_LOGOS` : recherche d
 **Entrées clés :**
 
 - [BDR-020](decisions/BDR-020.md) — normalizeAnswer étendu aux variantes unicode mobiles
-- [BLK-011](blockers/BLK-011.md) — PACA refusé, U+2019 mobile
-- [BLK-012](blockers/BLK-012.md) — Saint-Denis, tiret iOS U+2013
+- [ZBLK-011](archive/blockers/ZBLK-011.md) — PACA refusé, U+2019 mobile
+- [ZBLK-012](archive/blockers/ZBLK-012.md) — Saint-Denis, tiret iOS U+2013
 
 ## 2026-06-07
 
@@ -183,7 +183,7 @@ Deux blocages sur les screenshots dev-browser : commande absente du PATH, puis `
 
 - [BDR-021](decisions/BDR-021.md) — architecture AssociationBoardState
 - [BDR-022](decisions/BDR-022.md) — replace-in-place stabilité positionnelle
-- [BLK-013](blockers/BLK-013.md) — dev-browser PATH, contournement createRequire
+- [ZBLK-013](archive/blockers/ZBLK-013.md) — dev-browser PATH, contournement createRequire
 - [EVAL-014](evals/EVAL-014.md) — AssociationTab complet validé
 
 ---
@@ -246,3 +246,95 @@ Le module remplace le badge "3ème" par un sélecteur de domaine Géographie / H
 - [BDR-028](decisions/BDR-028.md) — Frise Ordonner Option D
 - [BDR-029](decisions/BDR-029.md) — Phase 1b infrastructure partagée
 - [EVAL-017](evals/EVAL-017.md) — roadmap-histoire.md validée
+
+---
+
+Session de Phase 0 du module Histoire. Objectif : refactoriser la navigation dans `App.tsx` — remplacer le badge "3ème" par un sélecteur de domaine Géographie / Histoire, brancher les états et constantes nécessaires, sans implémenter aucun mini-jeu. Le livrable de la session précédente (`docs/roadmap-histoire.md`) définissait exactement les 9 tâches à cocher.
+
+Travail effectué en une passe propre : ajout du type discriminant `Domain`, états parallèles `historySubject` + `historyTab` à côté des états géo existants, constantes `DOMAINS`, `HISTORY_SUBJECTS`, `HISTORY_TABS_DATES`, `HISTORY_TABS_PERSONNAGES`, extraction des styles pill partagés (`pillActiveStyle`/`pillInactiveStyle`). Le handler `handleHistorySubjectChange` réinitialise `historyTab` de façon atomique dans le même callback — même pattern que [BDR-012](decisions/BDR-012.md) (mutations d'état couplées dans un handler, jamais dans un useEffect). L'écran Histoire affiche un placeholder "bientôt disponible".
+
+Trois états visuels validés par screenshots Playwright (dev server port 5175, conflit auto-résolu) : Géographie vue par défaut, Histoire/Dates, Histoire/Personnages. Lint 0 erreur, build clean 441 kB / 129 kB gzip.
+
+**Entrées clés :**
+
+- [BDR-032](decisions/BDR-032.md) — reset atomique historySubject + historyTab dans même handler
+
+---
+
+Session de validation des données Phase 1 du module Histoire. Aucun nouveau composant — travail de sourcing photo et validation des données.
+
+Baptiste a exporté sa sélection JSON depuis la page `validate-photos.html` (outil HTML temporaire créé en session précédente). `historicalFigures.ts` mis à jour avec les URLs validées pour les 11 personnages. Cas difficile : Raphaël Élizé n'avait aucun portrait sur Wikimedia Commons (article Wikipedia FR marqué "à illustrer"). Résolu en cherchant sur outremermemory.com (portrait N&B stable) et lalibre.be (haute résolution mais URL à token potentiellement éphémère). Photos supplémentaires trouvées pour Tillion (Chemins de Mémoire) et Geneviève de Gaulle (photo de groupe 1943, Musée Résistance).
+
+Marie a validé les données (dates + primaryKeywords) — validation pédagogique Phase 1 complète. Roadmap cochée sur 5 tâches (3 photos + 2 validation). Dernier commit annulé par Baptiste (re-commit à venir avec roadmap + données).
+
+**Entrées clés :**
+
+- [BDR-033](decisions/BDR-033.md) — photos non-Wikimedia acceptées, app privée
+- [LRN-017](learnings/LRN-017.md) — WordPress `-WxH` suffix → full-res
+- [LRN-018](learnings/LRN-018.md) — Wikimedia 429 ≠ URL cassée
+
+## 2026-06-10
+
+Session de Phase 1b — infrastructure de scoring partagée sur tous les jeux avec leaderboard. Aucun nouveau mini-jeu, uniquement de la mise à niveau des types, modals et hooks existants.
+
+Le travail a démarré sur un constat : les leaderboards de tous les jeux avaient un score "premier essai" (`★`) mais pas de colonne `❌` (raté) dans les lignes du classement — information présente dans le header de la modal de fin mais absente des rangées. Tous les `GameOverModal` et le `LeaderboardPanel` partagé ont été mis à jour pour afficher `{total - firstTryScore - (hintScore ?? 0)}❌`.
+
+Baptiste a également signalé que le bouton "Indice : voir le drapeau" existant dans MapQuizTab devrait compter comme un hint dans le scoring unifié. Décision prise : oui. Implémentation via un `flagUsedCodes: Set<string>` — toggle-on sur un pays l'ajoute au Set, toggle multiple ne l'ajoute qu'une fois. `flagUsedCodes.size` devient le `hintScore` sauvegardé dans le leaderboard.
+
+Architecture finale : `hintScore?: number` optionnel dans `LeaderboardEntry` et `FranceLeaderboardEntry`, display conditionnel `(hintScore ?? 0) > 0`. Les jeux sans hint (Association EU + France) n'ont pas ce champ — le `💡` n'apparaît donc jamais pour eux. Les jeux avec hint (MapQuizTab tracké, CapitalsQuizTab et FranceCapitalsQuizTab prêts mais bouton non câblé) bénéficient de l'infrastructure sans toucher aux types ou modals à l'avenir.
+
+Tri pondéré dans tous les `useLeaderboard` : `firstTryScore × 2 + (hintScore ?? 0)` DESC, puis temps ASC. Backward-compatible avec les entrées localStorage existantes.
+
+Session terminée sur validation de Baptiste après audit roadmap + cochage des étapes Phase 1b. `learnings.md` normalisé (colonne "Contexte" retirée, 18 lignes).
+
+**Entrées clés :**
+
+- [BDR-034](decisions/BDR-034.md) — "voir le drapeau" tracké comme hintScore
+- [LRN-019](learnings/LRN-019.md) — champ optionnel + display conditionnel = infra forward-compatible
+
+---
+
+Session de Phase 2 du module Histoire — implémentation de la `FriseLectureTab` avec `TimelineCanvas`.
+
+La frise a d'abord été réécrite en layout vertical descendant (axe horizontal → vertical), puis redessinée une seconde fois sur retour visuel de Baptiste. Le problème identifié sur v1 : axe à x=48, labels démarrant à x=192, grande zone vide entre les deux. Solution v2 : axe déplacé à AXIS_X=300, labels des événements ponctuels à gauche de l'axe en `text-align:right` format "DATE — Intitulé" sur une seule ligne (ellipsis), barres de périodes colorées à droite avec `writing-mode:vertical-rl`. Le CSS `right:calc(100% - 287px)` contraint la largeur des labels sans connaître la largeur du parent.
+
+Deux algorithmes implémentés dans `TimelineCanvas.tsx` : (1) `computePointPositions` avec tri sub-annuel via parsing des mois français et greedy push-down (`MIN_SPACING=18 < PX_PER_YEAR=22` pour ne cascader que les événements de la même année) ; (2) `computeLanes` (inchangé) pour l'attribution de couloirs aux périodes.
+
+Un bug TypeScript `noUnusedLocals` a été résolu en supprimant le `useMemo numLanes` dans le parent après avoir retiré la prop du composant enfant.
+
+La roadmap `docs/roadmap-histoire.md` a été mise à jour : Phase 2 cochée, Phase 4 et Décision #7 corrigées pour mentionner le layout vertical descendant partagé entre les deux phases.
+
+**Entrées clés :**
+
+- [BDR-035](decisions/BDR-035.md) — layout frise verticale AXIS_X=300
+- [LRN-020](learnings/LRN-020.md) — `right:calc(100% - Xpx)` = zone largeur fixe depuis bord gauche
+- [LRN-021](learnings/LRN-021.md) — anti-collision greedy push-down événements sub-année
+
+---
+
+Session de Phase 2 polish — itérations UX sur la `FriseLectureTab`. Pas de nouveau composant, uniquement des ajustements visuels et de lisibilité.
+
+Séquence des modifications : (1) Augmentation font-size des labels événements `9 → 11` et des badges ticks `9 → 10` pour meilleure lisibilité mobile. (2) Baptiste constate l'absence de date visible sur les barres de période (WWII, Hitler, Staline, 4ème République). Tentative date inline verticale dans la barre (flex-col, deux spans) → rejetée : "trop chargé visuellement, enlève la date au milieu des bulles". (3) Décision finale : tooltip au survol sur toutes les barres — la condition `!showText` est retirée, le tooltip affiche la date en premier puis l'intitulé. (4) Centrage vertical du tooltip : `top: y + barHeight/2` + `transform: translateY(-50%)`. (5) Labels tronqués (`...`) : root cause axe AXIS_X=300 trop proche du bord gauche. Tentative AXIS_X=460 → scroll latéral → rejet explicite de Baptiste ("je ne veux pas de scroll latérale"). Solution finale : `whiteSpace: normal` (multi-ligne) + `MIN_POINT_SPACING 18→32` pour éviter le chevauchement, puis AXIS_X décalé `300→380` pour élargir la zone label à 367px — les textes longs passent sur 2 lignes sans scroll. (6) TICK_CLEARANCE `20→28` pour éviter le chevauchement léger entre badges années et labels d'événements.
+
+Roadmap `docs/roadmap-histoire.md` auditée : Phases 0, 1, 1b, 2 entièrement cochées. Phase 3 (Checklist Personnages) est le prochain chantier.
+
+**Entrées clés :**
+
+- [BDR-035](decisions/BDR-035.md) — mis à jour : AXIS_X=380, labels multi-lignes (remplace v1 AXIS_X=300 single-line)
+- [BDR-036](decisions/BDR-036.md) — tooltip sur toutes les barres de période
+- [LRN-022](learnings/LRN-022.md) — `whiteSpace: normal` + MIN_POINT_SPACING = lisibilité sans scroll
+- [LRN-023](learnings/LRN-023.md) — centrage vertical tooltip sur barre hauteur variable
+
+## 2026-06-11
+
+Session courte et ciblée — Phase 3 du module Histoire : implémentation de `HistoirePersonnagesTab` (onglet "Liste" / Personnages).
+
+Le composant suit exactement le pattern EuropTab (`useState<Set<string>>`, `useHaptics`, confetti double salve, bouton Recommencer conditionnel), à une exception : le layout passe de `grid-cols-3` à `flex-col gap-2.5`. La raison est textuelle — chaque `FigureCard` affiche trois niveaux d'information (nom en Fredoka, période en uppercase 10px, rôle en 2 lignes max via `line-clamp-2`), illisibles dans une grille 3 colonnes sur mobile. 11 items = liste scrollable acceptable.
+
+`FigureCard` utilise un avatar circulaire avec l'icône `User` de Lucide (au lieu d'initiales — trop de doublons : 3 "L", 2 "G", 2 "J"). La palette candy 6 couleurs cycliques est réutilisée à l'identique. App.tsx câblé sur `historySubject === "personnages" && historyTab === "liste"`, le placeholder "Bientôt disponible" est conservé pour les autres onglets.
+
+Lint ✅ Build ✅ Screenshot ✅ via dev-browser (résolution de l'API `saveScreenshot` après 3 tentatives incorrectes — voir [ZBLK-014](archive/blockers/ZBLK-014.md)).
+
+**Entrées clés :**
+
+- [BDR-037](decisions/BDR-037.md) — liste 1-col vs grid pour HistoirePersonnagesTab
