@@ -1,3 +1,4 @@
+import { Fragment, useState } from "react";
 import type { HistoricalDate } from "../../../data/historicalDates";
 import type { RangeWithLane } from "../utils/computeLanes";
 
@@ -5,11 +6,13 @@ const DISPLAY_START = 1913;
 const DISPLAY_END = 1960;
 const PX_PER_YEAR = 22;
 const V_PAD = 24;
-const AXIS_X = 300;
-const LANE_W = 26;
-const RANGE_W = 20;
+const AXIS_X = 380;
+const LANE_W = 30;
+const RANGE_W = 24;
 const POINT_R = 7;
-const MIN_POINT_SPACING = 18;
+const MIN_POINT_SPACING = 32;
+const TICK_CLEARANCE = 28;
+const MIN_TEXT_BAR_HEIGHT = 60;
 // right edge of point labels: just before the circle
 const LABEL_RIGHT_EDGE = AXIS_X - POINT_R - 6;
 
@@ -54,7 +57,16 @@ const computePointPositions = (items: HistoricalDate[]): PointWithY[] => {
   let lastY = -Infinity;
   for (const item of sorted) {
     const naturalY = yearToY(getSubYear(item.date, item.sortKey));
-    const y = Math.max(naturalY, lastY + MIN_POINT_SPACING);
+    let y = Math.max(naturalY, lastY + MIN_POINT_SPACING);
+    // Push events below tick year badges when too close
+    for (const tickYear of TICK_YEARS) {
+      const tickY = yearToY(tickYear);
+      if (y > tickY - TICK_CLEARANCE && y < tickY + TICK_CLEARANCE) {
+        y = tickY + TICK_CLEARANCE;
+      }
+    }
+    // Re-enforce min spacing after tick adjustment
+    y = Math.max(y, lastY + MIN_POINT_SPACING);
     result.push({ item, y });
     lastY = y;
   }
@@ -76,14 +88,23 @@ const TimelineCanvas = ({
   colorMap,
   onToggle,
 }: TimelineCanvasProps) => {
+  const [hoveredRangeId, setHoveredRangeId] = useState<string | null>(null);
+
   const canvasHeight =
     V_PAD + (DISPLAY_END - DISPLAY_START) * PX_PER_YEAR + V_PAD;
+
+  const maxLane = rangesWithLanes.reduce(
+    (max, { lane }) => Math.max(max, lane),
+    0,
+  );
+  const canvasWidth = AXIS_X + 2 + (maxLane + 1) * LANE_W + RANGE_W + 20;
+
   const pointPositions = computePointPositions(points);
 
   return (
     <div
-      className="relative w-full select-none"
-      style={{ height: canvasHeight }}
+      className="relative select-none"
+      style={{ height: canvasHeight, width: canvasWidth, margin: "0 auto" }}
     >
       {/* Axe vertical */}
       <div
@@ -97,7 +118,7 @@ const TimelineCanvas = ({
         }}
       />
 
-      {/* Graduations et labels d'années */}
+      {/* Graduations et labels d'années — badges pills distincts */}
       {TICK_YEARS.map((year) => {
         const y = yearToY(year);
         return (
@@ -117,16 +138,27 @@ const TimelineCanvas = ({
               style={{
                 left: 0,
                 right: `calc(100% - ${AXIS_X - 12}px)`,
-                top: y - 6,
-                textAlign: "right",
-                fontSize: 8,
-                fontWeight: 700,
-                fontFamily: "'Fredoka', system-ui, sans-serif",
-                color: "#b39ddb",
-                whiteSpace: "nowrap",
+                top: y - 7,
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
               }}
             >
-              {year}
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  fontFamily: "'Fredoka', system-ui, sans-serif",
+                  color: "#7e57c2",
+                  background: "#f3e8ff",
+                  borderRadius: 6,
+                  padding: "1px 5px",
+                  lineHeight: 1.2,
+                  border: "1px solid #e9d5ff",
+                }}
+              >
+                {year}
+              </span>
             </div>
           </div>
         );
@@ -142,47 +174,95 @@ const TimelineCanvas = ({
         const barX = AXIS_X + 2 + lane * LANE_W + (LANE_W - RANGE_W) / 2;
         const color = colorMap.get(item.id) ?? "#c084fc";
         const isSeen = seen.has(item.id);
-        const showText = barHeight > 36;
+        const showText = barHeight >= MIN_TEXT_BAR_HEIGHT;
+        const isHovered = hoveredRangeId === item.id;
 
         return (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => onToggle(item.id)}
-            className="absolute rounded-xl border-2 transition-all duration-300 active:scale-95 cursor-pointer overflow-hidden flex items-center justify-center"
-            style={{
-              left: barX,
-              top: y,
-              width: RANGE_W,
-              height: barHeight,
-              background: isSeen ? `${color}cc` : `${color}33`,
-              borderColor: isSeen ? color : `${color}66`,
-              boxShadow: isSeen ? `0 2px 8px ${color}80` : "none",
-            }}
-            aria-label={`${isSeen ? "Décocher" : "Cocher"} : ${item.event} (${item.date})`}
-            aria-pressed={isSeen}
-            title={`${item.event} — ${item.date}`}
-          >
-            {showText && (
-              <span
+          <Fragment key={item.id}>
+            <button
+              type="button"
+              onClick={() => onToggle(item.id)}
+              onMouseEnter={() => setHoveredRangeId(item.id)}
+              onMouseLeave={() => setHoveredRangeId(null)}
+              className="absolute rounded-xl border-2 transition-all duration-300 active:scale-95 cursor-pointer overflow-hidden flex items-center justify-center"
+              style={{
+                left: barX,
+                top: y,
+                width: RANGE_W,
+                height: barHeight,
+                background: isSeen ? `${color}cc` : `${color}33`,
+                borderColor: isSeen ? color : `${color}66`,
+                boxShadow: isHovered
+                  ? `0 0 0 3px ${color}66, 0 2px 10px ${color}60`
+                  : isSeen
+                    ? `0 2px 8px ${color}80`
+                    : "none",
+              }}
+              aria-label={`${isSeen ? "Décocher" : "Cocher"} : ${item.event} (${item.date})`}
+              aria-pressed={isSeen}
+              title={`${item.event} — ${item.date}`}
+            >
+              {showText && (
+                <span
+                  style={{
+                    fontSize: 8.5,
+                    fontFamily: "'Nunito', system-ui, sans-serif",
+                    fontWeight: 700,
+                    color: isSeen ? "#4a148c" : "#7e57c2",
+                    writingMode: "vertical-rl",
+                    pointerEvents: "none",
+                    userSelect: "none",
+                    overflow: "hidden",
+                    maxHeight: barHeight - 4,
+                    lineHeight: 1.3,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {item.event}
+                </span>
+              )}
+            </button>
+
+            {/* Tooltip au survol */}
+            {isHovered && (
+              <div
+                className="absolute pointer-events-none"
                 style={{
-                  fontSize: 7,
+                  right: `calc(100% - ${barX}px)`,
+                  top: y + barHeight / 2,
+                  transform: "translateY(-50%)",
+                  maxWidth: 200,
+                  padding: "5px 8px",
+                  background: "#faf5ff",
+                  border: `1.5px solid ${color}`,
+                  borderRadius: 10,
+                  boxShadow: `0 2px 12px ${color}40, 0 1px 4px rgba(0,0,0,0.1)`,
+                  fontSize: 8.5,
                   fontFamily: "'Nunito', system-ui, sans-serif",
                   fontWeight: 700,
                   color: isSeen ? "#4a148c" : "#7e57c2",
-                  writingMode: "vertical-rl",
-                  pointerEvents: "none",
-                  userSelect: "none",
-                  overflow: "hidden",
-                  maxHeight: barHeight - 4,
-                  lineHeight: 1.3,
-                  whiteSpace: "nowrap",
+                  textAlign: "right",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                  lineHeight: 1.4,
+                  zIndex: 50,
                 }}
               >
+                <span
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 8,
+                    color: "#9575cd",
+                    display: "block",
+                    marginBottom: 2,
+                  }}
+                >
+                  {item.date}
+                </span>
                 {item.event}
-              </span>
+              </div>
             )}
-          </button>
+          </Fragment>
         );
       })}
 
@@ -198,13 +278,10 @@ const TimelineCanvas = ({
               style={{
                 left: 0,
                 right: `calc(100% - ${LABEL_RIGHT_EDGE}px)`,
-                top: y - 8,
+                top: y - 15,
                 textAlign: "right",
-                fontSize: 9,
+                fontSize: 11,
                 lineHeight: 1.4,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
               }}
             >
               <span
