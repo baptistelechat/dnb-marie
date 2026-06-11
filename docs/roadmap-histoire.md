@@ -207,11 +207,11 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/HistoirePersonnagesTab/`
+- [x] Créer `src/components/HistoirePersonnagesTab/`
   - `index.tsx`
   - `components/FigureCard.tsx` — nom + rôle/période, checkbox
-- [ ] Afficher nom, période, rôle court
-- [ ] Même mécanique de progression, confetti, haptics
+- [x] Afficher nom, période, rôle court
+- [x] Même mécanique de progression, confetti, haptics
 
 ---
 
@@ -232,15 +232,15 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/FriseOrdonnnerTab/`
+- [x] Créer `src/components/FriseOrdonnnerTab/`
   - `index.tsx`
   - `components/GameTimeline.tsx` — frise verticale avec drop zones positionnées
   - `components/DraggableEventCard.tsx` — carte draggable (événement sans la date)
   - `components/DropZone.tsx` — cible sur la frise (pastille ou colonne verticale selon `type`)
-- [ ] Installer et configurer `@dnd-kit/core` + `@dnd-kit/utilities`
-- [ ] Réutiliser `computeLanes` pour les lanes de ranges (même algo que Phase 2)
-- [ ] Animation d'extension de la pilule verticale sur placement correct d'un range
-- [ ] Timer GO! + leaderboard localStorage
+- [x] Installer et configurer `@dnd-kit/core` (sans @dnd-kit/utilities — non nécessaire)
+- [x] Réutiliser l'algorithme `computeLanes` pour les lanes de ranges (implémenté localement dans GameTimeline)
+- [x] Animation CSS transition sur placement correct (dashed → solid, opacity fill)
+- [x] Timer GO! + leaderboard localStorage
 
 ---
 
