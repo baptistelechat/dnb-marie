@@ -1,6 +1,6 @@
 ---
 register: learnings
-last_updated: 2026-06-11
+last_updated: 2026-06-12
 ---
 
 ## Index
@@ -31,3 +31,6 @@ last_updated: 2026-06-11
 | [LRN-022](learnings/LRN-022.md) | 2026-06-10 | `whiteSpace: normal` + MIN_POINT_SPACING accru = labels lisibles sans scroll                                                                          | #css #timeline #mobile #whitespace #absolute-positioning #frise          |
 | [LRN-023](learnings/LRN-023.md) | 2026-06-10 | `top: y + h/2` + `translateY(-50%)` centre un tooltip sur élément à hauteur variable                                                                  | #css #tooltip #absolute-positioning #vertical-centering #timeline #frise |
 | [LRN-024](learnings/LRN-024.md) | 2026-06-11 | `saveScreenshot(buf, name)` : buffer en premier, filename en second                                                                                   | #dev-browser #screenshot #api #quickjs #playwright                       |
+| [LRN-025](learnings/LRN-025.md) | 2026-06-12 | Anti-collision timeline unifiée : ancrer au début de l'élément, obstacles fixes                                                                       | #timeline #anti-collision #algorithm #layout #histoire                   |
+| [LRN-026](learnings/LRN-026.md) | 2026-06-12 | `pointerWithin` dnd-kit retourne la zone de plus petite surface en overlap                                                                            | #dnd-kit #collision-detection #droppable #drag-drop #hit-area            |
+| [LRN-027](learnings/LRN-027.md) | 2026-06-12 | Tooltip dans enfant `overflow:hidden` → état `hoveredId` dans le parent                                                                               | #tooltip #overflow #react #absolute-positioning #parent-state            |

@@ -338,3 +338,28 @@ Lint ✅ Build ✅ Screenshot ✅ via dev-browser (résolution de l'API `saveScr
 **Entrées clés :**
 
 - [BDR-037](decisions/BDR-037.md) — liste 1-col vs grid pour HistoirePersonnagesTab
+
+## 2026-06-12
+
+Session Phase 4 — finition et polish du jeu `FriseOrdonnnerTab` (drag & drop frise chronologique). Contexte partiellement compacté depuis la session précédente.
+
+Cinq chantiers couverts :
+
+1. **Fix précision drag & drop** — les points (cercles) perdaient systématiquement contre les pilules de période en overlap. Solution : `pointerWithin` (retourne la zone de plus petite surface) + zone de hit transparente 44px autour du cercle visuel 14px. La combinaison rend le cercle prioritaire.
+
+2. **Chrono live + leaderboard sur écran GO** — timer déclenché au clic GO, affiché en temps réel via `useEffect` + interval 500ms. Leaderboard chargé dès le mount et visible sur l'écran d'accueil.
+
+3. **Anti-collision labels : 4 itérations** — root causes successives identifiées : (1) maps séparées ranges/points, (2) tracking top-to-top au lieu de bottom-to-top, (3) badges de graduation non traités comme obstacles, (4) label de range ancré au centre de la barre au lieu du haut. Algorithme final `computeAllLabelsYMap` : map unifiée, `lastBottom` tracking, `badgeZones` obstacles fixes, ancrage au haut pour les ranges.
+
+4. **Sticky cards column** — `position: sticky; top: 80px; align-self: flex-start` sur la colonne "À placer".
+
+5. **Tooltips sur toutes les drop zones** — hover affiche la date + l'événement si correct. État `hoveredId` dans `GameTimeline`, callbacks `onHoverStart`/`onHoverEnd` dans `DropZone`, tooltip rendu dans le parent pour contourner `overflow: hidden` de la pilule.
+
+Fix lint résiduel : `MIN_TEXT_BAR_HEIGHT` devenu inutilisé après suppression du label externe des ranges.
+
+**Entrées clés :**
+
+- [BDR-038](decisions/BDR-038.md) — `pointerWithin` + HIT_R pour précision dnd-kit
+- [BDR-039](decisions/BDR-039.md) — labels ranges ancrés au haut de barre
+- [BDR-040](decisions/BDR-040.md) — tooltip dans parent vs overflow:hidden
+- [ZBLK-015](archive/blockers/ZBLK-015.md) — anti-collision 4 itérations, résolu

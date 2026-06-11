@@ -1,6 +1,6 @@
 ---
 register: decisions
-last_updated: 2026-06-11
+last_updated: 2026-06-12
 ---
 
 ## Index
@@ -44,3 +44,6 @@ last_updated: 2026-06-11
 | [BDR-035](decisions/BDR-035.md) | 2026-06-10 | Frise verticale : AXIS_X=380, labels multi-lignes gauche, périodes droite                                     | #histoire #timeline #layout #design                | actif  |
 | [BDR-036](decisions/BDR-036.md) | 2026-06-10 | Tooltip pour toutes les barres de période                                                                     | #histoire #timeline #tooltip #ux #frise            | actif  |
 | [BDR-037](decisions/BDR-037.md) | 2026-06-11 | HistoirePersonnagesTab : liste 1-colonne vs grid                                                              | #histoire #layout #react #checklist #mobile        | actif  |
+| [BDR-038](decisions/BDR-038.md) | 2026-06-12 | `pointerWithin` + HIT_R=22 pour précision drop zones dnd-kit                                                  | #dnd-kit #collision-detection #ux #drag-drop       | actif  |
+| [BDR-039](decisions/BDR-039.md) | 2026-06-12 | Labels de ranges ancrés au HAUT de la barre dans GameTimeline                                                 | #timeline #layout #anti-collision #histoire        | actif  |
+| [BDR-040](decisions/BDR-040.md) | 2026-06-12 | Tooltip rendu dans GameTimeline (parent), pas dans DropZone                                                   | #tooltip #react #overflow #histoire #timeline      | actif  |
