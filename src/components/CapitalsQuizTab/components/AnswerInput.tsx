@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import type { Country } from "../../../data/euCountries";
 import type { CapitalsDirection, CapitalsLastResult } from "../types";
+import HintButton from "../../shared/HintButton";
 
 interface AnswerInputProps {
   direction: CapitalsDirection;
   lastResult: CapitalsLastResult;
   country: Country | null;
-  onSubmit: (answer: string) => void;
+  pool: string[];
+  onSubmit: (answer: string, hintUsed: boolean) => void;
   onNext: () => void;
   onSkip?: () => void;
 }
@@ -15,11 +17,13 @@ const AnswerInput = ({
   direction,
   lastResult,
   country,
+  pool,
   onSubmit,
   onNext,
   onSkip,
 }: AnswerInputProps) => {
   const [inputValue, setInputValue] = useState("");
+  const [hintRevealed, setHintRevealed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -50,7 +54,11 @@ const AnswerInput = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-    onSubmit(inputValue);
+    onSubmit(inputValue, hintRevealed);
+  };
+
+  const handleChoiceSelected = (choice: string) => {
+    onSubmit(choice, true);
   };
 
   if (lastResult === null) {
@@ -71,7 +79,7 @@ const AnswerInput = ({
             fontFamily: "'Nunito', system-ui, sans-serif",
           }}
         />
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             type="submit"
             disabled={!inputValue.trim()}
@@ -100,6 +108,16 @@ const AnswerInput = ({
             >
               Passer →
             </button>
+          )}
+          {correctAnswer && (
+            <div className={hintRevealed ? "basis-full order-last" : ""}>
+              <HintButton
+                pool={pool}
+                answer={correctAnswer}
+                onHintUsed={() => setHintRevealed(true)}
+                onChoiceSelected={handleChoiceSelected}
+              />
+            </div>
           )}
         </div>
       </form>

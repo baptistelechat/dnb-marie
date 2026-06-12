@@ -4,12 +4,14 @@ import type {
   FranceCapitalsDirection,
   FranceCapitalsLastResult,
 } from "../types";
+import HintButton from "../../shared/HintButton";
 
 interface FranceAnswerInputProps {
   direction: FranceCapitalsDirection;
   lastResult: FranceCapitalsLastResult;
   region: Region | null;
-  onSubmit: (answer: string) => void;
+  pool: string[];
+  onSubmit: (answer: string, hintUsed: boolean) => void;
   onNext: () => void;
   onSkip?: () => void;
 }
@@ -18,11 +20,13 @@ const FranceAnswerInput = ({
   direction,
   lastResult,
   region,
+  pool,
   onSubmit,
   onNext,
   onSkip,
 }: FranceAnswerInputProps) => {
   const [inputValue, setInputValue] = useState("");
+  const [hintRevealed, setHintRevealed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -49,7 +53,11 @@ const FranceAnswerInput = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-    onSubmit(inputValue);
+    onSubmit(inputValue, hintRevealed);
+  };
+
+  const handleChoiceSelected = (choice: string) => {
+    onSubmit(choice, true);
   };
 
   if (lastResult === null) {
@@ -70,7 +78,7 @@ const FranceAnswerInput = ({
             fontFamily: "'Nunito', system-ui, sans-serif",
           }}
         />
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             type="submit"
             disabled={!inputValue.trim()}
@@ -99,6 +107,16 @@ const FranceAnswerInput = ({
             >
               Passer →
             </button>
+          )}
+          {correctAnswer && (
+            <div className={hintRevealed ? "basis-full order-last" : ""}>
+              <HintButton
+                pool={pool}
+                answer={correctAnswer}
+                onHintUsed={() => setHintRevealed(true)}
+                onChoiceSelected={handleChoiceSelected}
+              />
+            </div>
           )}
         </div>
       </form>

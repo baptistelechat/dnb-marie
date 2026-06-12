@@ -367,10 +367,10 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Brancher `HintButton` dans `CapitalsQuizTab` (composant déjà prêt depuis Phase 1b)
-- [ ] Brancher `HintButton` dans `FranceCapitalsQuizTab`
-- [ ] Mettre à jour le scoring dans les deux composants : `freeScore ★` / `hintScore 💡`
-- [ ] Vérifier la rétrocompatibilité leaderboard (anciennes entrées → `hintScore = 0` implicite)
+- [x] Brancher `HintButton` dans `CapitalsQuizTab` (composant déjà prêt depuis Phase 1b)
+- [x] Brancher `HintButton` dans `FranceCapitalsQuizTab`
+- [x] Mettre à jour le scoring dans les deux composants : `freeScore ★` / `hintScore 💡`
+- [x] Vérifier la rétrocompatibilité leaderboard (anciennes entrées → `hintScore = 0` implicite)
 
 ---
 
