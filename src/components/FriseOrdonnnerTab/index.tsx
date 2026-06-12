@@ -30,6 +30,17 @@ const formatTime = (seconds: number): string => {
   return s > 0 ? `${m}m ${s}s` : `${m}m`;
 };
 
+const formatAge = (dateISO: string): string => {
+  const diffDays = Math.floor(
+    (Date.now() - new Date(dateISO).getTime()) / 86_400_000,
+  );
+  if (diffDays === 0) return "aujourd'hui";
+  if (diffDays === 1) return "hier";
+  if (diffDays < 7) return `il y a ${diffDays}j`;
+  if (diffDays < 30) return `il y a ${Math.floor(diffDays / 7)} sem`;
+  return `il y a ${Math.floor(diffDays / 30)} mois`;
+};
+
 const FriseOrdonnnerTab = () => {
   const { getEntries, addEntry } = useOrdonnerLeaderboard();
   const { tick, success } = useHaptics();
@@ -253,12 +264,17 @@ const FriseOrdonnnerTab = () => {
                     }}
                   >
                     <span className="w-6 text-center shrink-0">{rank}</span>
-                    <span
-                      className="flex-1 font-bold truncate"
-                      style={{ color: "#4a148c" }}
-                    >
-                      {entry.name}
-                    </span>
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      <span
+                        className="font-bold truncate"
+                        style={{ color: "#4a148c" }}
+                      >
+                        {entry.name}
+                      </span>
+                      <span className="text-xs" style={{ color: "#b0bec5" }}>
+                        {formatAge(entry.date)}
+                      </span>
+                    </div>
                     <span
                       className="font-bold shrink-0 text-xs"
                       style={{ color: "#7e57c2" }}
