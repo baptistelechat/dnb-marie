@@ -278,14 +278,14 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/HistoryDatesFlashcardTab/`
+- [x] Créer `src/components/HistoryDatesFlashcardTab/`
   - `components/DateQuizCard.tsx` — face avant (date ou événement)
   - `components/DateAnswerInput.tsx` — saisie + validation + `HintButton`
   - Réutiliser `shared/ProgressBar`, pattern GO!, `GameOverModal` unifié (Phase 1b)
-- [ ] Implémenter `normalizeDateAnswer` — tolérance sur le format, exactitude sur le contenu :
+- [x] Implémenter `normalizeDateAnswer` — tolérance sur le format, exactitude sur le contenu :
   - `"11 novembre 1918"` = `"11/11/1918"` = `"11/11/18"` = `"11 nov 1918"` = `"11-11-1918"`
   - Pour les ranges (`"1924–1953"`), accepter `"1924 1953"`, `"1924/1953"`, tiret ou espace
-- [ ] Toggle A/B direction
+- [x] Toggle A/B direction
 
 ---
 
