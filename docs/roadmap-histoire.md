@@ -116,18 +116,18 @@ interface HistoricalFigure {
   id: string;
   name: string; // ex: "Jean Moulin"
   primaryKeyword: string; // mot-clé utilisé comme paire dans le jeu Association
-  keywords: string[]; // liste complète des mots-clés — à définir en Phase 7 (2-4 par personnage)
+  keywords: string[]; // liste complète des mots-clés — 2-4 par personnage (définis en Phase 7 ✅)
   photos: string[]; // URLs Wikimedia Commons (2-3 par personnage) — à sourcer en Phase 1
   period: string; // ex: "Seconde Guerre mondiale"
   role: string; // description courte du rôle historique
 }
 ```
 
-> ⚠️ **`keywords[]` à compléter en Phase 7.** Un seul mot-clé ne résume pas un personnage. La liste complète (2-4 mots-clés par personne) sera définie lors du développement de l'onglet Association Personnages, sur la base du cours de Marie. Le tableau ci-dessous liste uniquement le `primaryKeyword` provisoire.
+> ✅ **`keywords[]` complétés en Phase 7.** 2-4 mots-clés par personnage définis dans `historicalFigures.ts`. La draw anti-collision de `buildUniqueKeywordPairs()` garantit l'unicité des mots-clés affichés dans la colonne droite pour chaque partie.
 
-**`primaryKeyword` provisoire** (à affiner en Phase 7) :
+**`primaryKeyword` + `keywords[]`** (Phase 7 complétée) :
 
-| Personnage                   | primaryKeyword (provisoire)  |
+| Personnage                   | primaryKeyword               |
 | ---------------------------- | ---------------------------- |
 | Pétain                       | Collaboration                |
 | Lénine                       | Révolution russe             |
@@ -296,18 +296,18 @@ interface HistoricalFigure {
 ### Concept
 
 - Colonne gauche : **noms des personnages**
-- Colonne droite : **mots-clés biographiques** (`primaryKeyword`)
-- Ex : `"Jean Moulin"` ↔ `"CNR / Martyr"`
+- Colonne droite : **mot-clé tiré aléatoirement dans `keywords[]`** à chaque partie (Option B retenue)
+- Ex : `"Jean Moulin"` ↔ `"CNR"` ou `"Martyr"` ou `"Caluire"` selon le tirage
 
 ### Tâches
 
-- [ ] **Définir la liste complète des mots-clés** pour chacun des 11 personnages (2-4 mots-clés par personne), sur la base du cours de Marie — à faire avant de coder
-- [ ] Décider comment le jeu utilise les mots-clés multiples : toujours `primaryKeyword` ? tirage aléatoire dans `keywords[]` à chaque round ? → décision à prendre en début de phase
-- [ ] Créer `src/components/HistoryPersonnagesAssociationTab/`
-- [ ] Paires depuis `historicalFigures.ts` (`name` ↔ mot-clé selon décision ci-dessus)
-- [ ] Pool 5 paires par round (11 personnages total)
-- [ ] Labels : `"Personnages"` / `"Mots-clés"`
-- [ ] Clé leaderboard : `"dnb-histoire-personnages-association-leaderboard"`
+- [x] **Définir la liste complète des mots-clés** pour chacun des 11 personnages (2-4 mots-clés par personne), sur la base du cours de Marie — mots-clés uniques garantis pour éviter les doublons dans la colonne droite
+- [x] Décider comment le jeu utilise les mots-clés multiples : **Option B retenue — tirage aléatoire dans `keywords[]` à chaque partie** (keyword fixé au démarrage, stable pendant la partie)
+- [x] Créer `src/components/HistoryPersonnagesAssociationTab/`
+- [x] Paires depuis `historicalFigures.ts` (`name` ↔ `randomKeyword(f)`)
+- [x] Pool 5 paires par round (11 personnages total)
+- [x] Labels : `"Personnages"` / `"Mots-clés"`
+- [x] Clé leaderboard : `"dnb-histoire-personnages-association-leaderboard"`
 
 ---
 

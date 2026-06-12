@@ -3,7 +3,6 @@ export interface HistoricalFigure {
   name: string;
   primaryKeyword: string;
   keywords: string[];
-  // TODO Phase 1 : sourcer 2-3 photos Wikimedia Commons par personnage et vérifier chaque URL
   photos: string[];
   period: string;
   role: string;
@@ -14,7 +13,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "petain",
     name: "Pétain",
     primaryKeyword: "Collaboration",
-    keywords: [],
+    keywords: ["Collaboration", "Vichy", "Armistice 1940"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/a/a9/P%C3%A9tain_-_portrait_photographique.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/d/d0/Philippe_P%C3%A9tain_-_photo_Henri_Manuel.jpg",
@@ -30,7 +29,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "lenine",
     name: "Lénine",
     primaryKeyword: "Révolution russe",
-    keywords: [],
+    keywords: ["Révolution russe", "Bolcheviks", "Fondateur URSS"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/c/cd/Iljitsj_Oeljanov_Lenin%2C_de_Russische_revolutionair_en_communistische_%28partij%29_leider_van_de%2C_SFA001006857.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/8/83/Lenin_1920.jpg",
@@ -46,7 +45,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "staline",
     name: "Staline",
     primaryKeyword: "Totalitarisme / URSS",
-    keywords: [],
+    keywords: ["Totalitarisme", "URSS", "Goulag"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/e/ef/Stalin_in_1937.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/f/f7/Joseph_Stalin_official_portrait.jpg",
@@ -62,7 +61,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "hitler",
     name: "Hitler",
     primaryKeyword: "Nazisme",
-    keywords: [],
+    keywords: ["Nazisme", "IIIe Reich", "Antisémitisme"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/3/32/Bundesarchiv_Bild_183-S33882%2C_Adolf_Hitler.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/a/ab/Bundesarchiv_Bild_183-H1216-0500-002%2C_Adolf_Hitler.jpg",
@@ -76,7 +75,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "blum",
     name: "Léon Blum",
     primaryKeyword: "Front populaire",
-    keywords: [],
+    keywords: ["Front populaire", "Congés payés", "SFIO"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/c/c7/L%C3%A9on_Blum_directeur_du_Populaire_-_photo_Henri_Manuel.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/d/da/L%C3%A9on_Blum_Meurisse_b_1927.jpg",
@@ -89,7 +88,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "degaulle",
     name: "Le général de Gaulle",
     primaryKeyword: "Résistance / GPRF",
-    keywords: [],
+    keywords: ["Appel du 18 juin", "France libre", "GPRF", "Résistance"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/e/ea/General_Charles_de_Gaulle_in_1945.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/8/82/Charles_de_Gaulle_micro_BBC_Londres.jpg",
@@ -103,7 +102,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "moulin",
     name: "Jean Moulin",
     primaryKeyword: "CNR / Martyr",
-    keywords: [],
+    keywords: ["CNR", "Martyr", "Caluire", "Résistance"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/1/15/Moulin_Harcourt_1937.jpg",
       "https://museedelaresistanceenligne.org/musee/doc/image/recto/grande/3328.jpg",
@@ -116,7 +115,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "elize",
     name: "Raphaël Élizé",
     primaryKeyword: "Premier maire noir de France",
-    keywords: [],
+    keywords: ["Premier maire noir", "Sablé-sur-Sarthe", "Déportation"],
     photos: [
       "https://outremermemory.com/wp-content/uploads/2021/02/Raphael-2.png",
       "https://www.lalibre.be/resizer/v2/HYJCOLTZRFEE3EJ4BIMARDEI4Y.jpg?auth=901a42f82dafe2cca83a5198001fbc0894e1cd4c25e98d570be3f391df108b9f&width=1200&height=800&quality=85&focal=321%2C438",
@@ -128,7 +127,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "tillion",
     name: "Germaine Tillion",
     primaryKeyword: "Déportée / Ethnologue",
-    keywords: [],
+    keywords: ["Ethnologue", "Résistante", "Ravensbrück"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/3/37/%C2%A9_assoc_GT_Photo_G_Tillion_carte_d%27%C3%A9tudiante_1934.jpg",
       "https://upload.wikimedia.org/wikipedia/en/2/27/Germaine_Tillion.jpg",
@@ -140,7 +139,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "gaulle-antonioz",
     name: "Geneviève de Gaulle-Antonioz",
     primaryKeyword: "Résistante / Ravensbrück",
-    keywords: [],
+    keywords: ["Ravensbrück", "Nièce de Gaulle", "Résistante"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/0/0e/GdGA_StreetArt.jpg",
       "https://museedelaresistanceenligne.org/musee/doc/image/recto/grande/1895.jpg",
@@ -152,7 +151,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     id: "baker",
     name: "Joséphine Baker",
     primaryKeyword: "Espionne / Droits civiques",
-    keywords: [],
+    keywords: ["Espionne", "Droits civiques", "Artiste"],
     photos: [
       "https://upload.wikimedia.org/wikipedia/commons/4/45/Josephine_Baker.jpg",
       "https://upload.wikimedia.org/wikipedia/commons/2/2d/Manuel_-_Josephine_Baker.jpg",
