@@ -1,6 +1,6 @@
 ﻿---
 register: journal
-last_updated: 2026-06-11
+last_updated: 2026-06-12
 ---
 
 ## 2026-06-02
@@ -363,3 +363,126 @@ Fix lint résiduel : `MIN_TEXT_BAR_HEIGHT` devenu inutilisé après suppression 
 - [BDR-039](decisions/BDR-039.md) — labels ranges ancrés au haut de barre
 - [BDR-040](decisions/BDR-040.md) — tooltip dans parent vs overflow:hidden
 - [ZBLK-015](archive/blockers/ZBLK-015.md) — anti-collision 4 itérations, résolu
+
+---
+
+Micro-session (2 messages). Baptiste signale l'absence de date relative sous son nom dans le leaderboard de l'écran d'accueil de `FriseOrdonnnerTab`. Diagnostic : le leaderboard de la modal (`OrdonnerGameOverModal`) utilisait déjà `formatAge`, mais le leaderboard inline dans `index.tsx` (affiché avant la partie) ne l'avait pas — code dupliqué sans composant partagé, drift silencieux. Fix en 2 édits : ajout de `formatAge` dans `index.tsx`, transformation du `<span>` nom en `<div flex-col>` avec la date en gris en dessous.
+
+**Entrées clés :**
+
+- [LRN-028](learnings/LRN-028.md) — leaderboard dupliqué sans composant partagé → drift silencieux
+
+---
+
+Rituel de consolidation mémoire. 0 fusion(s), 0 archivage(s). Compression 0b : 36 titres raccourcis (19 dans decisions.md, 17 dans learnings.md).
+
+---
+
+Phase 5 du module Histoire — implémentation de `HistoryDatesAssociationTab`. Session courte en deux temps.
+
+Premier temps : création du composant en suivant exactement le pattern `FranceAssociationTab`. Trois fichiers créés — `utils.ts` (initBoard depuis `HISTORICAL_DATES` avec mapping `event`→`country`, `date`→`capital`), hook leaderboard avec clé `"dnb-histoire-dates-association-leaderboard"`, `index.tsx` identique à FranceAssociationTab avec labels "Événements" / "Dates" et description "Relie chaque événement à sa date 📅". `App.tsx` mis à jour : import + condition de dispatch + retrait du placeholder "Bientôt disponible" pour cet onglet. Lint ✅ Build ✅.
+
+Deuxième temps : fix visuel signalé par Baptiste (screenshot) — décalage entre hauteurs des colonnes gauche et droite dans `AssociationBoard`. Les événements historiques (gauche) passent sur 2 lignes, les dates (droite) restent sur 1 ligne ; deux `flex-col` indépendants ne synchronisent jamais leurs hauteurs. Fix : restructuration row-by-row — headers dans un `grid-cols-2` dédié, puis chaque row est un `div grid-cols-2 items-stretch` contenant `leftOrder[i]` et `rightOrder[i]`; `ColumnItem` reçoit `className="h-full"` via une prop optionnelle ajoutée. Rétrocompatible avec AssociationTab EU et FranceAssociationTab (items courts → rows uniformes).
+
+**Entrées clés :**
+
+- [BDR-041](decisions/BDR-041.md) — mapping event→country, date→capital dans AssociationPair
+- [BDR-042](decisions/BDR-042.md) — AssociationBoard row-by-row layout
+- [LRN-029](learnings/LRN-029.md) — pattern CSS 2 colonnes hauteurs variables
+
+---
+
+Phase 6 du module Histoire — implémentation complète de `HistoryDatesFlashcardTab` (Flashcards Dates).
+
+Session en deux temps selon le résumé compacté, finalisée par un repositionnement UX du HintButton.
+
+Premier temps : création du composant complet. Architecture en dossier — `types.ts`, `hooks/useHistoryDatesLeaderboard.ts`, quatre sous-composants (`DateQuizCard`, `DateAnswerInput`, `HistoryDatesDirectionToggle`, `HistoryDatesGameOverModal`), `index.tsx` orchestrateur. Nouvelle utilité `src/utils/normalizeDateAnswer.ts` qui expose `datesMatch(input, expected)` — pipeline : `normalizeAnswer` → remplacement `/`→espace → mapping mois FR→chiffres via `MONTH_MAP` → `parseInt` (supprime zéros initiaux) → expansion `XX` → `19XX` si 3 tokens et dernier à 2 chiffres. `answersMatch` reste utilisé pour les événements textuels, `datesMatch` pour les dates. Pool de distracteurs : `ALL_EVENTS` ou `ALL_DATES` selon la direction active. Scoring : pattern `failedIds` identique aux autres jeux — `firstAttemptIds` ou `hintIds` selon `hintUsed` booléen, uniquement si la carte n'a jamais été ratée. Leaderboard filtré par direction. `App.tsx` câblé.
+
+Deuxième temps : roadmap auditée, Phase 6 (3 tâches) cochée dans `docs/roadmap-histoire.md`. Lint ✅ Build ✅.
+
+Troisième temps (session courte) : Baptiste demande de rendre le bouton "Proposition" plus visible en le plaçant inline avec "Valider". Avant : HintButton dans une `<div>` centrée séparée en dessous. Après : même `flex-wrap gap-2` que "Valider" — wrapper conditionnel `basis-full order-last` quand révélé pour pousser les 4 choix sur leur propre ligne pleine largeur sans casser le layout. Lint ✅ Build ✅.
+
+**Entrées clés :**
+
+- [BDR-043](decisions/BDR-043.md) — normalizeDateAnswer / datesMatch
+- [BDR-044](decisions/BDR-044.md) — toggle direction date-to-event / event-to-date
+- [BDR-045](decisions/BDR-045.md) — HintButton inline Valider
+- [LRN-030](learnings/LRN-030.md) — flex-wrap + basis-full order-last
+
+---
+
+Phase 7 du module Histoire — implémentation complète de `HistoryPersonnagesAssociationTab` (Association Personnages).
+
+Session démarrée depuis la roadmap (`@docs/roadmap-histoire.md lance Phase 7`). Baptiste a d'abord choisi l'Option B pour les keywords : tirage aléatoire dans `keywords[]` à chaque partie plutôt qu'un primaryKeyword fixe. Trois fichiers créés : `utils.ts` avec `buildUniqueKeywordPairs()` (anti-collision `Set<string> used` pour garantir l'unicité des labels dans la colonne droite même quand plusieurs personnages partagent un concept), hook leaderboard avec clé `"dnb-histoire-personnages-association-leaderboard"`, `index.tsx` orchestrateur (labels "Personnages" / "Mots-clés", 11 paires total, pool de 5 par round).
+
+`historicalFigures.ts` mis à jour : `keywords[]` remplis pour les 11 personnages (2–4 mots-clés chacun). Cas de partage conservés intentionnellement : "Résistance" pour de Gaulle et Moulin, "Résistante" et "Ravensbrück" pour Tillion et Gaulle-Antonioz — notions pédagogiques importantes à ne pas retirer des données. La draw anti-collision résout le problème UX au runtime.
+
+`App.tsx` câblé pour le dispatch `historySubject === "personnages" && historyTab === "association"`. Roadmap Phase 7 entièrement cochée. Audit roadmap : phases 0–7 toutes complètes. Note Phase 1 mise à jour : `⚠️ keywords[] à compléter en Phase 7` → `✅ complétés`. Lint ✅.
+
+**Entrées clés :**
+
+- [BDR-046](decisions/BDR-046.md) — Option B + anti-collision keywords personnages
+- [LRN-031](learnings/LRN-031.md) — Set anti-collision au tirage pour labels partagés
+
+---
+
+Phase 8 du module Histoire — implémentation complète de `PhotoFlashcardTab` (onglet "Photos" sous Histoire > Personnages).
+
+Session démarrée depuis la roadmap (`@docs/roadmap-histoire.md lance la phase 8`). Architecture identique aux autres flashcard tabs : GO! timer, queue FIFO avec réinsertion aléatoire des mauvaises réponses, scoring `firstAttemptIds` / `hintIds`, leaderboard localStorage, modal GameOver.
+
+Spécificités de cet onglet : (1) `src/utils/normalizePersonName.ts` avec `personNamesMatch(input, expected)` — matching partiel (`"De Gaulle"` valide pour `"Le général de Gaulle"`) via `normExpected.includes(normInput)`, garde min 3 chars pour éviter les faux positifs. (2) `PhotoCard` affiche la photo dans un conteneur `overflow-hidden height:300px`, alt générique (`"Portrait d'un personnage historique"`) pour ne pas fuiter le nom. (3) `PersonNameInput` intègre `HintButton` avec `pool={ALL_NAMES}` (11 noms). (4) `usePhotoLeaderboard` sans filtre par direction (pas de toggle dans ce jeu).
+
+Deux fixes post-screenshot de Baptiste :
+
+1. **Photos coupées** — `object-cover` + `aspectRatio: "1/1"` tronquait les portraits (ex. Hitler : seulement le torse). Fix : `object-contain` + `height: 300px` + background `#f5f0fb`. Le sujet est entier, avec du fond neutre sur les côtés pour les images non carrées.
+
+2. **Pool de 44 photos trop long** — le pool initial était `HISTORICAL_FIGURES.flatMap(fig => fig.photos.map(...))` = 44 entrées. Fix : `buildRoundPool()` sélectionne 1 photo aléatoire par personnage = 11 cartes par partie. Nouveau tirage à chaque replay. Architecture : factory `buildRoundPool()` + `useState(pool)` + `useMemo(roundMap)`.
+
+`App.tsx` câblé, roadmap Phase 8 entièrement cochée (5/5 tâches). Lint ✅ Build ✅ (0 erreur, warning chunk size pré-existant). Screenshot Playwright confirmé : "📸 11 photos à identifier".
+
+**Entrées clés :**
+
+- [BDR-047](decisions/BDR-047.md) — buildRoundPool 1 photo aléatoire par personnage
+- [BDR-048](decisions/BDR-048.md) — PhotoCard object-contain + hauteur fixe
+- [LRN-032](learnings/LRN-032.md) — object-contain = portrait entier visible
+- [LRN-033](learnings/LRN-033.md) — pool dynamique + useMemo roundMap
+
+---
+
+Phase 9 du module Histoire — implémentation complète de `QuiSuisJeTab` (onglet "Qui suis-je ?" sous Histoire > Personnages).
+
+Session démarrée depuis la roadmap (`@docs/roadmap-histoire.md lance la phase 9`). Architecture : `types.ts`, `hooks/useQSJLeaderboard.ts`, trois sous-composants (`ClueCard`, `QSJInput`, `QSJGameOverModal`), `index.tsx` orchestrateur. Réutilisation directe de `personNamesMatch()` (déjà écrit pour PhotoFlashcardTab), `Timer`, `LeaderboardPanel` (MapQuizTab).
+
+Mécanique de jeu : queue linéaire des 11 personnages (shuffle, sans réinsertion), `revealedCount` progressif, `canRevealNextClue = revealedCount < activeClues.length && lastResult === "wrong"`. Cinq états de `QSJInput` : null / wrong+canReveal / wrong+exhausted / correct / skipped. Scoring `firstTryIds ★` (réponse au 1er indice) / `hintIds 💡` (réponse après 2+ indices) / `failedIds ❌`. Clé `key="${activeId}-${revealedCount}"` sur `QSJInput` pour remount propre à chaque nouvel indice.
+
+Deux itérations post-implémentation :
+
+1. Baptiste demande 5 indices par personnage (vs 3 du spec) pour éviter la répétition — `historicalFigures.ts` mis à jour avec 2 clues supplémentaires par figure, rédigées en 1ère personne, ordre progressif du plus vague au plus spécifique.
+2. Baptiste constate que les indices sont toujours dans le même ordre d'une partie à l'autre — ajout de `shuffledClues: Map<string, string[]>` en state, initialisée au mount et réinitialisée à chaque `handleReplay`. `ClueCard` reçoit `activeClues = shuffledClues.get(activeId)` au lieu de `activeFigure.clues`.
+
+`App.tsx` câblé : `quiz` ajouté à `HistoryTabPersonnages`, `HelpCircle` importé, dispatch complet. Roadmap Phase 9 validée — tous les points concept cochés. Lint ✅ Build ✅.
+
+**Entrées clés :**
+
+- [BDR-049](decisions/BDR-049.md) — clues[] + 5 indices + shuffle Map par partie
+- [LRN-034](learnings/LRN-034.md) — Map<id, T[]> pour variantes mélangées par item
+
+---
+
+Phase 10 du module Histoire — branchement `HintButton` dans `CapitalsQuizTab` (UE Flashcards) et `FranceCapitalsQuizTab` (France Flashcards), avec scoring complet `freeScore ★` / `hintScore 💡` et rétrocompatibilité leaderboard.
+
+Les deux `AnswerInput` (EU et France) avaient été créés sans HintButton — les branchements étaient prévus en Phase 10. Quatre changements identiques appliqués sur chaque paire `[AnswerInput, index.tsx]` :
+
+1. **HintButton inline** — dans le flex-wrap avec "Valider" et "Passer →". Wrapper conditionnel `className={hintRevealed ? "basis-full order-last" : ""}` — sans classe = inline, avec classe = pleine largeur après révélation des choix.
+2. **`hintRevealed` local** — état dans l'AnswerInput uniquement, communiqué via `onSubmit(answer, hintUsed: boolean)`. Aucun prop supplémentaire, aucun state parent (`openedHintCodes` éliminé).
+3. **`hintSuccessCodes` dans l'index** — nouveau `Set<string>` parallèle à `firstAttemptCodes`. Guard `isFirstTry = !failedCodes.has(code) && !answeredCodes.has(code)` commun aux deux branches.
+4. **`answersPool`** — computed depuis `EU_COUNTRIES` / `FRENCH_REGIONS` selon `direction`, passé comme `pool` au HintButton pour générer 3 distracteurs pertinents.
+
+Une correction UX après première implémentation : le wrapper avait `basis-full` inconditionnel → HintButton isolé sur sa propre ligne dès le départ. Pattern correct relu dans `DateAnswerInput` (référence Phase 6).
+
+Rétrocompatibilité confirmée : `hintScore?: number` déjà optionnel dans tous les types, `useLeaderboard` utilisait déjà `a.hintScore ?? 0` dans le tri. Roadmap Phase 10 (4/4 tâches) cochée dans `docs/roadmap-histoire.md`. Lint ✅ Build ✅.
+
+**Entrées clés :**
+
+- [BDR-050](decisions/BDR-050.md) — hintUsed:boolean dans onSubmit vs état parent
+- [LRN-035](learnings/LRN-035.md) — HintButton inline-first, wrapper conditionnel
