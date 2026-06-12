@@ -6,6 +6,7 @@ export interface HistoricalFigure {
   photos: string[];
   period: string;
   role: string;
+  clues: string[];
 }
 
 export const HISTORICAL_FIGURES: HistoricalFigure[] = [
@@ -24,6 +25,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Seconde Guerre mondiale",
     role: "Chef de l'État français (régime de Vichy), symbole de la collaboration",
+    clues: [
+      "Je suis un militaire français devenu figure politique controversée au cours du XXe siècle.",
+      "Héros de la bataille de Verdun en 1916, je suis considéré comme le 'sauveur' de la France lors de la Première Guerre mondiale.",
+      "Je deviens chef de l'État français en juillet 1940, après l'armistice signé avec l'Allemagne nazie.",
+      "Je rencontre Hitler à Montoire en octobre 1940 et engage la France dans la voie de la collaboration.",
+      "Mon gouvernement, installé à Vichy, adopte des lois antisémites et met fin à la Troisième République.",
+    ],
   },
   {
     id: "lenine",
@@ -40,6 +48,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Révolution russe",
     role: "Chef du parti bolchevique, fondateur de l'URSS",
+    clues: [
+      "Je suis un révolutionnaire et théoricien politique russe, fondateur du parti bolchevique.",
+      "Je rentre en Russie depuis mon exil en 1917, à bord d'un train traversant l'Allemagne en guerre.",
+      "Je dirige la révolution bolchevique d'Octobre 1917, qui renverse le gouvernement provisoire russe.",
+      "Je signe le traité de Brest-Litovsk en 1918, retirant la Russie de la Première Guerre mondiale.",
+      "Je crée l'Union des républiques socialistes soviétiques (URSS) en 1922.",
+    ],
   },
   {
     id: "staline",
@@ -56,6 +71,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Entre-deux-guerres / Seconde Guerre mondiale",
     role: "Dirigeant de l'URSS (1924–1953), régime totalitaire soviétique",
+    clues: [
+      "Je suis un dirigeant soviétique qui consolide mon pouvoir en éliminant tous mes rivaux politiques.",
+      "Je prends le contrôle de l'URSS après la mort de Lénine en 1924.",
+      "Je lance la collectivisation forcée de l'agriculture, provoquant une famine qui cause des millions de morts.",
+      "Mon régime repose sur les purges politiques et les camps de travail forcé, les goulags.",
+      "Je dirige l'Union soviétique d'une main de fer pendant près de trente ans, jusqu'à ma mort en 1953.",
+    ],
   },
   {
     id: "hitler",
@@ -70,6 +92,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Entre-deux-guerres / Seconde Guerre mondiale",
     role: "Chancelier puis Führer d'Allemagne, fondateur du régime nazi",
+    clues: [
+      "Je suis un homme politique autrichien qui exploite la crise économique et la rancœur d'après-guerre pour accéder au pouvoir en Allemagne.",
+      "J'écris 'Mein Kampf' en prison, exposant mon idéologie fondée sur le nationalisme, le racisme et l'antisémitisme.",
+      "Je deviens chancelier d'Allemagne le 30 janvier 1933, après la victoire électorale de mon parti.",
+      "Je fais adopter les lois de Nuremberg en 1935, privant les Juifs de leurs droits civiques.",
+      "Je suis le Führer du IIIe Reich et je déclenche la Seconde Guerre mondiale en envahissant la Pologne le 1er septembre 1939.",
+    ],
   },
   {
     id: "blum",
@@ -83,6 +112,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Entre-deux-guerres",
     role: "Président du Conseil (1936), chef du gouvernement du Front populaire",
+    clues: [
+      "Je suis un intellectuel et homme politique français, figure majeure du parti socialiste dans l'entre-deux-guerres.",
+      "Je suis la première personne juive à diriger un gouvernement en France, ce qui m'expose à de violentes attaques antisémites.",
+      "Mon gouvernement impose la semaine de 40 heures de travail et reconnaît le droit aux conventions collectives.",
+      "Je suis nommé président du Conseil en juin 1936, à la tête d'une coalition de partis de gauche.",
+      "Mon gouvernement accorde les premiers congés payés aux travailleurs français.",
+    ],
   },
   {
     id: "degaulle",
@@ -97,6 +133,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Seconde Guerre mondiale",
     role: "Appel du 18 juin 1940, chef de la France libre, président du GPRF",
+    clues: [
+      "Je suis un officier de l'armée française qui refuse l'armistice signé avec l'Allemagne nazie en juin 1940.",
+      "Depuis Londres, je lance le 18 juin 1940 un appel à la résistance sur les ondes de la BBC.",
+      "Je dirige la France libre depuis l'Angleterre, rassemblant les Français qui refusent l'occupation nazie.",
+      "Je défile sur les Champs-Élysées le 26 août 1944, lors de la libération de Paris.",
+      "Après la Libération, je préside le gouvernement provisoire de la République française.",
+    ],
   },
   {
     id: "moulin",
@@ -110,6 +153,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Seconde Guerre mondiale",
     role: "Résistant, fondateur et premier président du Conseil National de la Résistance, mort sous la torture en 1943",
+    clues: [
+      "Je suis un haut fonctionnaire français qui refuse de collaborer avec l'occupant nazi dès 1940.",
+      "Je suis envoyé en France occupée par le général de Gaulle avec une mission secrète : unifier les mouvements de Résistance.",
+      "Je réussis à rassembler les principaux mouvements de résistance intérieure sous une même autorité.",
+      "Je fonde et préside le Conseil National de la Résistance (CNR), créé le 27 mai 1943 à Paris.",
+      "Je suis arrêté par la Gestapo à Caluire en juin 1943 et je meurs sous la torture, sans avoir livré aucun secret.",
+    ],
   },
   {
     id: "elize",
@@ -122,6 +172,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Entre-deux-guerres / Seconde Guerre mondiale",
     role: "Premier maire noir de France (Sablé-sur-Sarthe, 1929), mort en déportation en 1945",
+    clues: [
+      "Je suis né en 1891 à la Martinique et je poursuis mes études en France métropolitaine pour devenir vétérinaire.",
+      "Je m'installe dans la Sarthe, où je m'engage dans la vie politique locale.",
+      "Je suis le premier maire noir de France métropolitaine, élu dans une commune de la Sarthe en 1929.",
+      "Pendant la Seconde Guerre mondiale, je m'engage dans la Résistance contre l'occupation nazie.",
+      "Je suis arrêté par les nazis, déporté, et je meurs au camp de concentration de Mauthausen en mars 1945.",
+    ],
   },
   {
     id: "tillion",
@@ -134,6 +191,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Seconde Guerre mondiale",
     role: "Résistante, déportée à Ravensbrück, ethnologue",
+    clues: [
+      "Je suis une chercheuse française qui consacre ma carrière à l'étude des populations berbères d'Algérie.",
+      "Dès l'été 1940, peu après l'armistice, je rejoins un réseau de résistance pour lutter contre l'occupant nazi.",
+      "Dénoncée et arrêtée par les nazis, je suis déportée au camp de concentration de Ravensbrück en Allemagne.",
+      "Au camp, je compose clandestinement une opérette satirique, 'Le Verfügbar aux Enfers', pour maintenir le moral des déportées.",
+      "Après la guerre, je témoigne inlassablement des crimes nazis et reprends mes travaux d'ethnologue.",
+    ],
   },
   {
     id: "gaulle-antonioz",
@@ -146,6 +210,13 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Seconde Guerre mondiale",
     role: "Résistante, déportée à Ravensbrück, nièce du général de Gaulle",
+    clues: [
+      "Je suis la petite-nièce d'un général français devenu célèbre pour son refus de l'armistice en juin 1940.",
+      "Étudiante, je rejoins la Résistance française dès les premières années de l'Occupation.",
+      "Je suis arrêtée par la Gestapo en 1944 et déportée dans un camp de concentration en Allemagne.",
+      "Je suis internée à Ravensbrück dans un quartier de détention particulièrement sévère, à l'isolement.",
+      "Après la guerre, je consacre ma vie à la lutte contre la grande pauvreté et je préside ATD Quart Monde.",
+    ],
   },
   {
     id: "baker",
@@ -162,5 +233,12 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
     ],
     period: "Seconde Guerre mondiale",
     role: "Artiste, résistante, espionne pour la France libre, militante des droits civiques",
+    clues: [
+      "Née dans une famille modeste aux États-Unis, je deviens une star internationale du spectacle vivant.",
+      "Je m'installe à Paris dans les années 1920, où je triomphe sur les scènes de music-hall et deviens une icône parisienne.",
+      "Pendant la Seconde Guerre mondiale, je mets mon statut d'artiste au service des services secrets alliés.",
+      "Je cache des messages codés dans mes partitions et transmets des renseignements lors de mes tournées à l'étranger.",
+      "Je m'engage pour les droits civiques des Noirs, je rejoins la France libre et je suis décorée de la Légion d'honneur.",
+    ],
   },
 ];

@@ -6,6 +6,7 @@ import {
   Calendar,
   Camera,
   Globe,
+  HelpCircle,
   Landmark,
   Layers,
   Link2,
@@ -30,13 +31,14 @@ import HistoryDatesAssociationTab from "./components/HistoryDatesAssociationTab"
 import HistoryDatesFlashcardTab from "./components/HistoryDatesFlashcardTab";
 import HistoryPersonnagesAssociationTab from "./components/HistoryPersonnagesAssociationTab";
 import PhotoFlashcardTab from "./components/PhotoFlashcardTab";
+import QuiSuisJeTab from "./components/QuiSuisJeTab";
 
 type Domain = "geo" | "histoire";
 type GeoTab = "checklist" | "map-quiz" | "capitals-quiz" | "association";
 type GeoSubject = "eu" | "france";
 type HistorySubject = "dates" | "personnages";
 type HistoryTabDates = "frise" | "ordonner" | "flashcards" | "association";
-type HistoryTabPersonnages = "liste" | "association" | "photos";
+type HistoryTabPersonnages = "liste" | "association" | "photos" | "quiz";
 type HistoryTab = HistoryTabDates | HistoryTabPersonnages;
 
 const DOMAINS: { value: Domain; label: string; icon: React.ReactNode }[] = [
@@ -88,6 +90,7 @@ const HISTORY_TABS_PERSONNAGES: {
   { value: "liste", label: "Liste", icon: <List size={14} /> },
   { value: "association", label: "Association", icon: <Link2 size={14} /> },
   { value: "photos", label: "Photos", icon: <Camera size={14} /> },
+  { value: "quiz", label: "Qui suis-je ?", icon: <HelpCircle size={14} /> },
 ];
 
 const pillActiveStyle = {
@@ -346,13 +349,17 @@ const App = () => {
           historySubject === "personnages" &&
           historyTab === "photos" && <PhotoFlashcardTab />}
         {domain === "histoire" &&
+          historySubject === "personnages" &&
+          historyTab === "quiz" && <QuiSuisJeTab />}
+        {domain === "histoire" &&
           !(historySubject === "dates" && historyTab === "frise") &&
           !(historySubject === "dates" && historyTab === "ordonner") &&
           !(historySubject === "dates" && historyTab === "flashcards") &&
           !(historySubject === "dates" && historyTab === "association") &&
           !(historySubject === "personnages" && historyTab === "liste") &&
           !(historySubject === "personnages" && historyTab === "association") &&
-          !(historySubject === "personnages" && historyTab === "photos") && (
+          !(historySubject === "personnages" && historyTab === "photos") &&
+          !(historySubject === "personnages" && historyTab === "quiz") && (
             <div className="p-8 text-center">
               <p
                 className="text-2xl mb-2"
