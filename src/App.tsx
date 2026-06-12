@@ -29,6 +29,7 @@ import HistoirePersonnagesTab from "./components/HistoirePersonnagesTab";
 import HistoryDatesAssociationTab from "./components/HistoryDatesAssociationTab";
 import HistoryDatesFlashcardTab from "./components/HistoryDatesFlashcardTab";
 import HistoryPersonnagesAssociationTab from "./components/HistoryPersonnagesAssociationTab";
+import PhotoFlashcardTab from "./components/PhotoFlashcardTab";
 
 type Domain = "geo" | "histoire";
 type GeoTab = "checklist" | "map-quiz" | "capitals-quiz" | "association";
@@ -342,14 +343,16 @@ const App = () => {
           historySubject === "personnages" &&
           historyTab === "association" && <HistoryPersonnagesAssociationTab />}
         {domain === "histoire" &&
+          historySubject === "personnages" &&
+          historyTab === "photos" && <PhotoFlashcardTab />}
+        {domain === "histoire" &&
           !(historySubject === "dates" && historyTab === "frise") &&
           !(historySubject === "dates" && historyTab === "ordonner") &&
           !(historySubject === "dates" && historyTab === "flashcards") &&
           !(historySubject === "dates" && historyTab === "association") &&
           !(historySubject === "personnages" && historyTab === "liste") &&
-          !(
-            historySubject === "personnages" && historyTab === "association"
-          ) && (
+          !(historySubject === "personnages" && historyTab === "association") &&
+          !(historySubject === "personnages" && historyTab === "photos") && (
             <div className="p-8 text-center">
               <p
                 className="text-2xl mb-2"

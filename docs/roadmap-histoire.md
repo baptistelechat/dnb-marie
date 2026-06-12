@@ -327,14 +327,14 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/PhotoFlashcardTab/`
+- [x] Créer `src/components/PhotoFlashcardTab/`
   - `index.tsx` — construit un pool de photos shufflé à partir de `historicalFigures`
   - `components/PhotoCard.tsx` — image plein cadre arrondie, sans label
   - `components/PersonNameInput.tsx` — saisie nom + validation + `HintButton` (Phase 1b)
-- [ ] `normalizeAnswer` adapté aux noms propres (accents, majuscules, tirets, noms partiels)
-- [ ] Fallback placeholder avec initiales si image introuvable
-- [ ] Progression : `X / total photos` (pas `X / 11 personnages`)
-- [ ] Timer GO!, leaderboard localStorage
+- [x] `normalizeAnswer` adapté aux noms propres (accents, majuscules, tirets, noms partiels)
+- [x] Fallback placeholder avec initiales si image introuvable
+- [x] Progression : `X / total photos` (pas `X / 11 personnages`)
+- [x] Timer GO!, leaderboard localStorage
 
 ---
 
