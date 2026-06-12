@@ -38,9 +38,11 @@ const FRENCH_MONTHS: Record<string, number> = {
   décembre: 12,
 };
 
+const FRENCH_MONTHS_ENTRIES = Object.entries(FRENCH_MONTHS);
+
 const getSubYear = (date: string, sortKey: number): number => {
   const lower = date.toLowerCase();
-  for (const [name, num] of Object.entries(FRENCH_MONTHS)) {
+  for (const [name, num] of FRENCH_MONTHS_ENTRIES) {
     if (lower.includes(name)) return sortKey + (num - 0.5) / 12;
   }
   return sortKey;
@@ -78,7 +80,7 @@ const computePointYMap = (
   pointItems: GameItem[],
   yearToY: (y: number) => number,
 ): Map<string, number> => {
-  const sorted = [...pointItems].sort(
+  const sorted = pointItems.toSorted(
     (a, b) => getSubYear(a.date, a.sortKey) - getSubYear(b.date, b.sortKey),
   );
   const yMap = new Map<string, number>();

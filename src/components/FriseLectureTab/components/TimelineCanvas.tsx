@@ -33,9 +33,11 @@ const FRENCH_MONTHS: Record<string, number> = {
   décembre: 12,
 };
 
+const FRENCH_MONTHS_ENTRIES = Object.entries(FRENCH_MONTHS);
+
 const getSubYear = (date: string, sortKey: number): number => {
   const lower = date.toLowerCase();
-  for (const [name, num] of Object.entries(FRENCH_MONTHS)) {
+  for (const [name, num] of FRENCH_MONTHS_ENTRIES) {
     if (lower.includes(name)) return sortKey + (num - 0.5) / 12;
   }
   return sortKey;
@@ -50,7 +52,7 @@ interface PointWithY {
 }
 
 const computePointPositions = (items: HistoricalDate[]): PointWithY[] => {
-  const sorted = [...items].sort(
+  const sorted = items.toSorted(
     (a, b) => getSubYear(a.date, a.sortKey) - getSubYear(b.date, b.sortKey),
   );
   const result: PointWithY[] = [];

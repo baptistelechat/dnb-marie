@@ -23,7 +23,7 @@ const ClueCard = ({ clues, revealedCount }: ClueCardProps) => {
       </h3>
 
       {clues.slice(0, revealedCount).map((clue, i) => (
-        <div key={i} className="flex gap-3 items-start">
+        <div key={clue} className="flex gap-3 items-start">
           <span
             className="text-xs font-bold rounded-full px-2 py-0.5 shrink-0 mt-0.5"
             style={{ background: "#ede7f6", color: "#7e57c2" }}

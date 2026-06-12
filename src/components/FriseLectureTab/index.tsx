@@ -34,9 +34,13 @@ const FriseLectureTab = () => {
 
   const colorMap = useMemo(() => {
     const map = new Map<string, string>();
-    HISTORICAL_DATES.filter((d) => d.type === "range").forEach((d, i) => {
-      map.set(d.id, CANDY_COLORS[i % CANDY_COLORS.length]);
-    });
+    let i = 0;
+    for (const d of HISTORICAL_DATES) {
+      if (d.type === "range") {
+        map.set(d.id, CANDY_COLORS[i % CANDY_COLORS.length]);
+        i++;
+      }
+    }
     return map;
   }, []);
 
@@ -59,6 +63,7 @@ const FriseLectureTab = () => {
   }, []);
 
   useEffect(() => {
+    let id: ReturnType<typeof setTimeout> | undefined;
     if (count === TOTAL && !completedRef.current) {
       completedRef.current = true;
       success();
@@ -77,9 +82,10 @@ const FriseLectureTab = () => {
           ],
         });
       launch();
-      setTimeout(launch, 400);
+      id = setTimeout(launch, 400);
     }
     if (count < TOTAL) completedRef.current = false;
+    return () => clearTimeout(id);
   }, [count, success]);
 
   return (
@@ -171,7 +177,7 @@ const FriseLectureTab = () => {
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
             aria-label="Recommencer depuis le début"
           >
             <RotateCcw size={14} />

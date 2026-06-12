@@ -2,6 +2,11 @@ import type { AssociationPair } from "../types";
 import ColumnItem from "./ColumnItem";
 import type { ColumnItemState } from "./ColumnItem";
 
+const labelStyle = {
+  color: "#b39ddb",
+  fontFamily: "'Fredoka', system-ui, sans-serif",
+};
+
 interface AssociationBoardProps {
   display: AssociationPair[];
   leftOrder: string[];
@@ -43,11 +48,6 @@ const AssociationBoard = ({
     if (shakingPair?.right === code) return "shaking";
     if (selectedRight === code) return "selected";
     return "idle";
-  };
-
-  const labelStyle = {
-    color: "#b39ddb",
-    fontFamily: "'Fredoka', system-ui, sans-serif",
   };
 
   return (

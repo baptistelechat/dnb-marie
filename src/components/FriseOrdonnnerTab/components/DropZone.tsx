@@ -71,7 +71,7 @@ const DropZone = ({
               : isOver
                 ? "0 0 0 3px #ddd6fe"
                 : "none",
-            transition: "all 0.3s",
+            transition: "background 0.3s, box-shadow 0.3s",
           }}
         />
       </div>
@@ -101,7 +101,7 @@ const DropZone = ({
           : isOver
             ? "0 0 0 3px #ddd6fe"
             : "none",
-        transition: "all 0.3s",
+        transition: "background 0.3s, border-color 0.3s, box-shadow 0.3s",
         overflow: "hidden",
         display: "flex",
         alignItems: "center",

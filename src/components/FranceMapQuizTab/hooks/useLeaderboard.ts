@@ -18,7 +18,7 @@ const score = (e: FranceLeaderboardEntry) =>
   e.firstTryScore * 2 + (e.hintScore ?? 0);
 
 const sort = (entries: FranceLeaderboardEntry[]): FranceLeaderboardEntry[] =>
-  [...entries].sort(
+  entries.toSorted(
     (a, b) => score(b) - score(a) || a.totalTimeSeconds - b.totalTimeSeconds,
   );
 

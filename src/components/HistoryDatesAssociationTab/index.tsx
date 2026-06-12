@@ -244,7 +244,7 @@ const HistoryDatesAssociationTab = () => {
           <button
             type="button"
             onClick={handleReplay}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
             aria-label="Recommencer depuis le début"
           >
             <RotateCcw size={14} />

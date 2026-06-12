@@ -70,6 +70,7 @@ const FranceAnswerInput = ({
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={placeholder}
           autoComplete="off"
+          aria-label="Entrer la capitale"
           className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none"
           style={{
             background: "#f5f0fb",

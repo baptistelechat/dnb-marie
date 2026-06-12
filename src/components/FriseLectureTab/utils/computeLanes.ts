@@ -7,7 +7,7 @@ export interface RangeWithLane {
 
 export const computeLanes = (items: HistoricalDate[]): RangeWithLane[] => {
   const ranges = items.filter((d) => d.type === "range");
-  const sorted = [...ranges].sort((a, b) => a.sortKey - b.sortKey);
+  const sorted = ranges.toSorted((a, b) => a.sortKey - b.sortKey);
   const laneOccupancy: Array<Array<{ start: number; end: number }>> = [];
   const result: RangeWithLane[] = [];
 

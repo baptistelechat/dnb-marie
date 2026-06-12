@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -42,12 +43,13 @@ const EuropeMap = ({
         style={{ width: "100%", height: "auto" }}
       >
         <Geographies geography={WORLD_ATLAS_URL}>
-          {({ geographies }) => (
-            <>
-              {/* Passe 1 : pays non-EU en fond — pas cliquables, pas interactifs */}
-              {geographies
-                .filter((geo) => !NUMERIC_TO_ALPHA2[geo.id as string])
-                .map((geo) => (
+          {({ geographies }) => {
+            const nonEU: ReactNode[] = [];
+            const eu: ReactNode[] = [];
+            for (const geo of geographies) {
+              const alpha2 = NUMERIC_TO_ALPHA2[geo.id as string];
+              if (!alpha2) {
+                nonEU.push(
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
@@ -74,81 +76,74 @@ const EuropeMap = ({
                     }}
                     tabIndex={-1}
                     aria-hidden="true"
-                  />
-                ))}
+                  />,
+                );
+              } else {
+                const isActive = alpha2 === activeCode;
+                const isAnswered = answeredCodes.has(alpha2);
+                const isPulsing = alpha2 === pulsingCode;
 
-              {/* Passe 2 : pays EU par-dessus — cliquables si isInteractive */}
-              {geographies
-                .filter((geo) => !!NUMERIC_TO_ALPHA2[geo.id as string])
-                .map((geo) => {
-                  const alpha2 = NUMERIC_TO_ALPHA2[geo.id as string];
+                let fill = "#c8c8c8";
+                let stroke = "#a0a0a0";
+                let strokeWidth = 0.8;
 
-                  const isActive = alpha2 === activeCode;
-                  const isAnswered = answeredCodes.has(alpha2);
-                  const isPulsing = alpha2 === pulsingCode;
+                if (isAnswered) {
+                  fill = "#7e57c2";
+                  stroke = "#4a148c";
+                  strokeWidth = 1.5;
+                } else if (isActive) {
+                  fill = "#ddd6fe";
+                  stroke = "#7c3aed";
+                  strokeWidth = 2;
+                }
 
-                  let fill = "#c8c8c8";
-                  let stroke = "#a0a0a0";
-                  let strokeWidth = 0.8;
+                const hoverFill = isAnswered
+                  ? "#6a1b9a"
+                  : isActive
+                    ? "#c4b5fd"
+                    : "#a0a0a0";
+                const hoverStroke = isAnswered ? "#4a148c" : "#7c3aed";
 
-                  if (isAnswered) {
-                    fill = "#7e57c2";
-                    stroke = "#4a148c";
-                    strokeWidth = 1.5;
-                  } else if (isActive) {
-                    fill = "#ddd6fe";
-                    stroke = "#7c3aed";
-                    strokeWidth = 2;
-                  }
-
-                  const hoverFill = isAnswered
-                    ? "#6a1b9a"
-                    : isActive
-                      ? "#c4b5fd"
-                      : "#a0a0a0";
-                  const hoverStroke = isAnswered ? "#4a148c" : "#7c3aed";
-
-                  if (isPulsing) {
-                    return (
-                      <Geography
-                        key={geo.rsmKey}
-                        geography={geo}
-                        {...(isInteractive && {
-                          onClick: () => onSelect(alpha2),
-                        })}
-                        style={{
-                          default: {
-                            fill: "#ddd6fe",
-                            stroke: "#7c3aed",
-                            strokeWidth: 2,
-                            outline: "none",
-                            animation: "map-pulse 1.2s ease-in-out infinite",
-                            cursor: isInteractive ? "pointer" : "default",
-                            pointerEvents: isInteractive ? "auto" : "none",
-                          },
-                          hover: {
-                            fill: "#c4b5fd",
-                            stroke: "#7c3aed",
-                            strokeWidth: 2,
-                            outline: "none",
-                            cursor: isInteractive ? "pointer" : "default",
-                            pointerEvents: isInteractive ? "auto" : "none",
-                          },
-                          pressed: {
-                            fill: "#a78bfa",
-                            stroke: "#4a148c",
-                            strokeWidth: 2,
-                            outline: "none",
-                          },
-                        }}
-                        aria-label={alpha2}
-                        role="img"
-                        tabIndex={isInteractive ? 0 : -1}
-                      />
-                    );
-                  }
-
-                  return (
+                if (isPulsing) {
+                  eu.push(
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      {...(isInteractive && {
+                        onClick: () => onSelect(alpha2),
+                      })}
+                      style={{
+                        default: {
+                          fill: "#ddd6fe",
+                          stroke: "#7c3aed",
+                          strokeWidth: 2,
+                          outline: "none",
+                          animation: "map-pulse 1.2s ease-in-out infinite",
+                          cursor: isInteractive ? "pointer" : "default",
+                          pointerEvents: isInteractive ? "auto" : "none",
+                        },
+                        hover: {
+                          fill: "#c4b5fd",
+                          stroke: "#7c3aed",
+                          strokeWidth: 2,
+                          outline: "none",
+                          cursor: isInteractive ? "pointer" : "default",
+                          pointerEvents: isInteractive ? "auto" : "none",
+                        },
+                        pressed: {
+                          fill: "#a78bfa",
+                          stroke: "#4a148c",
+                          strokeWidth: 2,
+                          outline: "none",
+                        },
+                      }}
+                      aria-label={alpha2}
+                      role="img"
+                      tabIndex={isInteractive ? 0 : -1}
+                    />,
+                  );
+                } else {
+                  eu.push(
                     <Geography
                       key={geo.rsmKey}
                       geography={geo}
@@ -182,11 +177,20 @@ const EuropeMap = ({
                       aria-label={alpha2}
                       role={isInteractive ? "button" : "img"}
                       tabIndex={isInteractive ? 0 : -1}
-                    />
+                    />,
                   );
-                })}
-            </>
-          )}
+                }
+              }
+            }
+            return (
+              <>
+                {/* Passe 1 : pays non-EU en fond — pas cliquables, pas interactifs */}
+                {nonEU}
+                {/* Passe 2 : pays EU par-dessus — cliquables si isInteractive */}
+                {eu}
+              </>
+            );
+          }}
         </Geographies>
 
         {/* Marqueurs cliquables pour les petits pays EU */}
@@ -218,7 +222,7 @@ const EuropeMap = ({
                   animation: isPulsing
                     ? "map-pulse 1.2s ease-in-out infinite"
                     : "none",
-                  outline: "none",
+                  outlineColor: "transparent",
                 }}
                 onClick={isInteractive ? () => onSelect(alpha2) : undefined}
                 role={isInteractive ? "button" : "img"}

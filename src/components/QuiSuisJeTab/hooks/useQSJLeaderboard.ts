@@ -17,7 +17,7 @@ export const useQSJLeaderboard = () => {
 
   const sortEntries = useCallback(
     (entries: QSJLeaderboardEntry[]): QSJLeaderboardEntry[] =>
-      [...entries].sort((a, b) => {
+      entries.toSorted((a, b) => {
         const wa = a.firstTryScore * 2 + a.hintScore;
         const wb = b.firstTryScore * 2 + b.hintScore;
         return (

@@ -142,7 +142,6 @@ const PhotoGameOverModal = ({
                 fontFamily: "'Nunito', system-ui, sans-serif",
                 color: "#4a148c",
               }}
-              autoFocus
             />
             <button
               type="button"

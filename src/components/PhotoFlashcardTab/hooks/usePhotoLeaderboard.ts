@@ -17,7 +17,7 @@ export const usePhotoLeaderboard = () => {
 
   const sortEntries = useCallback(
     (entries: PhotoLeaderboardEntry[]): PhotoLeaderboardEntry[] =>
-      [...entries].sort((a, b) => {
+      entries.toSorted((a, b) => {
         const wa = a.firstTryScore * 2 + (a.hintScore ?? 0);
         const wb = b.firstTryScore * 2 + (b.hintScore ?? 0);
         return (

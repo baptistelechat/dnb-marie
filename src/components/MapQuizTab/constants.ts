@@ -28,8 +28,6 @@ export const NUMERIC_TO_ALPHA2: Readonly<Record<string, string>> = {
   "752": "SE",
 } as const;
 
-export const EU_ALPHA2_SET = new Set(Object.values(NUMERIC_TO_ALPHA2));
-
 export const CANDY_COLORS = [
   { fill: "#fce4ec", stroke: "#f48fb1", vivid: "#e91e63" },
   { fill: "#ede7f6", stroke: "#b39ddb", vivid: "#7e57c2" },

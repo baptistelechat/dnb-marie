@@ -52,6 +52,7 @@ const PersonNameInput = ({
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Entrez le nom du personnage..."
           autoComplete="off"
+          aria-label="Entrer le nom du personnage"
           className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
           style={{
             background: "#f5f0fb",
