@@ -26,6 +26,7 @@ import FranceAssociationTab from "./components/FranceAssociationTab";
 import FriseLectureTab from "./components/FriseLectureTab";
 import FriseOrdonnnerTab from "./components/FriseOrdonnnerTab";
 import HistoirePersonnagesTab from "./components/HistoirePersonnagesTab";
+import HistoryDatesAssociationTab from "./components/HistoryDatesAssociationTab";
 
 type Domain = "geo" | "histoire";
 type GeoTab = "checklist" | "map-quiz" | "capitals-quiz" | "association";
@@ -327,11 +328,15 @@ const App = () => {
           historySubject === "dates" &&
           historyTab === "ordonner" && <FriseOrdonnnerTab />}
         {domain === "histoire" &&
+          historySubject === "dates" &&
+          historyTab === "association" && <HistoryDatesAssociationTab />}
+        {domain === "histoire" &&
           historySubject === "personnages" &&
           historyTab === "liste" && <HistoirePersonnagesTab />}
         {domain === "histoire" &&
           !(historySubject === "dates" && historyTab === "frise") &&
           !(historySubject === "dates" && historyTab === "ordonner") &&
+          !(historySubject === "dates" && historyTab === "association") &&
           !(historySubject === "personnages" && historyTab === "liste") && (
             <div className="p-8 text-center">
               <p

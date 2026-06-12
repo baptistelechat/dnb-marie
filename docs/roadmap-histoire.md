@@ -256,11 +256,11 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/HistoryDatesAssociationTab/`
-- [ ] Adapter `utils/initBoard` depuis `historicalDates` (paires `date` ↔ `event`)
-- [ ] Labels : `"Dates"` / `"Événements"`
-- [ ] Clé leaderboard : `"dnb-histoire-dates-association-leaderboard"`
-- [ ] Pool complet, tirage 5 paires par round
+- [x] Créer `src/components/HistoryDatesAssociationTab/`
+- [x] Adapter `utils/initBoard` depuis `historicalDates` (paires `date` ↔ `event`)
+- [x] Labels : `"Dates"` / `"Événements"`
+- [x] Clé leaderboard : `"dnb-histoire-dates-association-leaderboard"`
+- [x] Pool complet, tirage 5 paires par round
 
 ---
 
