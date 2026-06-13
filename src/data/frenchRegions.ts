@@ -38,7 +38,6 @@ export const FRENCH_REGIONS: Region[] = [
   { code: "06", name: "Mayotte", capital: "Mamoudzou", isDom: true },
 ];
 
-export const METRO_REGIONS = FRENCH_REGIONS.filter((r) => !r.isDom);
 export const DOM_REGIONS = FRENCH_REGIONS.filter((r) => r.isDom);
 
 export const REGION_LOGOS: Partial<Record<string, string>> = {

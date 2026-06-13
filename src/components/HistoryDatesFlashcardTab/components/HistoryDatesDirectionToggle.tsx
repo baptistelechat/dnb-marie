@@ -1,30 +1,41 @@
-import { Shuffle, Timer } from "lucide-react";
-import type { CapitalsQuizMode } from "../types";
+import { Calendar, FileText } from "lucide-react";
+import type { HistoryDatesFlashcardDirection } from "../types";
 
-interface QuizModeToggleProps {
-  mode: CapitalsQuizMode;
-  onChange: (mode: CapitalsQuizMode) => void;
+interface HistoryDatesDirectionToggleProps {
+  direction: HistoryDatesFlashcardDirection;
+  onChange: (direction: HistoryDatesFlashcardDirection) => void;
 }
 
-const MODES: {
-  value: CapitalsQuizMode;
+const DIRECTIONS: {
+  value: HistoryDatesFlashcardDirection;
   label: string;
   icon: React.ReactNode;
 }[] = [
-  { value: "free", label: "Libre", icon: <Shuffle size={14} /> },
-  { value: "directed", label: "Dirigé", icon: <Timer size={14} /> },
+  {
+    value: "date-to-event",
+    label: "Date → Événement",
+    icon: <Calendar size={14} />,
+  },
+  {
+    value: "event-to-date",
+    label: "Événement → Date",
+    icon: <FileText size={14} />,
+  },
 ];
 
-const QuizModeToggle = ({ mode, onChange }: QuizModeToggleProps) => {
+const HistoryDatesDirectionToggle = ({
+  direction,
+  onChange,
+}: HistoryDatesDirectionToggleProps) => {
   return (
     <div
       className="flex rounded-full p-1 gap-1"
       style={{ background: "#f0e6ff" }}
       role="group"
-      aria-label="Mode de jeu"
+      aria-label="Direction du quiz"
     >
-      {MODES.map(({ value, label, icon }) => {
-        const isActive = mode === value;
+      {DIRECTIONS.map(({ value, label, icon }) => {
+        const isActive = direction === value;
         return (
           <button
             key={value}
@@ -58,4 +69,4 @@ const QuizModeToggle = ({ mode, onChange }: QuizModeToggleProps) => {
   );
 };
 
-export default QuizModeToggle;
+export default HistoryDatesDirectionToggle;

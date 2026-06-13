@@ -5,6 +5,7 @@ export type CapitalsLastResult = "correct" | "wrong" | "skipped" | null;
 export interface CapitalsLeaderboardEntry {
   name: string;
   firstTryScore: number;
+  hintScore?: number;
   totalCountries: number;
   totalTimeSeconds: number;
   date: string;

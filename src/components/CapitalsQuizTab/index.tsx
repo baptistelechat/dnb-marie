@@ -43,6 +43,9 @@ const CapitalsQuizTab = () => {
   const [firstAttemptCodes, setFirstAttemptCodes] = useState<Set<string>>(
     new Set(),
   );
+  const [hintSuccessCodes, setHintSuccessCodes] = useState<Set<string>>(
+    new Set(),
+  );
   const [failedCodes, setFailedCodes] = useState<Set<string>>(new Set());
   const [lastResult, setLastResult] = useState<CapitalsLastResult>(null);
   const [queue, setQueue] = useState<string[]>(() =>
@@ -73,6 +76,7 @@ const CapitalsQuizTab = () => {
   const resetState = useCallback(() => {
     setAnsweredCodes(new Set());
     setFirstAttemptCodes(new Set());
+    setHintSuccessCodes(new Set());
     setFailedCodes(new Set());
     setLastResult(null);
     setTimerStartedAt(null);
@@ -95,7 +99,7 @@ const CapitalsQuizTab = () => {
   }, []);
 
   const handleSubmit = useCallback(
-    (answer: string) => {
+    (answer: string, hintUsed: boolean) => {
       if (!activeCountry) return;
       const correct =
         direction === "country-to-capital"
@@ -103,15 +107,23 @@ const CapitalsQuizTab = () => {
           : answersMatch(answer, activeCountry.name);
       tick();
       if (correct) {
-        if (
+        const isFirstTry =
           !failedCodes.has(activeCountry.code) &&
-          !answeredCodes.has(activeCountry.code)
-        ) {
-          setFirstAttemptCodes((prev) => {
-            const n = new Set(prev);
-            n.add(activeCountry.code);
-            return n;
-          });
+          !answeredCodes.has(activeCountry.code);
+        if (isFirstTry) {
+          if (hintUsed) {
+            setHintSuccessCodes((prev) => {
+              const n = new Set(prev);
+              n.add(activeCountry.code);
+              return n;
+            });
+          } else {
+            setFirstAttemptCodes((prev) => {
+              const n = new Set(prev);
+              n.add(activeCountry.code);
+              return n;
+            });
+          }
         }
         setAnsweredCodes((prev) => {
           const n = new Set(prev);
@@ -168,6 +180,7 @@ const CapitalsQuizTab = () => {
       const entry: CapitalsLeaderboardEntry = {
         name: playerName,
         firstTryScore: firstAttemptCodes.size,
+        hintScore: hintSuccessCodes.size,
         totalCountries: TOTAL,
         totalTimeSeconds: Math.floor((stop - start) / 1000),
         date,
@@ -180,6 +193,7 @@ const CapitalsQuizTab = () => {
       timerStartedAt,
       timerStoppedAt,
       firstAttemptCodes.size,
+      hintSuccessCodes.size,
       addEntry,
       direction,
     ],
@@ -194,6 +208,11 @@ const CapitalsQuizTab = () => {
     timerStartedAt !== null && timerStoppedAt !== null
       ? Math.floor((timerStoppedAt - timerStartedAt) / 1000)
       : 0;
+
+  const answersPool =
+    direction === "country-to-capital"
+      ? EU_COUNTRIES.map((c) => c.capital)
+      : EU_COUNTRIES.map((c) => c.name);
 
   return (
     <div className="flex flex-col gap-4 py-4 px-4 max-w-2xl mx-auto">
@@ -268,6 +287,7 @@ const CapitalsQuizTab = () => {
             direction={direction}
             lastResult={lastResult}
             country={activeCountry}
+            pool={answersPool}
             onSubmit={handleSubmit}
             onNext={handleNext}
             onSkip={handleSkip}
@@ -282,7 +302,7 @@ const CapitalsQuizTab = () => {
           <button
             type="button"
             onClick={handleReplay}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
             aria-label="Recommencer depuis le début"
           >
             <RotateCcw size={14} />
@@ -294,6 +314,7 @@ const CapitalsQuizTab = () => {
       {showGameOver && (
         <CapitalsGameOverModal
           firstTryScore={firstAttemptCodes.size}
+          hintScore={hintSuccessCodes.size}
           totalTimeSeconds={totalTimeSeconds}
           leaderboard={leaderboard}
           direction={direction}

@@ -43,6 +43,9 @@ const FranceCapitalsQuizTab = () => {
   const [firstAttemptCodes, setFirstAttemptCodes] = useState<Set<string>>(
     new Set(),
   );
+  const [hintSuccessCodes, setHintSuccessCodes] = useState<Set<string>>(
+    new Set(),
+  );
   const [failedCodes, setFailedCodes] = useState<Set<string>>(new Set());
   const [lastResult, setLastResult] = useState<FranceCapitalsLastResult>(null);
   const [queue, setQueue] = useState<string[]>(() =>
@@ -76,6 +79,7 @@ const FranceCapitalsQuizTab = () => {
   const resetState = useCallback(() => {
     setAnsweredCodes(new Set());
     setFirstAttemptCodes(new Set());
+    setHintSuccessCodes(new Set());
     setFailedCodes(new Set());
     setLastResult(null);
     setTimerStartedAt(null);
@@ -98,7 +102,7 @@ const FranceCapitalsQuizTab = () => {
   }, []);
 
   const handleSubmit = useCallback(
-    (answer: string) => {
+    (answer: string, hintUsed: boolean) => {
       if (!activeRegion) return;
       const correct =
         direction === "region-to-capital"
@@ -106,15 +110,23 @@ const FranceCapitalsQuizTab = () => {
           : answersMatch(answer, activeRegion.name);
       tick();
       if (correct) {
-        if (
+        const isFirstTry =
           !failedCodes.has(activeRegion.code) &&
-          !answeredCodes.has(activeRegion.code)
-        ) {
-          setFirstAttemptCodes((prev) => {
-            const n = new Set(prev);
-            n.add(activeRegion.code);
-            return n;
-          });
+          !answeredCodes.has(activeRegion.code);
+        if (isFirstTry) {
+          if (hintUsed) {
+            setHintSuccessCodes((prev) => {
+              const n = new Set(prev);
+              n.add(activeRegion.code);
+              return n;
+            });
+          } else {
+            setFirstAttemptCodes((prev) => {
+              const n = new Set(prev);
+              n.add(activeRegion.code);
+              return n;
+            });
+          }
         }
         setAnsweredCodes((prev) => {
           const n = new Set(prev);
@@ -171,6 +183,7 @@ const FranceCapitalsQuizTab = () => {
       const entry: FranceCapitalsLeaderboardEntry = {
         name: playerName,
         firstTryScore: firstAttemptCodes.size,
+        hintScore: hintSuccessCodes.size,
         totalRegions: TOTAL,
         totalTimeSeconds: Math.floor((stop - start) / 1000),
         date,
@@ -183,6 +196,7 @@ const FranceCapitalsQuizTab = () => {
       timerStartedAt,
       timerStoppedAt,
       firstAttemptCodes.size,
+      hintSuccessCodes.size,
       addEntry,
       direction,
     ],
@@ -192,6 +206,11 @@ const FranceCapitalsQuizTab = () => {
     resetState();
     setQueue(shuffle(FRENCH_REGIONS.map((r) => r.code)));
   }, [resetState]);
+
+  const answersPool =
+    direction === "region-to-capital"
+      ? FRENCH_REGIONS.map((r) => r.capital)
+      : FRENCH_REGIONS.map((r) => r.name);
 
   return (
     <div className="flex flex-col gap-4 py-4 px-4 max-w-2xl mx-auto">
@@ -266,6 +285,7 @@ const FranceCapitalsQuizTab = () => {
             direction={direction}
             lastResult={lastResult}
             region={activeRegion}
+            pool={answersPool}
             onSubmit={handleSubmit}
             onNext={handleNext}
             onSkip={handleSkip}
@@ -280,7 +300,7 @@ const FranceCapitalsQuizTab = () => {
           <button
             type="button"
             onClick={handleReplay}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
             aria-label="Recommencer depuis le début"
           >
             <RotateCcw size={14} />
@@ -292,6 +312,7 @@ const FranceCapitalsQuizTab = () => {
       {showGameOver && (
         <FranceCapitalsGameOverModal
           firstTryScore={firstAttemptCodes.size}
+          hintScore={hintSuccessCodes.size}
           total={TOTAL}
           totalTimeSeconds={totalTimeSeconds}
           leaderboard={leaderboard}

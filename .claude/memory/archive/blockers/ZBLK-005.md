@@ -1,0 +1,48 @@
+---
+id: ZBLK-005
+type: blocker
+date: 2026-06-03
+tags: [world-atlas, geo, ids, react-simple-maps]
+status: résolu
+---
+
+# ZBLK-005 — Belgique et Autriche invisibles/non-cliquables sur la carte
+
+## Friction
+
+Belgique (BE) et Autriche (AT) apparaissent en gris clair (couleur pays non-EU) et ne sont pas cliquables, alors qu'elles sont bien dans `NUMERIC_TO_ALPHA2`.
+
+## Tentatives infructueuses
+
+1. Fix z-order SVG (double passe rendu non-EU avant EU) → améliore les petits pays couverts, mais BE/AT toujours gris clair
+2. Ajout `pointer-events: none` sur pays non-EU → pas d'effet sur le problème de couleur
+
+## Cause racine
+
+`NUMERIC_TO_ALPHA2` utilisait `"40"` (AT) et `"56"` (BE) — sans zero-padding. Or world-atlas stocke les IDs comme `"040"` et `"056"` (strings 3 chiffres). Le lookup `NUMERIC_TO_ALPHA2["040"]` retournait `undefined` → BE et AT traités comme pays non-EU.
+
+## Diagnostic
+
+```bash
+node -e "fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+  .then(r=>r.json()).then(data => {
+    const ids = new Set(data.objects.countries.geometries.map(f=>String(f.id)));
+    console.log(['040','056'].map(id => id + ': ' + ids.has(id)));
+  })"
+# → [ '040: true', '056: true' ]
+```
+
+## Résolution
+
+```ts
+// constants.ts — avant
+"40": "AT", "56": "BE"
+// après
+"040": "AT", "056": "BE"
+```
+
+## Références
+
+- [LRN-003](../../learnings/LRN-003.md) — pattern world-atlas IDs zero-paddés
+- [LRN-004](../../learnings/LRN-004.md) — SVG z-order (fix partiel, pas la root cause)
+- [LRN-005](../../learnings/LRN-005.md) — technique diagnostic node -e fetch
