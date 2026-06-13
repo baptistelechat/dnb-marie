@@ -1,6 +1,6 @@
 ﻿---
 register: journal
-last_updated: 2026-06-12
+last_updated: 2026-06-13
 ---
 
 ## 2026-06-02
@@ -486,3 +486,77 @@ Rétrocompatibilité confirmée : `hintScore?: number` déjà optionnel dans tou
 
 - [BDR-050](decisions/BDR-050.md) — hintUsed:boolean dans onSubmit vs état parent
 - [LRN-035](learnings/LRN-035.md) — HintButton inline-first, wrapper conditionnel
+
+---
+
+Session react-doctor — scan complet du codebase (`npx react-doctor@latest --verbose`), score initial 44/100.
+
+**Erreurs corrigées (4) :** `effect-needs-cleanup` dans les 4 composants avec confetti completion (EuropTab, FranceTab, FriseLectureTab, HistoirePersonnagesTab) — pattern `let id: ReturnType<typeof setTimeout> | undefined` + `return () => clearTimeout(id)` appliqué uniformément.
+
+**Warnings corrigés (44) :** `js-tosorted-immutable` (10 fichiers, `[...arr].sort()` → `arr.toSorted()`), `no-autofocus` (9 modals GameOver), `control-has-associated-label` (5 inputs sans aria-label), dead code (`EU_ALPHA2_SET`, `METRO_REGIONS`, `QuizModeToggle.tsx`, `DomButtons.tsx`, dépendance `topojson-client`), `no-gray-on-colored-background` (15 fichiers, `text-slate-400` → `text-slate-600`), divers (`transition` raccourci, `outline: none`, clé stable sur liste, `role="button"` sur div cliquable, constante module-scope).
+
+**Score final : 60/100.** 125 warnings restants déférés intentionnellement en 6 catégories (`no-event-handler`×18, `prefer-tag-over-role`×21, `no-inline-exhaustive-style`×14, `no-tiny-text`×14, `prefer-useReducer`×13, `prefer-html-dialog`×9) + 5 faux positifs documentés dans `.react-doctor/false-positives.md`. `pnpm-workspace.yaml` durci avec `settings.minimumReleaseAge: 10080` et `trustPolicy: no-downgrade` — mais la règle `require-pnpm-hardening` reste active (blocker ouvert).
+
+**Entrées clés :**
+
+- [BDR-051](decisions/BDR-051.md) — react-doctor 44→60, 125 warnings déférés
+- [BDR-052](decisions/BDR-052.md) — faux positifs documentés en fichier
+- [LRN-036](learnings/LRN-036.md) — useEffect + setTimeout cleanup pattern
+- [BLK-016](blockers/BLK-016.md) — require-pnpm-hardening encore active
+
+---
+
+Session courte de documentation. Création du guide `docs/ajouter-donnees-historiques.md` couvrant l'ajout de personnages historiques et de dates dans le module Histoire. Baptiste a demandé d'y intégrer un stop explicite pour la validation des photos : les URLs candidates doivent d'abord être ajoutées dans `src/data/validate-photos.html`, validées visuellement dans le navigateur et exportées via la modale — seulement ensuite les URLs retenues vont dans `historicalFigures.ts`. Le guide est structuré en Phase 1 (curation photos) + Phase 2 (intégration code) avec un bloc STOP entre les deux.
+
+**Entrées clés :**
+
+- [BDR-053](decisions/BDR-053.md) — guide contribution, workflow photos 2 phases
+- [LRN-038](learnings/LRN-038.md) — HTML standalone comme gate de validation d'assets
+
+## 2026-06-13
+
+Session de planification — préparation du lot d'intégration 01 pour le module Histoire. Aucun code écrit. Livrable unique : `docs/integration-01.md`, roadmap complète 35 dates + 5 personnages construite en 4 itérations.
+
+Sources analysées : 5 images dans `docs/Nouvelles donnees/` (notes manuscrites + fiches imprimées + extraits de manuel). Toutes les dates Thème 1 (1914–1945) et IVe République (1946–1958) étant déjà présentes dans `historicalDates.ts`, la roadmap couvre uniquement les nouveautés : 5 dates Thème 2 (ONU, Guerre froide, Traité de Rome, indépendance de l'Algérie, chute du mur) et 30 dates Thème 3 réparties en 4 périodes présidentielles gaullienne → Chirac.
+
+2 nouvelles périodes à créer : `"Guerre froide"` (dates mondiales Thème 2) et `"Ve République"` (Thème 3 intégral). Traité de Rome (1957) et Guerre d'Algérie (1954–1962) assignés à `"Ve République"` malgré leur antériorité — découpage thématique DNB.
+
+5 nouveaux personnages avec indices préliminaires : Simone Veil, Pompidou, Giscard d'Estaing, Mitterrand, Chirac. Phase 2 (personnages) reste bloquante sur validation photos (`validate-photos.html`) avant intégration code.
+
+**Entrées clés :**
+
+- [BDR-054](decisions/BDR-054.md) — période `"Guerre froide"` pour Thème 2
+- [LRN-039](learnings/LRN-039.md) — valider l'existant avant de planifier un lot
+
+---
+
+Session d'intégration — lot 01 complet du module Histoire. Deux livrables : `historicalDates.ts` + `historicalFigures.ts`.
+
+Première partie (reprise de session compactée) : mise à jour de `docs/integration-01.md` pour refléter l'état réel — Phase A dates ✅ (39 entrées : 35 initiales + onu-creation + 4 mandats présidentiels 2007–2027), Phase B personnages étendue à 8 (ajout Sarkozy, Hollande, Macron).
+
+Deuxième partie : Baptiste fournit l'export JSON de `validate-photos.html` avec les sélections de photos pour les 8 personnages. Intégration dans `historicalFigures.ts` — 8 nouvelles entrées à la fin du tableau (Veil, Pompidou, Giscard, Mitterrand, Chirac, Sarkozy, Hollande, Macron), portant le total à 19 personnages. Source primaire pour les 6 présidents (Pompidou → Hollande) : portraits officiels CDN Élysée (`elysee.fr/cdn-cgi/image/...`). Veil et Macron : Wikimedia Commons. Vérification conformité avec `docs/ajouter-donnees-historiques.md` : anti-collision keywords ✅, exactement 5 clues par personnage ✅, 1ère personne sans nom/prénom ✅. Lint ✅ 0 erreur.
+
+**Entrées clés :**
+
+- [BDR-055](decisions/BDR-055.md) — portraits Élysée = source primaire présidents Ve République
+- [LRN-040](learnings/LRN-040.md) — workflow validate-photos → export JSON → intégration
+- [LRN-041](learnings/LRN-041.md) — pattern URL CDN Élysée
+
+---
+
+Session de corrections visuelles et ajout vue liste sur `FriseLectureTab`. Deux sessions compactées couvertes.
+
+Première partie : corrections visuelles. La frise était tronquée à 1960 à cause d'un `DISPLAY_END = 1960` hardcodé — les données couvrent jusqu'en 2027. Fix : suppression de la constante, `canvasHeight` désormais calculée dynamiquement depuis `max(lastPointY, lastRangeBottom) + V_PAD`. `TICK_YEARS` étendu à 2025. Les barres de période débordaient malgré `overflow: hidden` sur le parent flex — root cause : `overflow: hidden` ne clippe pas fiablement un enfant `writing-mode: vertical-rl`. Fix : wrapper `<div style={{ height: barHeight-8, overflow: "hidden" }}>` avec hauteur explicite autour du `<span>`.
+
+Ajout de la logique de label intelligent dans les bulles : `TEXT_CHAR_PX = 5.5` heuristique (pixels par caractère Latin à fontSize 8.5 en écriture verticale). Si `fullLabel.length * TEXT_CHAR_PX <= barHeight - 8` → affiche `"Date — Événement"`, sinon juste la date. Texte centré verticalement avec `alignItems: "center"` dans le wrapper.
+
+Deuxième partie : vue liste. Création de `DateCard.tsx` (miroir exact de `FigureCard.tsx` — icône `CalendarDays`/`Layers`, palette candy 6 couleurs cycliques, badge de coche) et `DateListView.tsx` (tri `toSorted()` au module level, map sur les items). Ajout d'un toggle pill Frise/Liste dans `FriseLectureTab/index.tsx` avec `viewMode: "frise" | "liste"` en state. L'état `seen: Set<string>` est unique et partagé entre les deux vues — cocher en liste reflète l'état sur la frise.
+
+Blocage dev-browser : `browser.newPage()` timeouttait systématiquement (30 s). Résolu par `browser.getPage("main")`. Deuxième blocage : pipe PowerShell vers dev-browser provoquait un OOM. Résolu en écrivant le script dans un fichier tmp via Bash.
+
+**Entrées clés :**
+
+- [BDR-056](decisions/BDR-056.md) — canvasHeight dynamique FriseLectureTab
+- [BDR-057](decisions/BDR-057.md) — DateListView + toggle Frise/Liste, état seen partagé
+- [LRN-043](learnings/LRN-043.md) — overflow:hidden flex ne clippe pas writing-mode vertical
+- [ZBLK-017](archive/blockers/ZBLK-017.md) — browser.newPage() timeout, résolu

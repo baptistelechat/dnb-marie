@@ -1,0 +1,16 @@
+---
+id: ZBLK-017
+type: blocker
+date: 2026-06-13
+tags: [dev-browser, playwright, screenshot, newPage, timeout]
+---
+
+# ZBLK-017 — `browser.newPage()` timeout systématique dans dev-browser
+
+| Friction                                                                                  | Cause réelle                                                                                                                       | Solution                                                                 | Statut |
+| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------ |
+| Tous les appels `browser.newPage()` dans les scripts dev-browser timeouttaient après 30 s | `newPage()` crée un contexte isolé qui attend une navigation initiale — le daemon dev-browser ne la fournit jamais automatiquement | Remplacé par `browser.getPage("main")` qui récupère la page déjà ouverte | résolu |
+
+## Références
+
+- [LRN-044](../../learnings/LRN-044.md) — pattern getPage("main") vs newPage()

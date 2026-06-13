@@ -1,6 +1,6 @@
 ---
 register: decisions
-last_updated: 2026-06-12
+last_updated: 2026-06-13
 ---
 
 ## Index
@@ -57,3 +57,10 @@ last_updated: 2026-06-12
 | [BDR-048](decisions/BDR-048.md) | 2026-06-12 | `PhotoCard` : `object-contain` + hauteur fixe 300px pour portraits non coupés    | #css #images #object-fit #portrait #photocard #ux #flashcards              | actif  |
 | [BDR-049](decisions/BDR-049.md) | 2026-06-12 | `QuiSuisJeTab` : clues[] + 5 indices mélangés par partie                         | #histoire #game-design #quiz #clues #personnages #shuffle                  | actif  |
 | [BDR-050](decisions/BDR-050.md) | 2026-06-12 | `hintUsed: boolean` dans `onSubmit` vs état parent                               | #react #quiz #hints #scoring #flashcards #callback #state-management       | actif  |
+| [BDR-051](decisions/BDR-051.md) | 2026-06-12 | react-doctor score 44→60, 125 warnings déférés intentionnellement                | #react-doctor #code-quality #technical-debt #deferred                      | actif  |
+| [BDR-052](decisions/BDR-052.md) | 2026-06-12 | Faux positifs react-doctor documentés dans `.react-doctor/false-positives.md`    | #react-doctor #false-positives #documentation #process                     | actif  |
+| [BDR-053](decisions/BDR-053.md) | 2026-06-12 | Guide `ajouter-donnees-historiques.md` — workflow photos 2 phases                | #docs #guide #photos #workflow #contribution #histoire #validate-photos    | actif  |
+| [BDR-054](decisions/BDR-054.md) | 2026-06-13 | Période `"Guerre froide"` pour les dates mondiales Thème 2                       | #histoire #data #periode #theme2 #dnb #classification                      | actif  |
+| [BDR-055](decisions/BDR-055.md) | 2026-06-13 | Portraits Élysée = source primaire présidents Ve République                      | #elysee #photos #presidents #cdn #ve-republique #historicalFigures         | actif  |
+| [BDR-056](decisions/BDR-056.md) | 2026-06-13 | `canvasHeight` dynamique dans FriseLectureTab, sans DISPLAY_END                  | #timeline #frise #react #layout #historicalDates #canvasHeight             | actif  |
+| [BDR-057](decisions/BDR-057.md) | 2026-06-13 | DateListView + toggle Frise/Liste, état `seen` partagé                           | #frise #liste #react #toggle #ux #sharedState #datelist                    | actif  |
