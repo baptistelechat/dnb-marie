@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import confetti from "canvas-confetti";
-import { AlignCenter, RotateCcw, Trophy } from "lucide-react";
+import { AlignCenter, List, RotateCcw, Trophy } from "lucide-react";
 import { HISTORICAL_DATES } from "../../data/historicalDates";
 import { computeLanes } from "./utils/computeLanes";
 import TimelineCanvas from "./components/TimelineCanvas";
+import DateListView from "./components/DateListView";
 import ProgressBar from "../shared/ProgressBar";
 import { useHaptics } from "../../utils/hapticPatterns";
 
@@ -20,6 +21,7 @@ const CANDY_COLORS = [
 
 const FriseLectureTab = () => {
   const [seen, setSeen] = useState<Set<string>>(new Set());
+  const [viewMode, setViewMode] = useState<"frise" | "liste">("frise");
   const { tick, success } = useHaptics();
   const completedRef = useRef(false);
 
@@ -155,22 +157,76 @@ const FriseLectureTab = () => {
         )}
       </div>
 
-      <div
-        className="rounded-3xl border-2 p-3"
-        style={{
-          background: "white",
-          borderColor: "#e9d5ff",
-          boxShadow: "0 4px 20px #c084fc15",
-        }}
-      >
-        <TimelineCanvas
-          points={points}
-          rangesWithLanes={rangesWithLanes}
-          seen={seen}
-          colorMap={colorMap}
-          onToggle={handleToggle}
-        />
+      {/* Toggle frise / liste */}
+      <div className="flex justify-center">
+        <div
+          className="flex gap-1 p-1 rounded-2xl"
+          style={{ background: "#f3e8ff" }}
+          role="radiogroup"
+          aria-label="Mode d'affichage"
+        >
+          <button
+            type="button"
+            role="radio"
+            aria-checked={viewMode === "frise"}
+            onClick={() => setViewMode("frise")}
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200"
+            style={
+              viewMode === "frise"
+                ? {
+                    background: "white",
+                    color: "#7e57c2",
+                    boxShadow: "0 2px 8px #c084fc30",
+                  }
+                : { color: "#9e9e9e" }
+            }
+          >
+            <AlignCenter size={14} />
+            Frise
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={viewMode === "liste"}
+            onClick={() => setViewMode("liste")}
+            className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-sm font-semibold transition-all duration-200"
+            style={
+              viewMode === "liste"
+                ? {
+                    background: "white",
+                    color: "#7e57c2",
+                    boxShadow: "0 2px 8px #c084fc30",
+                  }
+                : { color: "#9e9e9e" }
+            }
+          >
+            <List size={14} />
+            Liste
+          </button>
+        </div>
       </div>
+
+      {/* Contenu principal */}
+      {viewMode === "frise" ? (
+        <div
+          className="rounded-3xl border-2 p-3"
+          style={{
+            background: "white",
+            borderColor: "#e9d5ff",
+            boxShadow: "0 4px 20px #c084fc15",
+          }}
+        >
+          <TimelineCanvas
+            points={points}
+            rangesWithLanes={rangesWithLanes}
+            seen={seen}
+            colorMap={colorMap}
+            onToggle={handleToggle}
+          />
+        </div>
+      ) : (
+        <DateListView seen={seen} onToggle={handleToggle} />
+      )}
 
       {count > 0 && (
         <div className="flex justify-center pt-2">

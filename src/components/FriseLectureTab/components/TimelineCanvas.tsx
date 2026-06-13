@@ -3,7 +3,6 @@ import type { HistoricalDate } from "../../../data/historicalDates";
 import type { RangeWithLane } from "../utils/computeLanes";
 
 const DISPLAY_START = 1913;
-const DISPLAY_END = 1960;
 const PX_PER_YEAR = 22;
 const V_PAD = 24;
 const AXIS_X = 380;
@@ -13,10 +12,14 @@ const POINT_R = 7;
 const MIN_POINT_SPACING = 32;
 const TICK_CLEARANCE = 28;
 const MIN_TEXT_BAR_HEIGHT = 60;
+const TEXT_CHAR_PX = 5.5; // px estimé par caractère Latin en writingMode vertical-rl à fontSize 8.5
 // right edge of point labels: just before the circle
 const LABEL_RIGHT_EDGE = AXIS_X - POINT_R - 6;
 
-const TICK_YEARS = [1914, 1920, 1925, 1930, 1935, 1940, 1945, 1950, 1955];
+const TICK_YEARS = [
+  1914, 1920, 1925, 1930, 1935, 1940, 1945, 1950, 1955, 1960, 1965, 1970, 1975,
+  1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015, 2020, 2025,
+];
 
 const FRENCH_MONTHS: Record<string, number> = {
   janvier: 1,
@@ -92,16 +95,32 @@ const TimelineCanvas = ({
 }: TimelineCanvasProps) => {
   const [hoveredRangeId, setHoveredRangeId] = useState<string | null>(null);
 
-  const canvasHeight =
-    V_PAD + (DISPLAY_END - DISPLAY_START) * PX_PER_YEAR + V_PAD;
+  const pointPositions = computePointPositions(points);
+
+  const lastPointY =
+    pointPositions.length > 0
+      ? Math.max(...pointPositions.map(({ y }) => y + POINT_R))
+      : V_PAD;
+  const lastRangeBottom =
+    rangesWithLanes.length > 0
+      ? Math.max(
+          ...rangesWithLanes.map(({ item }) => {
+            const y = yearToY(item.sortKey);
+            const h = Math.max(
+              ((item.endSortKey ?? item.sortKey) - item.sortKey) * PX_PER_YEAR,
+              6,
+            );
+            return y + h;
+          }),
+        )
+      : V_PAD;
+  const canvasHeight = Math.max(lastPointY, lastRangeBottom) + V_PAD;
 
   const maxLane = rangesWithLanes.reduce(
     (max, { lane }) => Math.max(max, lane),
     0,
   );
   const canvasWidth = AXIS_X + 2 + (maxLane + 1) * LANE_W + RANGE_W + 20;
-
-  const pointPositions = computePointPositions(points);
 
   return (
     <div
@@ -115,7 +134,7 @@ const TimelineCanvas = ({
           left: AXIS_X,
           top: V_PAD,
           width: 2,
-          height: (DISPLAY_END - DISPLAY_START) * PX_PER_YEAR,
+          height: canvasHeight - 2 * V_PAD,
           background: "linear-gradient(to bottom, #d1c4e9, #b39ddb)",
         }}
       />
@@ -177,6 +196,9 @@ const TimelineCanvas = ({
         const color = colorMap.get(item.id) ?? "#c084fc";
         const isSeen = seen.has(item.id);
         const showText = barHeight >= MIN_TEXT_BAR_HEIGHT;
+        const fullLabel = `${item.date} — ${item.event}`;
+        const fullLabelFits = fullLabel.length * TEXT_CHAR_PX <= barHeight - 8;
+        const barLabel = fullLabelFits ? fullLabel : item.date;
         const isHovered = hoveredRangeId === item.id;
 
         return (
@@ -205,23 +227,32 @@ const TimelineCanvas = ({
               title={`${item.event} — ${item.date}`}
             >
               {showText && (
-                <span
+                <div
                   style={{
-                    fontSize: 8.5,
-                    fontFamily: "'Nunito', system-ui, sans-serif",
-                    fontWeight: 700,
-                    color: isSeen ? "#4a148c" : "#7e57c2",
-                    writingMode: "vertical-rl",
-                    pointerEvents: "none",
-                    userSelect: "none",
+                    height: barHeight - 8,
+                    width: RANGE_W - 8,
                     overflow: "hidden",
-                    maxHeight: barHeight - 4,
-                    lineHeight: 1.3,
-                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  {item.event}
-                </span>
+                  <span
+                    style={{
+                      fontSize: 8.5,
+                      fontFamily: "'Nunito', system-ui, sans-serif",
+                      fontWeight: 700,
+                      color: isSeen ? "#4a148c" : "#7e57c2",
+                      writingMode: "vertical-rl",
+                      pointerEvents: "none",
+                      userSelect: "none",
+                      lineHeight: 1.3,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {barLabel}
+                  </span>
+                </div>
               )}
             </button>
 
