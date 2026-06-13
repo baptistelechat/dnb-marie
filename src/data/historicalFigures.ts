@@ -177,7 +177,7 @@ export const HISTORICAL_FIGURES: HistoricalFigure[] = [
       "Je m'installe dans la Sarthe, où je m'engage dans la vie politique locale.",
       "Je suis le premier maire noir de France métropolitaine, élu dans une commune de la Sarthe en 1929.",
       "Pendant la Seconde Guerre mondiale, je m'engage dans la Résistance contre l'occupation nazie.",
-      "Je suis arrêté par les nazis, déporté, et je meurs au camp de concentration de Mauthausen en mars 1945.",
+      "Je suis arrêté par les nazis, déporté, et je meurs au camp de concentration de Buchenwald en mars 1945.",
     ],
   },
   {
