@@ -1,0 +1,19 @@
+---
+id: ZBLK-009
+type: blocker
+date: 2026-06-06
+tags: [layout, viewport, regression, tailwind]
+status: résolu
+---
+
+# ZBLK-009 — Layout viewport global → 3 régressions simultanées (scrollbar, overlap mobile, wrapping texte)
+
+| Friction                                                                                                                                                                                                                      | Cause réelle                                                                                                                                                                                                   | Solution                                                                                                                                                                   | Statut |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| Après implémentation du layout viewport-contraint pour les Carte Quiz, 3 régressions apparaissent : scrollbar OS visible sur Liste/Flashcards, éléments qui se superposent à fenêtre réduite, "Union Européenne" sur 2 lignes | `h-dvh flex-col` appliqué globalement sur `#root` + App div : tous les onglets héritent du scroll élément ; `flex-1 min-h-0` sur la colonne carte comprime celle-ci sous la hauteur naturelle du SVG en mobile | Application conditionnelle `h-dvh flex-col` selon `activeTab === "map-quiz"` ; `lg:flex-1 lg:min-h-0` sur la colonne carte ; `whitespace-nowrap` sur les labels de boutons | résolu |
+
+## Références
+
+- [BDR-016](../../decisions/BDR-016.md) — décision résultante
+- [LRN-010](../../learnings/LRN-010.md) — pattern layout conditionnel
+- [LRN-011](../../learnings/LRN-011.md) — pattern flex-1 min-h-0 compression

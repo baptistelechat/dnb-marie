@@ -43,12 +43,12 @@ src/components/
 
 ### Tâches
 
-- [ ] Remplacer le badge `3ème` dans le header par deux boutons pill (`Géographie` / `Histoire`), même style visuel que le sélecteur EU/France actuel
-- [ ] Ajouter le state `domain: "geo" | "histoire"` dans `App.tsx`
-- [ ] Conditionner l'affichage du sélecteur EU/France uniquement quand `domain === "geo"` (comportement inchangé)
-- [ ] Ajouter un sélecteur `Dates` / `Personnages` affiché uniquement quand `domain === "histoire"` (même composant pill — `Calendar` pour Dates, `User` pour Personnages)
-- [ ] Créer un state `historySubject: "dates" | "personnages"` et un state `historyTab`
-- [ ] Définir `HISTORY_TABS_DATES` et `HISTORY_TABS_PERSONNAGES` séparés de `GEO_TABS` :
+- [x] Remplacer le badge `3ème` dans le header par deux boutons pill (`Géographie` / `Histoire`), même style visuel que le sélecteur EU/France actuel
+- [x] Ajouter le state `domain: "geo" | "histoire"` dans `App.tsx`
+- [x] Conditionner l'affichage du sélecteur EU/France uniquement quand `domain === "geo"` (comportement inchangé)
+- [x] Ajouter un sélecteur `Dates` / `Personnages` affiché uniquement quand `domain === "histoire"` (même composant pill — `Calendar` pour Dates, `User` pour Personnages)
+- [x] Créer un state `historySubject: "dates" | "personnages"` et un state `historyTab`
+- [x] Définir `HISTORY_TABS_DATES` et `HISTORY_TABS_PERSONNAGES` séparés de `GEO_TABS` :
 
 | Domaine                | Onglet          | Icône         | Description                          |
 | ---------------------- | --------------- | ------------- | ------------------------------------ |
@@ -60,9 +60,9 @@ src/components/
 | Histoire / Personnages | `"Association"` | `Link2`       | Jeu association personnage ↔ mot-clé |
 | Histoire / Personnages | `"Photos"`      | `Camera`      | Flashcard photo → nom                |
 
-- [ ] La navigation des onglets affiche les tabs correspondant à `domain` + `historySubject`
-- [ ] Le `<main>` dispatche sur `domain` en premier, puis sur les sub-states
-- [ ] Reset `historyTab` sur `"frise"` quand `historySubject === "dates"`, sur `"liste"` quand `"personnages"`
+- [x] La navigation des onglets affiche les tabs correspondant à `domain` + `historySubject`
+- [x] Le `<main>` dispatche sur `domain` en premier, puis sur les sub-states
+- [x] Reset `historyTab` sur `"frise"` quand `historySubject === "dates"`, sur `"liste"` quand `"personnages"`
 
 ---
 
@@ -116,18 +116,18 @@ interface HistoricalFigure {
   id: string;
   name: string; // ex: "Jean Moulin"
   primaryKeyword: string; // mot-clé utilisé comme paire dans le jeu Association
-  keywords: string[]; // liste complète des mots-clés — à définir en Phase 7 (2-4 par personnage)
+  keywords: string[]; // liste complète des mots-clés — 2-4 par personnage (définis en Phase 7 ✅)
   photos: string[]; // URLs Wikimedia Commons (2-3 par personnage) — à sourcer en Phase 1
   period: string; // ex: "Seconde Guerre mondiale"
   role: string; // description courte du rôle historique
 }
 ```
 
-> ⚠️ **`keywords[]` à compléter en Phase 7.** Un seul mot-clé ne résume pas un personnage. La liste complète (2-4 mots-clés par personne) sera définie lors du développement de l'onglet Association Personnages, sur la base du cours de Marie. Le tableau ci-dessous liste uniquement le `primaryKeyword` provisoire.
+> ✅ **`keywords[]` complétés en Phase 7.** 2-4 mots-clés par personnage définis dans `historicalFigures.ts`. La draw anti-collision de `buildUniqueKeywordPairs()` garantit l'unicité des mots-clés affichés dans la colonne droite pour chaque partie.
 
-**`primaryKeyword` provisoire** (à affiner en Phase 7) :
+**`primaryKeyword` + `keywords[]`** (Phase 7 complétée) :
 
-| Personnage                   | primaryKeyword (provisoire)  |
+| Personnage                   | primaryKeyword               |
 | ---------------------------- | ---------------------------- |
 | Pétain                       | Collaboration                |
 | Lénine                       | Révolution russe             |
@@ -143,14 +143,14 @@ interface HistoricalFigure {
 
 ### Ressources photos — tâches obligatoires
 
-- [ ] Sourcer 2-3 photos libres de droits (Wikimedia Commons, licence CC) par personnage = 22 à 33 images
-- [ ] Vérifier le chargement de chaque URL (pas de 404, résolution correcte sur mobile)
-- [ ] Documenter les URLs validées directement dans `historicalFigures.ts`
+- [x] Sourcer 2-3 photos libres de droits (Wikimedia Commons, licence CC) par personnage = 22 à 33 images
+- [x] Vérifier le chargement de chaque URL (pas de 404, résolution correcte sur mobile)
+- [x] Documenter les URLs validées directement dans `historicalFigures.ts`
 
 ### Validation pédagogique — ⛔ bloquant
 
-- [ ] Faire valider les données (dates, mots-clés personnages) par Marie ou sur la base de son cours avant de coder quoi que ce soit
-- [ ] Un scan du cahier d'histoire suffit — l'app doit refléter ce que le prof attend au DNB, pas la culture générale
+- [x] Faire valider les données (dates, mots-clés personnages) par Marie ou sur la base de son cours avant de coder quoi que ce soit
+- [x] Un scan du cahier d'histoire suffit — l'app doit refléter ce que le prof attend au DNB, pas la culture générale
 
 ---
 
@@ -160,14 +160,15 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/shared/HintButton.tsx`
+- [x] Créer `src/components/shared/HintButton.tsx`
   - Props : `pool: string[]`, `answer: string`, `onHintUsed: () => void`
   - Génère 3 distracteurs aléatoires + la bonne réponse, dans un ordre shufflé
   - Réutilisé dans `CapitalsQuizTab`, `FranceCapitalsQuizTab`, `HistoryDatesFlashcardTab`, `PhotoFlashcardTab`
-- [ ] Mettre à jour le contrat `useLeaderboard` : ajouter `hintScore` dans l'entrée sauvegardée
+- [x] Mettre à jour le contrat `useLeaderboard` : ajouter `hintScore` dans l'entrée sauvegardée
   - Les anciennes entrées sans ce champ affichent `hintScore = 0` par défaut (rétrocompatibilité)
-- [ ] Mettre à jour `GameOverModal` (et variantes) pour afficher `freeScore ★ · hintScore 💡 · missedScore ❌`
-- [ ] Vérifier lint + build clean avant de passer à la Phase 2
+  - _(Extension décidée en session : "voir le drapeau" dans MapQuizTab compte aussi comme hint)_
+- [x] Mettre à jour `GameOverModal` (et variantes) pour afficher `freeScore ★ · hintScore 💡 · missedScore ❌`
+- [x] Vérifier lint + build clean avant de passer à la Phase 2
 
 ---
 
@@ -183,19 +184,20 @@ interface HistoricalFigure {
 - Les lanes sont calculées algorithmiquement : un range occupe la lane la plus basse disponible sur son intervalle
 - Marie **tape** sur une pastille ou une pilule pour la marquer comme vue → feedback visuel (couleur validée), haptics `tick()`
 - Barre de progression `shared/ProgressBar`, confetti + `success()` à 100%
-- Responsive : frise **horizontale** desktop, **verticale** sur mobile
+- Layout : frise **verticale descendante** (axe de haut en bas), scroll vertical de la page
 
 ### Tâches
 
-- [ ] Créer `src/components/FriseLectureTab/`
+- [x] Créer `src/components/FriseLectureTab/`
   - `index.tsx` — orchestrateur, gestion de l'état "vues"
-  - `components/FriseAxis.tsx` — axe temporel avec graduation annuelle
-  - `components/PointMarker.tsx` — pastille ronde, tap pour valider
-  - `components/RangeBar.tsx` — pilule colorée sur sa lane, tap pour valider
+  - `components/TimelineCanvas.tsx` — canvas vertical (axe + barres + pastilles + labels)
   - `utils/computeLanes.ts` — algorithme de packing : assigne chaque range à la lane la plus basse disponible sur son intervalle
-- [ ] Gérer le scroll horizontal (desktop) / vertical (mobile) sur l'axe
-- [ ] Tap sur un item déjà validé → toggle (décocher possible)
-- [ ] Barre de progression, confetti, haptics (pattern identique aux checklists existantes)
+- [x] Axe vertical descendant, ticks aux années clés, labels d'années à gauche
+- [x] Barres de périodes (ranges) : colonnes verticales colorées par lane avec texte `writing-mode: vertical-rl`
+- [x] Pastilles d'événements ponctuels sur l'axe avec anti-collision (greedy push-down) pour les mêmes années
+- [x] Labels horizontaux à droite de toutes les lanes (date + nom de l'événement)
+- [x] Tap sur un item déjà validé → toggle (décocher possible)
+- [x] Barre de progression, confetti, haptics (pattern identique aux checklists existantes)
 
 ---
 
@@ -205,11 +207,11 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/HistoirePersonnagesTab/`
+- [x] Créer `src/components/HistoirePersonnagesTab/`
   - `index.tsx`
   - `components/FigureCard.tsx` — nom + rôle/période, checkbox
-- [ ] Afficher nom, période, rôle court
-- [ ] Même mécanique de progression, confetti, haptics
+- [x] Afficher nom, période, rôle court
+- [x] Même mécanique de progression, confetti, haptics
 
 ---
 
@@ -223,21 +225,22 @@ interface HistoricalFigure {
 - La frise affiche les emplacements vides avec les dates visibles
 - Marie glisse chaque carte vers le bon emplacement
 - **`type: "point"`** → drop zone = pastille cible, snap sur la date exacte
-- **`type: "range"`** → drop zone = zone étendue de la date de début à la date de fin, pilule qui s'anime pour s'étirer après placement correct (Option D)
+- **`type: "range"`** → drop zone = zone étendue de la date de début à la date de fin, pilule verticale qui s'anime pour s'étirer après placement correct (Option D)
 - Feedback : ✅ vert si correct, ❌ shake rouge + retour à la pile si incorrect
 - Score `freeScore` (pas de hint dans ce jeu), timer GO!, leaderboard localStorage
+- Layout : frise **verticale descendante** (même orientation que Phase 2), cartes draggables à droite
 
 ### Tâches
 
-- [ ] Créer `src/components/FriseOrdonnnerTab/`
+- [x] Créer `src/components/FriseOrdonnnerTab/`
   - `index.tsx`
-  - `components/GameTimeline.tsx` — frise avec drop zones positionnées
+  - `components/GameTimeline.tsx` — frise verticale avec drop zones positionnées
   - `components/DraggableEventCard.tsx` — carte draggable (événement sans la date)
-  - `components/DropZone.tsx` — cible sur la frise (pastille ou zone étendue selon `type`)
-- [ ] Installer et configurer `@dnd-kit/core` + `@dnd-kit/utilities`
-- [ ] Gérer le responsive : frise horizontale desktop, verticale sur mobile
-- [ ] Animation d'extension de la pilule sur placement correct d'un range
-- [ ] Timer GO! + leaderboard localStorage
+  - `components/DropZone.tsx` — cible sur la frise (pastille ou colonne verticale selon `type`)
+- [x] Installer et configurer `@dnd-kit/core` (sans @dnd-kit/utilities — non nécessaire)
+- [x] Réutiliser l'algorithme `computeLanes` pour les lanes de ranges (implémenté localement dans GameTimeline)
+- [x] Animation CSS transition sur placement correct (dashed → solid, opacity fill)
+- [x] Timer GO! + leaderboard localStorage
 
 ---
 
@@ -253,11 +256,11 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/HistoryDatesAssociationTab/`
-- [ ] Adapter `utils/initBoard` depuis `historicalDates` (paires `date` ↔ `event`)
-- [ ] Labels : `"Dates"` / `"Événements"`
-- [ ] Clé leaderboard : `"dnb-histoire-dates-association-leaderboard"`
-- [ ] Pool complet, tirage 5 paires par round
+- [x] Créer `src/components/HistoryDatesAssociationTab/`
+- [x] Adapter `utils/initBoard` depuis `historicalDates` (paires `date` ↔ `event`)
+- [x] Labels : `"Dates"` / `"Événements"`
+- [x] Clé leaderboard : `"dnb-histoire-dates-association-leaderboard"`
+- [x] Pool complet, tirage 5 paires par round
 
 ---
 
@@ -275,14 +278,14 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/HistoryDatesFlashcardTab/`
+- [x] Créer `src/components/HistoryDatesFlashcardTab/`
   - `components/DateQuizCard.tsx` — face avant (date ou événement)
   - `components/DateAnswerInput.tsx` — saisie + validation + `HintButton`
   - Réutiliser `shared/ProgressBar`, pattern GO!, `GameOverModal` unifié (Phase 1b)
-- [ ] Implémenter `normalizeDateAnswer` — tolérance sur le format, exactitude sur le contenu :
+- [x] Implémenter `normalizeDateAnswer` — tolérance sur le format, exactitude sur le contenu :
   - `"11 novembre 1918"` = `"11/11/1918"` = `"11/11/18"` = `"11 nov 1918"` = `"11-11-1918"`
   - Pour les ranges (`"1924–1953"`), accepter `"1924 1953"`, `"1924/1953"`, tiret ou espace
-- [ ] Toggle A/B direction
+- [x] Toggle A/B direction
 
 ---
 
@@ -293,18 +296,18 @@ interface HistoricalFigure {
 ### Concept
 
 - Colonne gauche : **noms des personnages**
-- Colonne droite : **mots-clés biographiques** (`primaryKeyword`)
-- Ex : `"Jean Moulin"` ↔ `"CNR / Martyr"`
+- Colonne droite : **mot-clé tiré aléatoirement dans `keywords[]`** à chaque partie (Option B retenue)
+- Ex : `"Jean Moulin"` ↔ `"CNR"` ou `"Martyr"` ou `"Caluire"` selon le tirage
 
 ### Tâches
 
-- [ ] **Définir la liste complète des mots-clés** pour chacun des 11 personnages (2-4 mots-clés par personne), sur la base du cours de Marie — à faire avant de coder
-- [ ] Décider comment le jeu utilise les mots-clés multiples : toujours `primaryKeyword` ? tirage aléatoire dans `keywords[]` à chaque round ? → décision à prendre en début de phase
-- [ ] Créer `src/components/HistoryPersonnagesAssociationTab/`
-- [ ] Paires depuis `historicalFigures.ts` (`name` ↔ mot-clé selon décision ci-dessus)
-- [ ] Pool 5 paires par round (11 personnages total)
-- [ ] Labels : `"Personnages"` / `"Mots-clés"`
-- [ ] Clé leaderboard : `"dnb-histoire-personnages-association-leaderboard"`
+- [x] **Définir la liste complète des mots-clés** pour chacun des 11 personnages (2-4 mots-clés par personne), sur la base du cours de Marie — mots-clés uniques garantis pour éviter les doublons dans la colonne droite
+- [x] Décider comment le jeu utilise les mots-clés multiples : **Option B retenue — tirage aléatoire dans `keywords[]` à chaque partie** (keyword fixé au démarrage, stable pendant la partie)
+- [x] Créer `src/components/HistoryPersonnagesAssociationTab/`
+- [x] Paires depuis `historicalFigures.ts` (`name` ↔ `randomKeyword(f)`)
+- [x] Pool 5 paires par round (11 personnages total)
+- [x] Labels : `"Personnages"` / `"Mots-clés"`
+- [x] Clé leaderboard : `"dnb-histoire-personnages-association-leaderboard"`
 
 ---
 
@@ -324,14 +327,14 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Créer `src/components/PhotoFlashcardTab/`
+- [x] Créer `src/components/PhotoFlashcardTab/`
   - `index.tsx` — construit un pool de photos shufflé à partir de `historicalFigures`
   - `components/PhotoCard.tsx` — image plein cadre arrondie, sans label
   - `components/PersonNameInput.tsx` — saisie nom + validation + `HintButton` (Phase 1b)
-- [ ] `normalizeAnswer` adapté aux noms propres (accents, majuscules, tirets, noms partiels)
-- [ ] Fallback placeholder avec initiales si image introuvable
-- [ ] Progression : `X / total photos` (pas `X / 11 personnages`)
-- [ ] Timer GO!, leaderboard localStorage
+- [x] `normalizeAnswer` adapté aux noms propres (accents, majuscules, tirets, noms partiels)
+- [x] Fallback placeholder avec initiales si image introuvable
+- [x] Progression : `X / total photos` (pas `X / 11 personnages`)
+- [x] Timer GO!, leaderboard localStorage
 
 ---
 
@@ -364,10 +367,10 @@ interface HistoricalFigure {
 
 ### Tâches
 
-- [ ] Brancher `HintButton` dans `CapitalsQuizTab` (composant déjà prêt depuis Phase 1b)
-- [ ] Brancher `HintButton` dans `FranceCapitalsQuizTab`
-- [ ] Mettre à jour le scoring dans les deux composants : `freeScore ★` / `hintScore 💡`
-- [ ] Vérifier la rétrocompatibilité leaderboard (anciennes entrées → `hintScore = 0` implicite)
+- [x] Brancher `HintButton` dans `CapitalsQuizTab` (composant déjà prêt depuis Phase 1b)
+- [x] Brancher `HintButton` dans `FranceCapitalsQuizTab`
+- [x] Mettre à jour le scoring dans les deux composants : `freeScore ★` / `hintScore 💡`
+- [x] Vérifier la rétrocompatibilité leaderboard (anciennes entrées → `hintScore = 0` implicite)
 
 ---
 
@@ -434,14 +437,14 @@ Les entrées leaderboard existantes (format `{ name, time, firstTryScore }`) s'a
 
 ## Points de décision ✅ Tranchés
 
-| #   | Question                     | Décision retenue                                                                                  |
-| --- | ---------------------------- | ------------------------------------------------------------------------------------------------- |
-| 1   | **Drag & drop frise**        | `@dnd-kit/core` — UX tactile mobile correcte                                                      |
-| 2   | **Tolérance réponse "date"** | Correspondance exacte sur le contenu, tolérance sur le format (`11/11/1918`, `11 nov 1918`, etc.) |
-| 3   | **Mode photos personnages**  | Saisie libre + bouton "Proposition" optionnel — correct libre → `★`, correct avec aide → `💡`     |
-| 4   | **Accepter nom partiel**     | Oui — `"De Gaulle"` valide pour `"Le général de Gaulle"`                                          |
-| 5   | **Intervalles sur la frise** | `type: "point" \| "range"` dans `HistoricalDate`, `endSortKey` obligatoire pour les ranges        |
-| 6   | **Frise lecture vs liste**   | Frise lecture (Option B lanes) remplace la checklist dates — onglet nommé `"Frise"`               |
-| 7   | **Frise jeu**                | Option D (pastille/pilule, snap début, extension animée) — onglet nommé `"Ordonner"`              |
-| 8   | **Tri leaderboard égalité**  | `score_pondéré` desc → `freeScore` desc → `temps` asc                                             |
-| 9   | **Temps par item**           | Non — temps total uniquement, comme 3ème critère de tri (pas de pénalité de vitesse par réponse)  |
+| #   | Question                     | Décision retenue                                                                                                                                                                  |
+| --- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Drag & drop frise**        | `@dnd-kit/core` — UX tactile mobile correcte                                                                                                                                      |
+| 2   | **Tolérance réponse "date"** | Correspondance exacte sur le contenu, tolérance sur le format (`11/11/1918`, `11 nov 1918`, etc.)                                                                                 |
+| 3   | **Mode photos personnages**  | Saisie libre + bouton "Proposition" optionnel — correct libre → `★`, correct avec aide → `💡`                                                                                     |
+| 4   | **Accepter nom partiel**     | Oui — `"De Gaulle"` valide pour `"Le général de Gaulle"`                                                                                                                          |
+| 5   | **Intervalles sur la frise** | `type: "point" \| "range"` dans `HistoricalDate`, `endSortKey` obligatoire pour les ranges                                                                                        |
+| 6   | **Frise lecture vs liste**   | Frise lecture (Option B lanes) remplace la checklist dates — onglet nommé `"Frise"`                                                                                               |
+| 7   | **Orientation frise**        | Verticale descendante — même layout pour Phase 2 (lecture) et Phase 4 (ordonner) ; élimine les labels rotatifs illisibles et gère les événements de même année par anti-collision |
+| 8   | **Tri leaderboard égalité**  | `score_pondéré` desc → `freeScore` desc → `temps` asc                                                                                                                             |
+| 9   | **Temps par item**           | Non — temps total uniquement, comme 3ème critère de tri (pas de pénalité de vitesse par réponse)                                                                                  |

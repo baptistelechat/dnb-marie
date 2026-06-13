@@ -4,9 +4,15 @@ interface ColumnItemProps {
   label: string;
   itemState: ColumnItemState;
   onClick: () => void;
+  className?: string;
 }
 
-const ColumnItem = ({ label, itemState, onClick }: ColumnItemProps) => {
+const ColumnItem = ({
+  label,
+  itemState,
+  onClick,
+  className = "",
+}: ColumnItemProps) => {
   const isSelected = itemState === "selected";
   const isFading = itemState === "fading";
   const isShaking = itemState === "shaking";
@@ -17,7 +23,7 @@ const ColumnItem = ({ label, itemState, onClick }: ColumnItemProps) => {
       onClick={onClick}
       disabled={isFading}
       aria-pressed={isSelected}
-      className="w-full rounded-full px-3 py-2.5 text-sm font-semibold border-2 active:scale-95"
+      className={`w-full rounded-full px-3 py-2.5 text-sm font-semibold border-2 active:scale-95 ${className}`}
       style={{
         fontFamily: "'Nunito', system-ui, sans-serif",
         background: isSelected

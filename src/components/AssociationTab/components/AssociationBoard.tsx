@@ -2,6 +2,11 @@ import type { AssociationPair } from "../types";
 import ColumnItem from "./ColumnItem";
 import type { ColumnItemState } from "./ColumnItem";
 
+const labelStyle = {
+  color: "#b39ddb",
+  fontFamily: "'Fredoka', system-ui, sans-serif",
+};
+
 interface AssociationBoardProps {
   display: AssociationPair[];
   leftOrder: string[];
@@ -46,54 +51,44 @@ const AssociationBoard = ({
   };
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-2 gap-3">
         <p
           className="text-xs font-bold text-center uppercase tracking-wide"
-          style={{
-            color: "#b39ddb",
-            fontFamily: "'Fredoka', system-ui, sans-serif",
-          }}
+          style={labelStyle}
         >
           {leftLabel}
         </p>
-        {leftOrder.map((code) => {
-          const pair = pairMap.get(code);
-          if (!pair) return null;
-          return (
-            <ColumnItem
-              key={code}
-              label={pair.country}
-              itemState={getLeftState(code)}
-              onClick={() => onSelectLeft(code)}
-            />
-          );
-        })}
-      </div>
-
-      <div className="flex flex-col gap-2">
         <p
           className="text-xs font-bold text-center uppercase tracking-wide"
-          style={{
-            color: "#b39ddb",
-            fontFamily: "'Fredoka', system-ui, sans-serif",
-          }}
+          style={labelStyle}
         >
           {rightLabel}
         </p>
-        {rightOrder.map((code) => {
-          const pair = pairMap.get(code);
-          if (!pair) return null;
-          return (
-            <ColumnItem
-              key={code}
-              label={pair.capital}
-              itemState={getRightState(code)}
-              onClick={() => onSelectRight(code)}
-            />
-          );
-        })}
       </div>
+
+      {leftOrder.map((leftCode, i) => {
+        const rightCode = rightOrder[i]!;
+        const leftPair = pairMap.get(leftCode);
+        const rightPair = pairMap.get(rightCode);
+        if (!leftPair || !rightPair) return null;
+        return (
+          <div key={leftCode} className="grid grid-cols-2 gap-3 items-stretch">
+            <ColumnItem
+              label={leftPair.country}
+              itemState={getLeftState(leftCode)}
+              onClick={() => onSelectLeft(leftCode)}
+              className="h-full"
+            />
+            <ColumnItem
+              label={rightPair.capital}
+              itemState={getRightState(rightCode)}
+              onClick={() => onSelectRight(rightCode)}
+              className="h-full"
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };

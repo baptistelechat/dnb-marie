@@ -38,6 +38,7 @@ const EuropTab = () => {
   }, []);
 
   useEffect(() => {
+    let id: ReturnType<typeof setTimeout> | undefined;
     if (count === TOTAL && !completedRef.current) {
       completedRef.current = true;
       success();
@@ -56,11 +57,12 @@ const EuropTab = () => {
           ],
         });
       launch();
-      setTimeout(launch, 400);
+      id = setTimeout(launch, 400);
     }
     if (count < TOTAL) {
       completedRef.current = false;
     }
+    return () => clearTimeout(id);
   }, [count, success]);
 
   return (
@@ -217,7 +219,7 @@ const EuropTab = () => {
           <button
             type="button"
             onClick={handleReset}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-400 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-rose-500 transition-colors rounded-full hover:bg-rose-50 active:scale-95"
             aria-label="Recommencer depuis le début"
           >
             <RotateCcw size={14} />

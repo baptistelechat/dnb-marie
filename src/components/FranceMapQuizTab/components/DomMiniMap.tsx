@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { FRANCE_REGIONS_ALL_URL } from "../constants";
 
@@ -74,10 +75,10 @@ const DomMiniMap = ({
             }
           : undefined
       }
-      role={isInteractive ? "button" : "img"}
+      role="button"
       aria-label={`${name}${isAnswered ? " — trouvé" : ""}`}
       aria-pressed={isAnswered}
-      tabIndex={isInteractive ? 0 : -1}
+      tabIndex={0}
     >
       <ComposableMap
         projection="geoMercator"
@@ -87,10 +88,11 @@ const DomMiniMap = ({
         style={{ width: "100%", height: "auto", display: "block" }}
       >
         <Geographies geography={FRANCE_REGIONS_ALL_URL}>
-          {({ geographies }) =>
-            geographies
-              .filter((geo) => geo.properties.code === code)
-              .map((geo) => (
+          {({ geographies }) => {
+            const nodes: ReactNode[] = [];
+            for (const geo of geographies) {
+              if (geo.properties.code !== code) continue;
+              nodes.push(
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
@@ -111,9 +113,11 @@ const DomMiniMap = ({
                   }}
                   tabIndex={-1}
                   aria-hidden="true"
-                />
-              ))
-          }
+                />,
+              );
+            }
+            return nodes;
+          }}
         </Geographies>
       </ComposableMap>
     </div>

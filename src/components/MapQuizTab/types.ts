@@ -10,8 +10,9 @@ export interface GeoFeature {
 
 export interface LeaderboardEntry {
   name: string;
-  firstTryScore: number; // pays réussis du premier coup
-  totalCountries: number; // toujours 27
-  totalTimeSeconds: number; // durée en secondes
-  date: string; // ISO 8601
+  firstTryScore: number;
+  hintScore?: number;
+  totalCountries: number;
+  totalTimeSeconds: number;
+  date: string;
 }

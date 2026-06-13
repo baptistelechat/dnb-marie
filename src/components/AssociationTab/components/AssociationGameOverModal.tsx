@@ -39,6 +39,7 @@ const AssociationGameOverModal = ({
   onSave,
   onReplay,
 }: AssociationGameOverModalProps) => {
+  const missedScore = totalCountries - firstTryScore;
   const [name, setName] = useState("");
   const [saved, setSaved] = useState(false);
   const [savedEntryDate, setSavedEntryDate] = useState<string | null>(null);
@@ -79,22 +80,13 @@ const AssociationGameOverModal = ({
             Bravo !
           </h2>
           <p
-            className="text-3xl font-bold"
+            className="text-2xl font-bold"
             style={{
               fontFamily: "'Fredoka', system-ui, sans-serif",
               color: "#4a148c",
             }}
           >
-            {firstTryScore} / {totalCountries}
-          </p>
-          <p
-            className="text-sm font-semibold"
-            style={{
-              color: "#9575cd",
-              fontFamily: "'Nunito', system-ui, sans-serif",
-            }}
-          >
-            du premier essai
+            {firstTryScore} ★ · {missedScore} ❌
           </p>
           <span
             className="self-center text-sm px-3 py-1 rounded-full font-semibold"
@@ -136,7 +128,6 @@ const AssociationGameOverModal = ({
                 fontFamily: "'Nunito', system-ui, sans-serif",
                 color: "#4a148c",
               }}
-              autoFocus
             />
             <button
               type="button"
@@ -206,7 +197,10 @@ const AssociationGameOverModal = ({
                       className="font-bold shrink-0"
                       style={{ color: "#7e57c2" }}
                     >
-                      {entry.firstTryScore}/{entry.totalCountries}
+                      {entry.firstTryScore}★ ·{" "}
+                      <span style={{ color: "#ef4444" }}>
+                        {entry.totalCountries - entry.firstTryScore}❌
+                      </span>
                     </span>
                     <span
                       className="text-xs shrink-0"
